@@ -5,10 +5,22 @@
   "main": "index.js",
   "scripts": {
     "dev:portfolio": "pnpm --filter angular-portfolio start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:portfolio-backend": "pnpm --filter portfolio-backend-hono dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "git:block-sensitive": "node scripts/git/block-sensitive-files.mjs",
+    "env:example:portfolio-backend-hono": "node apps/portfolio-backend-hono/scripts/generate-env-example.mjs",
+
+    "deploy:prepare-env-backend-hono": "node scripts/deployment/update-env-backend-hono.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.27.0"
+  "packageManager": "pnpm@10.28.0",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.22"
+  }
 }

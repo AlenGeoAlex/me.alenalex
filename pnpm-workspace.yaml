@@ -8,3 +8,5 @@ onlyBuiltDependencies:
   - esbuild
   - lmdb
   - msgpackr-extract
+  - sharp
+  - workerd

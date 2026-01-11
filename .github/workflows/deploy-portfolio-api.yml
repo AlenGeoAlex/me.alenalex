@@ -1,0 +1,46 @@
+name: deploy-portfolio-api.yml
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - apps/portfolio-backend-hono/**
+      - .github/workflows/deploy-portfolio-api.yml
+
+jobs:
+  deploy-worker:
+    name: 'Release worker on Cloudflare Workers'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Update App Configurations
+        run: pnpm run deploy:prepare-env-backend-hono
+
+      - name: Update Wrangler Config
+        run: node apps/portfolio-backend-hono/scripts/update-wrangler-config.js
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          environment: 'production'
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}

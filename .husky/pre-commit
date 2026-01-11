@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+pnpm run git:block-sensitive
+pnpm run env:example:portfolio-backend-hono
