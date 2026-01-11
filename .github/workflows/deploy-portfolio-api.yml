@@ -36,7 +36,9 @@ jobs:
         run: pnpm run deploy:prepare-env-backend-hono
 
       - name: Update Wrangler Config
-        run: node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
+        run: | 
+          "WRANGLER-CFG-vars.ALLOWED_HOST"="localhost:4200" \
+          node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
