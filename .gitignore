@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+.pnp.*
+.yarn/*
+
+# pnpm
+.pnpm-store/
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+out/
+
+# Angular
+.angular/
+.angular/cache/
+
+# IDE - JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# IDE - VSCode
+.vscode/
+.history/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Generated files
+gen/
