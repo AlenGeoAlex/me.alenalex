@@ -1,0 +1,90 @@
+<!-- about.component.html -->
+<section id="about" class="min-h-screen bg-gray-900 py-20">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl sm:text-5xl font-bold text-white mb-4">
+        About <span class="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">Me</span>
+      </h2>
+      <p class="text-gray-400 text-lg">Get to know more about my journey</p>
+    </div>
+
+    <div class="space-y-12 max-w-8xl mx-auto">
+      <app-terminal-component></app-terminal-component>
+    </div>
+    <!-- Terminal Sections -->
+<!--    <div class="space-y-12 max-w-5xl mx-auto">-->
+<!--      <div-->
+<!--        *ngFor="let section of sections; let i = index"-->
+<!--        [id]="'section-' + i"-->
+<!--        class="terminal-section">-->
+
+<!--        &lt;!&ndash; Terminal Window &ndash;&gt;-->
+<!--        <div class="bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">-->
+
+
+<!--          &lt;!&ndash; Terminal Body &ndash;&gt;-->
+<!--          <div class="p-6 font-mono text-sm sm:text-base">-->
+
+<!--            &lt;!&ndash; Command Line &ndash;&gt;-->
+<!--            <div class="mb-4">-->
+<!--              <span class="text-cyan-400">user&#64;portfolio</span>-->
+<!--              <span class="text-gray-400">:</span>-->
+<!--              <span class="text-blue-400">~</span>-->
+<!--              <span class="text-gray-400">$</span>-->
+<!--              <span class="text-green-400 ml-2">{{ section.command }}</span>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Output &ndash;&gt;-->
+<!--            <div class="space-y-2 text-gray-300">-->
+<!--              <div *ngFor="let line of section.content" class="leading-relaxed">-->
+<!--                {{ line }}-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Cursor &ndash;&gt;-->
+<!--            <div class="mt-4 flex items-center">-->
+<!--              <span class="text-cyan-400">user&#64;portfolio</span>-->
+<!--              <span class="text-gray-400">:</span>-->
+<!--              <span class="text-blue-400">~</span>-->
+<!--              <span class="text-gray-400">$</span>-->
+<!--              <span class="ml-2 w-2 h-4 bg-green-400 animate-pulse"></span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Navigation Hints &ndash;&gt;-->
+<!--        <div class="flex justify-between items-center mt-6 text-sm text-gray-500">-->
+<!--          <button-->
+<!--            *ngIf="i > 0"-->
+<!--            (click)="scrollToPreviousSection()"-->
+<!--            class="flex items-center space-x-2 hover:text-cyan-400 transition-colors duration-300">-->
+<!--            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>-->
+<!--            </svg>-->
+<!--            <span>Previous</span>-->
+<!--          </button>-->
+<!--          <div *ngIf="i === 0"></div>-->
+
+<!--          <div class="flex space-x-2">-->
+<!--            <div-->
+<!--              *ngFor="let s of sections; let idx = index"-->
+<!--              class="w-2 h-2 rounded-full transition-all duration-300"-->
+<!--              [ngClass]="idx === i ? 'bg-cyan-400 w-8' : 'bg-gray-600'">-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <button-->
+<!--            (click)="scrollToNextSection()"-->
+<!--            class="flex items-center space-x-2 hover:text-cyan-400 transition-colors duration-300">-->
+<!--            <span>{{ i < sections.length - 1 ? 'Next' : 'Contact' }}</span>-->
+<!--            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+  </div>
+</section>

@@ -1,0 +1,37 @@
+<div id="terminal-body" class="p-6 font-mono text-sm sm:text-base h-full max-h-full overflow-y-auto scroll-smooth" (click)="focusInput()">
+  @for (item of content(); track $index; let last = $last) {
+    <div class="mb-1">
+      @switch (item.kind) {
+        @case ('command') {
+          @if (last) {
+            <terminal-body-current-context
+              id="terminal-body-item-{{ $index }}"
+              #activeContext
+              [path]="item.data.path"
+              [disabled]="false"
+              (onUserCommandResponse)="emitCommand($event)"
+              [userInput]="item.data.command"
+            />
+          } @else {
+            <terminal-body-current-context
+              id="terminal-body-item-{{ $index }}"
+              [path]="item.data.path"
+              [disabled]="true"
+              [userInput]="item.data.command"
+            />
+          }
+        }
+        @case ('response') {
+          <terminal-body-response-context [data]="item.data" [id]="$index" />
+        }
+        @case ('error') {
+          <terminal-body-error-response-context [error]="item.data" [id]="$index" />
+        }
+      }
+    </div>
+  }
+
+  @if (isLoading()) {
+    <terminal-body-spinner />
+  }
+</div>

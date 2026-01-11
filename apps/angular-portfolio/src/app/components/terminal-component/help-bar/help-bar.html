@@ -1,0 +1,53 @@
+<div class="bg-gray-900/50 border-b border-gray-700 px-4 py-2">
+  <button
+    (click)="toggleHelp()"
+    class="text-cyan-400 hover:text-cyan-300 text-sm font-mono flex items-center gap-2 mb-2"
+  >
+    <span>{{ isExpanded() ? '▼' : '▶' }}</span>
+    <span>Help</span>
+  </button>
+
+  @if (isExpanded()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2 animate-slideDown">
+      <div>
+        <div class="text-gray-400 text-xs font-semibold mb-2 uppercase tracking-wider">Commands</div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 text-sm">
+            <code class="bg-gray-800 text-green-400 px-2 py-0.5 rounded font-mono text-xs">cd</code>
+            <span class="text-gray-300">Change directory</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <code class="bg-gray-800 text-green-400 px-2 py-0.5 rounded font-mono text-xs">ls</code>
+            <span class="text-gray-300">List files in directory</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <code class="bg-gray-800 text-green-400 px-2 py-0.5 rounded font-mono text-xs">list</code>
+            <span class="text-gray-300">List files in directory</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <code class="bg-gray-800 text-green-400 px-2 py-0.5 rounded font-mono text-xs">back</code>
+            <span class="text-gray-300">Go back to previous directory</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <code class="bg-gray-800 text-green-400 px-2 py-0.5 rounded font-mono text-xs">open</code>
+            <span class="text-gray-300">Open file or directory</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <code class="bg-gray-800 text-green-400 px-2 py-0.5 rounded font-mono text-xs">download</code>
+            <span class="text-gray-300">Download file</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-gray-400 text-xs font-semibold mb-2 uppercase tracking-wider">Keybinds</div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 text-sm">
+            <kbd class="bg-gray-800 text-cyan-400 px-2 py-0.5 rounded font-mono text-xs border border-gray-600">Enter</kbd>
+            <span class="text-gray-300">Execute command</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

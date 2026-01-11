@@ -1,0 +1,28 @@
+<div class="bg-gray-700 px-4 py-3 flex items-center justify-between group relative">
+  <div class="flex space-x-2">
+    <button
+      class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors duration-200 flex items-center justify-center group/close relative"
+      aria-label="Close">
+      <lucide-icon
+        [img]="X"
+        [size]="8"
+        class="text-gray-900 opacity-0 group-hover/close:opacity-100 transition-opacity duration-200">
+      </lucide-icon>
+      <span class="absolute top-8 left-0 bg-gray-900 text-white text-xs px-3 py-1.5 rounded shadow-lg opacity-0 group-hover/close:opacity-100 transition-opacity duration-200 pointer-events-none z-[100] whitespace-normal w-48 sm:w-auto sm:whitespace-nowrap">
+        Close the interactive terminal and read directly
+      </span>
+    </button>
+    <button
+      class="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-200 flex items-center justify-center group/minimize relative"
+      aria-label="Minimize">
+    </button>
+    <button
+      class="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors duration-200 flex items-center justify-center group/maximize relative"
+      aria-label="Maximize">
+    </button>
+  </div>
+  <div class="flex-1 text-center">
+    <span class="text-gray-300 text-sm font-mono">{{ title() }}</span>
+  </div>
+  <div class="w-15"></div>
+</div>

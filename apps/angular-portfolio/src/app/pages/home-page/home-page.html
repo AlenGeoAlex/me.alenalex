@@ -1,0 +1,57 @@
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img
+      src="assets/image.png"
+      alt="Background"
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-linear-to-b from-gray-900/90 via-gray-900/85 to-gray-900/90"></div>
+  </div>
+
+  <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center select-none">
+    <p class="hero-greeting text-cyan-400 text-lg sm:text-xl md:text-2xl font-medium mb-4 opacity-0">
+      Hello & Welcome
+    </p>
+
+    <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 opacity-0 select-none">
+      I Am <span class="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">Alen</span>
+    </h1>
+
+    <p class="hero-subtitle text-gray-300 text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-0 select-none">
+      Simply Human | Software Engineer
+    </p>
+
+    <div class="social-icons flex justify-center space-x-6 mb-12 opacity-0">
+      <a href="https://github.com/AlenGeoAlex/" target="_blank"
+         class="text-gray-400 hover:text-cyan-400 transition-colors duration-300">
+        <lucide-icon [img]="Github" size="24"></lucide-icon>
+      </a>
+      <a href="https://www.linkedin.com/in/alengeoalex/" target="_blank"
+         class="text-gray-400 hover:text-cyan-400 transition-colors duration-300">
+        <lucide-icon [img]="Linkedin" size="24"></lucide-icon>
+      </a>
+      <a href="mailto:contact@alenalex.me" target="_blank"
+         class="text-gray-400 hover:text-cyan-400 transition-colors duration-300">
+        <lucide-icon [img]="Mail" size="24"></lucide-icon>
+      </a>
+    </div>
+
+
+    <button
+      (click)="downloadCV()"
+      class="cta-button opacity-0 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 select-none">
+      Download CV
+    </button>
+  </div>
+
+  <div class="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+    <button
+      (click)="scrollToAbout()"
+      class="flex flex-col items-center text-gray-400 hover:text-cyan-400 transition-colors duration-300 focus:outline-none">
+      <span class="text-sm mb-2">Scroll Down</span>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
+    </button>
+  </div>
+</section>
