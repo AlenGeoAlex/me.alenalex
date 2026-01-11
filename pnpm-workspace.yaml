@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - gen/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+  - lmdb
+  - msgpackr-extract
