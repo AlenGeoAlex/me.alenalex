@@ -10,7 +10,6 @@
     "prepare": "husky",
     "git:block-sensitive": "node scripts/git/block-sensitive-files.mjs",
     "env:example:portfolio-backend-hono": "node apps/portfolio-backend-hono/scripts/generate-env-example.mjs",
-
     "deploy:prepare-env-backend-hono": "node scripts/deployment/update-env-backend-hono.mjs"
   },
   "keywords": [],
@@ -21,6 +20,7 @@
     "husky": "^9.1.7"
   },
   "dependencies": {
-    "lodash-es": "^4.17.22"
+    "lodash-es": "^4.17.22",
+    "wrangler": "^4.58.0"
   }
 }
