@@ -23,9 +23,9 @@
   "private": true,
   "packageManager": "npm@11.6.2",
   "dependencies": {
-    "@angular/common": "^21.0.0",
+    "@angular/common": "catalog:",
     "@angular/compiler": "^21.0.0",
-    "@angular/core": "^21.0.0",
+    "@angular/core": "catalog:",
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
     "@angular/router": "^21.0.0",
@@ -33,9 +33,10 @@
     "lucide-angular": "^0.562.0",
     "marked": "^17.0.1",
     "motion": "^12.25.0",
-    "rxjs": "~7.8.0",
+    "rxjs": "catalog:",
     "tslib": "^2.3.0",
-    "typed.js": "^2.1.0"
+    "typed.js": "^2.1.0",
+    "portfolio-backend-hono-sdk": "workspace:*"
   },
   "devDependencies": {
     "@angular/build": "^21.0.4",

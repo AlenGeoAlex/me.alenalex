@@ -11,4 +11,7 @@ import {AboutPage} from './pages/about-page/about-page';
   styleUrl: './app.css'
 })
 export class App {
+
+
+
 }
