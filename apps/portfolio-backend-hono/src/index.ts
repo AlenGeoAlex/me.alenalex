@@ -5,6 +5,11 @@ import { cors } from "hono/cors";
 
 const app = new Hono<{ Bindings: Env }>();
 app.use(async (c, next) => {
+	const url = new URL(c.req.url);
+	if (url.pathname === '/openapi.json') {
+		return await next();
+	}
+
 	const hostHeader = c.req.header('Origin');
 	const allowedHosts = c.env.ALLOWED_HOST?.split(',');
 	if(!allowedHosts.includes(hostHeader)) {
