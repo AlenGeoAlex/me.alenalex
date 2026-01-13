@@ -2,6 +2,7 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import {InitMe} from "./endpoints/me";
 import { cors } from "hono/cors";
+import {FsList} from "./endpoints/fs";
 
 const app = new Hono<{ Bindings: Env }>();
 app.use(async (c, next) => {
@@ -45,6 +46,8 @@ const openapi = fromHono(app, {
 
 //me
 openapi.get('/api/me', InitMe)
+
+openapi.get('/api/path/**', FsList)
 
 // Export the Hono app
 export default app;

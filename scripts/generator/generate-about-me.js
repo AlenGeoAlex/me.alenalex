@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const ABOUT_ME_JSON_ROOT_PATH = 'packages/about-me';
+const ABOUT_ME_JSON_ROOT_PATH = path.join(process.cwd(), 'packages/about-me');
 const REPLACEMENT_PATH = 'apps/portfolio-backend-hono/src/data/me.json';
 const INITIAL_JSON = {
     "type": "directory",
