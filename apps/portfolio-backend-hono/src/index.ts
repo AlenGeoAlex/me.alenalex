@@ -22,10 +22,8 @@ app.use(async (c, next) => {
 app.use(cors({
 	origin: (origin, c) => {
 		const allowedHosts = c.env.ALLOWED_HOST?.split(',');
-		console.log(origin);
-		return allowedHosts.includes(origin)
+		return allowedHosts.includes(origin) ? origin : undefined;
 	},
-	allowMethods: ['GET', 'POST', 'OPTIONS']
 }))
 
 app.use(async (c, next) => {
