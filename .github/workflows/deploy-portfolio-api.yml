@@ -37,7 +37,7 @@ jobs:
 
       - name: Update Wrangler Config
         run: | 
-          env "WRANGLER-CFG-vars.ALLOWED_HOST"="localhost:4200" \
+          env "WRANGLER-CFG-vars.ALLOWED_HOST"="http://localhost:4200" \
           node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
 
       - name: Deploy to Cloudflare Workers
