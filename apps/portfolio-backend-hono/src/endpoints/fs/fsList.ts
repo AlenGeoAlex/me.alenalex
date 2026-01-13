@@ -22,7 +22,7 @@ export class FsList extends OpenAPIRoute {
         summary: "List all paths",
         request: {
             params: z.object({
-                "*": Str({
+                path: Str({
                     description: "Dynamic path to directory (e.g., 'folder1/folder2')",
                     required: false,
                     default: ""
