@@ -21,6 +21,13 @@ export class FsList extends OpenAPIRoute {
         tags: ["Path"],
         summary: "List all paths",
         request: {
+            params: z.object({
+                "*": Str({
+                    description: "Dynamic path to directory (e.g., 'folder1/folder2')",
+                    required: false,
+                    default: ""
+                })
+            }),
             query: z.object({
                 head: Bool({
                     description: "Just check if directory exists (returns 200 if exists, 404 if not, 400 if file, no body)",
