@@ -6,9 +6,12 @@
   "scripts": {
     "dev:portfolio": "pnpm --filter angular-portfolio start",
     "dev:portfolio-backend": "pnpm --filter portfolio-backend-hono dev",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
-    "git:block-sensitive": "node scripts/git/block-sensitive-files.mjs",
+
+    "git": "npm run git:portfolio:revert-me && npm run git:portfolio:block-sensitive",
+    "git:portfolio:revert-me": "node scripts/git/revert-me-json.js",
+    "git:portfolio:block-sensitive": "node scripts/git/block-sensitive-files.mjs",
+
     "env:example:portfolio-backend-hono": "node apps/portfolio-backend-hono/scripts/generate-env-example.mjs",
     "deploy:prepare-env-backend-hono": "node scripts/deployment/update-env-backend-hono.mjs"
   },

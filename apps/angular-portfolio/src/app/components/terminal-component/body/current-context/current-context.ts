@@ -58,8 +58,8 @@ export class CurrentContext {
   }
 
   public setFocus(){
-    setTimeout(() => {
+    queueMicrotask(() => {
       this.terminalInput()?.nativeElement?.focus();
-    }, 0);
+    });
   }
 }

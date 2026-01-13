@@ -38,6 +38,12 @@ export class TerminalComponent {
   constructor() {
     effect(() => {
       const status = this.initialResource.status();
+      if(status === 'loading' || status === 'reloading'){
+        this.isLoading.set(true);
+      }else {
+        this.isLoading.set(false);
+      }
+
       let error: Error | undefined;
       let data: string | undefined;
       try {
@@ -107,6 +113,9 @@ export class TerminalComponent {
       case 'cd':
         this.onCdCommand(userCommand.slice(1));
         break;
+      case 'ls':
+        this.onLsCommand();
+        break;
       case 'back':
         break;
       case 'clear':
@@ -128,40 +137,11 @@ export class TerminalComponent {
 
         break;
       default:
-        this.pushError(`Unknown command: ${commandToken}.
-        Did you mean: type help for a list of commands?
+        this.pushError(`Unknown command: ${commandToken}. Type help for a list of commands?
         `);
+        this.pushNewCommand();
         break;
     }
-
-    // this.isLoading.set(true);
-    // setTimeout(() => {
-    //   const number = Math.random();
-    //   this.isLoading.set(false);
-    //   if(number <= 0.5){
-    //     this.content.update(v => {
-    //       v.push({
-    //         kind: 'response',
-    //         data: {
-    //           contentType: 'text/plain',
-    //           content: `
-    //           Hello World
-    //           `
-    //         }
-    //       })
-    //
-    //       v.push({kind: 'command', data: {path: [], command: ''}})
-    //       return v;
-    //     })
-    //   }else {
-    //     this.content.update(v => {
-    //       v.push({kind: 'error', data: {message: 'Command not found'}})
-    //
-    //       v.push({kind: 'command', data: {path: [], command: ''}})
-    //       return v;
-    //     })
-    //   }
-    // }, 250)
   }
 
   private pushNewCommand(){
@@ -304,70 +284,12 @@ export class TerminalComponent {
   }
 
 
-  private motd = `<div class="terminal-motd">
-  <span style="color:#E95420;">Welcome to AboutMeOs 1.0.0 LTS</span>
-  (<span style="color:#8AE234;">GNU/Developer Linux</span>)
-  <br>
-  <span style="color:#888;">Kernel:</span> 6.∞.dev •
-  <span style="color:#888;">Arch:</span> human64
-  <br><br>
-
-  <span style="color:#888;"> * Portfolio:</span>
-  <a href="https://www.alenalex.me" style="color:#729FCF;">https://alenalex.me</a><br>
-  <span style="color:#888;"> * Source:</span>
-  <a href="https://github.com/AlenGeoAlex" style="color:#729FCF;">https://github.com/AlenGeoAlex</a><br>
-  <span style="color:#888;"> * Contact:</span>
-  <a href="mailto:contact@alenalex.me" style="color:#729FCF;">contact@alenalex.me</a>
-  <br><br>
-
-  <span style="color:#888;">
-    System information as of
-  </span>
-  <span style="color:#C4A000;">
-    Sat Jan 10 21:02:14 UTC 2026
-  </span>
-  <br><br>
-
-  <pre style="margin:0; color:#DDD;">
-  System load:        <span style="color:#8AE234;">0.01</span>               Active projects:     <span style="color:#8AE234;">7</span>
-  Memory usage:      <span style="color:#8AE234;">42%</span>               Coffee level:        <span style="color:#EF2929;">LOW</span>
-  Disk usage (/):    <span style="color:#8AE234;">12.4%</span>             Bugs currently alive: <span style="color:#EF2929;">∞</span>
-  IPv4 address:      <span style="color:#729FCF;">127.0.0.1</span>          Visitors online:     <span style="color:#8AE234;">1</span>
-  </pre>
-
-  <br>
-
-  <span style="color:#FCE94F;">
-    Expanded Curiosity Maintenance is enabled.
-  </span><br>
-  <span style="color:#DDD;">
-    New features are deployed frequently.
-  </span>
-  <br><br>
-
-  <span style="color:#DDD;">
-    Type
-    <span style="color:#8AE234;">help</span>
-    to see available commands.
-  </span><br>
-  <span style="color:#DDD;">
-    Type
-    <span style="color:#8AE234;">about</span>,
-    <span style="color:#8AE234;">skills</span>,
-    <span style="color:#8AE234;">projects</span>,
-    or
-    <span style="color:#8AE234;">hobbies</span>
-    to explore.
-  </span>
-  <br><br>
-
-  <span style="color:#888;">
-    Last login: Fri Jan 9 11:56:18 2026 from you!
-  </span>
-</div>`;
-
   private onClearCommand() {
     this.content.set([])
     this.pushNewCommand();
+  }
+
+  private onLsCommand() {
+
   }
 }

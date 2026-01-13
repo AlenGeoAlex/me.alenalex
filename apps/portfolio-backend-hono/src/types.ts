@@ -11,3 +11,29 @@ export const Task = z.object({
 	completed: z.boolean().default(false),
 	due_date: DateTime(),
 });
+
+export type ContentType =
+	| "text/plain"
+	| "text/html"
+	| "application/pdf"
+	| "image/png"
+	| "image/jpeg"
+	| "video/mp4"
+	| "audio/mpeg"
+	| "text/markdown";
+
+export interface FileNode {
+	type: "file";
+	name: string;
+	contentType: ContentType;
+	content: string;
+}
+
+export interface DirectoryNode {
+	type: "directory";
+	name: string;
+	children: FSNode[];
+}
+
+export type FSNode = FileNode | DirectoryNode;
+

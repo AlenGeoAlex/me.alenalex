@@ -1,0 +1,9 @@
+// This is dynamically generated from the CI/CD. I don't want to create one large JSON, so I took this approach
+// Check /scripts/generator/generate-about-me.js
+{
+  "type": "directory",
+  "name": "~",
+  "children": [
+
+  ]
+}

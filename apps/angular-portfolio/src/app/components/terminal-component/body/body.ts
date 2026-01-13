@@ -1,4 +1,4 @@
-import {Component, effect, input, output, viewChild} from '@angular/core';
+import {Component, effect, input, output, untracked, viewChild} from '@angular/core';
 import {CurrentContext, ITerminalCommandOutput} from './current-context/current-context';
 import {Spinner} from './spinner/spinner';
 import {ResponseContext} from './response-context/response-context';
@@ -34,6 +34,9 @@ export class Body {
     effect(() => {
       const contentLength = this.content().length;
       this.focusInput();
+      untracked(() => {
+
+      })
     });
   }
 }
