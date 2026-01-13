@@ -8,6 +8,7 @@ on:
     paths:
       - apps/portfolio-backend-hono/**
       - .github/workflows/deploy-portfolio-api.yml
+      - packages/about-me/**
 
 jobs:
   deploy-worker:
@@ -34,6 +35,9 @@ jobs:
 
       - name: Update App Configurations
         run: pnpm run deploy:prepare-env-backend-hono
+
+      - name: Update About Me Json
+        run: pnpm run generate:about-me
 
       - name: Update Wrangler Config
         run: | 

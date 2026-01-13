@@ -39,14 +39,15 @@ export class PathService extends BaseService {
 
     /**
      * List all paths
+     * @param path Dynamic path to directory (e.g., \&#39;folder1/folder2\&#39;)
      * @param head Just check if directory exists (returns 200 if exists, 404 if not, 400 if file, no body)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFsList(head?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetFsList200Response>;
-    public getFsList(head?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetFsList200Response>>;
-    public getFsList(head?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetFsList200Response>>;
-    public getFsList(head?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFsList(path?: string, head?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GetFsList200Response>;
+    public getFsList(path?: string, head?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetFsList200Response>>;
+    public getFsList(path?: string, head?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetFsList200Response>>;
+    public getFsList(path?: string, head?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -77,7 +78,7 @@ export class PathService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/path/**`;
+        let localVarPath = `/api/path/`;
         return this.httpClient.request<GetFsList200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
