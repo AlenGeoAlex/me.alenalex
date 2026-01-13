@@ -1,4 +1,4 @@
 export const environment = {
-  apiBasePath: 'http://localhost:8080',
+  apiBasePath: 'https://portfolio-backend-hono.alengeoalex123.workers.dev/',
   production: false
 }

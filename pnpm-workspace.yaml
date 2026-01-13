@@ -3,12 +3,6 @@ packages:
   - gen/*
   - packages/*
 
-catalog:
-  '@angular/common': ^21.0.0
-  '@angular/core': ^21.0.0
-  rxjs: ~7.8.0
-  typescript: ~5.9.2
-
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild

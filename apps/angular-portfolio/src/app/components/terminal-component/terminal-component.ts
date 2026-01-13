@@ -1,4 +1,4 @@
-import {Component, ElementRef, input, output, signal, viewChild} from '@angular/core';
+import {Component, effect, ElementRef, inject, input, output, signal, viewChild} from '@angular/core';
 import {Header} from './header/header';
 import {Body} from './body/body';
 import {IResponseContextInput} from './body/response-context/response-context';
@@ -6,6 +6,8 @@ import {ITerminalCommandOutput} from './body/current-context/current-context';
 import {IErrorResponse} from './body/error-response-context/error-response-context';
 import {HelpBar} from './help-bar/help-bar';
 import {animate, stagger} from 'motion';
+import {MeService} from '@api/generated-sdk';
+import {rxResource} from '@angular/core/rxjs-interop';
 
 export type TTerminalContent = { kind: 'command', data: ITerminalCommandOutput, }
   | {kind: 'response', data: IResponseContextInput}
@@ -23,24 +25,52 @@ export type TTerminalContent = { kind: 'command', data: ITerminalCommandOutput, 
 })
 export class TerminalComponent {
   public readonly title = input<string>('connect me.alenalex:about');
-  protected readonly  close = output();
+  public readonly  close = output();
+  public readonly error = output<Error | string>();
   protected readonly  path = signal<string[]>(['home']);
   protected readonly  content = signal<TTerminalContent[]>([]);
   protected readonly isLoading = signal(false);
   private readonly helpBar = viewChild.required<HelpBar>('helpBar');
   private readonly tBody = viewChild.required<Body>('tBody');
   private readonly terminalRef = viewChild.required<ElementRef<HTMLElement>>('terminalRef');
+  private readonly meService = inject(MeService);
 
   constructor() {
-    this.content.update(x => {
-      x.push({kind: 'response', data : {
-        contentType: 'text/html',
-        content: this.motd
-        }})
-      return x;
+    effect(() => {
+      const status = this.initialResource.status();
+      let error: Error | undefined;
+      let data: string | undefined;
+      try {
+        error = this.initialResource.error();
+      } catch (e) {}
+
+      try {
+        data = this.initialResource.value()
+      }catch (e){}
+
+      if(status === 'error'){
+        console.error(error)
+        this.error.emit('An unknown error occurred');
+        return;
+      }
+
+      if(!this.initialResource.hasValue()) return;
+
+      this.content.update(x => {
+        x.push({kind: 'response', data : {
+            contentType: 'text/html',
+            content: data!
+          }})
+        return x;
+      })
+      this.pushNewCommand();
     })
-    this.pushNewCommand();
   }
+
+  protected readonly initialResource = rxResource({
+    params: () => ({}),
+    stream: (params) => this.meService.getInitMe()
+  })
 
   protected onCloseEmit(){
     // Emit to the parent component
