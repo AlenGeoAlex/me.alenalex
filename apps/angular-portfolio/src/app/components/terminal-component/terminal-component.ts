@@ -6,7 +6,7 @@ import {ITerminalCommandOutput} from './body/current-context/current-context';
 import {IErrorResponse} from './body/error-response-context/error-response-context';
 import {HelpBar} from './help-bar/help-bar';
 import {animate, stagger} from 'motion';
-import {MeService} from '@api/generated-sdk';
+import {GetFsList200Response, MeService, PathService} from '@api/generated-sdk';
 import {rxResource} from '@angular/core/rxjs-interop';
 
 export type TTerminalContent = { kind: 'command', data: ITerminalCommandOutput, }
@@ -34,6 +34,7 @@ export class TerminalComponent {
   private readonly tBody = viewChild.required<Body>('tBody');
   private readonly terminalRef = viewChild.required<ElementRef<HTMLElement>>('terminalRef');
   private readonly meService = inject(MeService);
+  private readonly pathService = inject(PathService);
 
   constructor() {
     effect(() => {
@@ -139,7 +140,6 @@ export class TerminalComponent {
       default:
         this.pushError(`Unknown command: ${commandToken}. Type help for a list of commands?
         `);
-        this.pushNewCommand();
         break;
     }
   }
@@ -151,9 +151,16 @@ export class TerminalComponent {
     })
   }
 
-  private pushError(message: string){
+  private pushError(message: string, addNextCommand = true){
     this.content.update(x => {
       x.push({kind: 'error', data: {message}})
+      return x;
+    })
+  }
+
+  private pushResponse(response: IResponseContextInput){
+    this.content.update(x => {
+      x.push({kind: 'response', data: response})
       return x;
     })
   }
@@ -290,6 +297,31 @@ export class TerminalComponent {
   }
 
   private onLsCommand() {
-
+    this.isLoading.set(true);
+    this.pathService.getFsList(
+      false
+    ).subscribe({
+      next: (data: GetFsList200Response) => {
+        this.isLoading.set(false);
+        this.pushResponse({
+          contentType: 'text/html',
+          content: `
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px 20px; padding: 10px;">
+            ${data.children.map(item => {
+                    const color = item.type === 'directory' ? '#4CAF50' : '#E0E0E0';
+                    const fontWeight = item.type === 'directory' ? 'bold' : 'normal';
+                    return `<div style="color: ${color}; font-weight: ${fontWeight};">${item.name}</div>`;
+                  }).join('')}
+          </div>
+           `
+        })
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
+      },
+      complete: () => {
+      }
+    })
   }
 }

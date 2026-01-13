@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-pnpm run env:example:portfolio-backend-hono
+pnpm run generate:portfolio-backend-hono:env-example
 pnpm run git
