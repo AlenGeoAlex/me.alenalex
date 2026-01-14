@@ -1,4 +1,5 @@
 {
   "contentType": "text/plain",
-  "content": "This is a test file"
+  "content": "This is a test file",
+  "name": "test.txt"
 }
