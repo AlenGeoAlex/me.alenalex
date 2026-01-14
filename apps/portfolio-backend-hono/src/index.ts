@@ -47,7 +47,7 @@ const openapi = fromHono(app, {
 //me
 openapi.get('/api/me', InitMe)
 
-openapi.get('/api/path/:path*', FsList)
+openapi.get('/api/path/:path', FsList)
 
 // Export the Hono app
 export default app;
