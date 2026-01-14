@@ -10,7 +10,7 @@ export class FsOpen extends OpenAPIRoute {
         summary: "Open a file",
         request: {
             params: z.object({
-                path: Str({
+                file: Str({
                     description: "Dynamic path to directory (e.g., 'folder1/folder2')",
                     required: false,
                     default: ""
