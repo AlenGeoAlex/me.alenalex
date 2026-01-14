@@ -66,23 +66,8 @@ export class FsList extends OpenAPIRoute {
 
     async handle(c: AppContext)  {
         const data = await this.getValidatedData<typeof this.schema>();
-        const url = new URL(c.req.url);
-        let pathSplit = url.pathname.split('/');
+        let pathSplit = data.params.path.split('/');
 
-        // First, it starts with / so check if a path is empty
-        if(pathSplit[0] === '')
-            pathSplit = pathSplit.slice(1)
-
-        if(pathSplit.length <= 2)
-            //This should never happen, but just in case
-            return c.json({
-                error: 'Invalid path'
-            }, 500);
-
-        if(pathSplit[0] !== 'api' || pathSplit[1] !== 'path')
-            return c.json({error: 'Forbidden path'}, 500)
-
-        pathSplit = pathSplit.slice(2)
         let currentChildren = content.children as FSNode[];
         let currentPathStr = '~'
         for (let eachPath of pathSplit) {

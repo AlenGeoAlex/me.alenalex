@@ -39,17 +39,12 @@ const openapi = fromHono(app, {
 	docs_url: "/",
 });
 
-// Register OpenAPI endpoints
-// openapi.get("/api/tasks", TaskList);
-// openapi.post("/api/tasks", TaskCreate);
-// openapi.get("/api/tasks/:taskSlug", TaskFetch);
-// openapi.delete("/api/tasks/:taskSlug", TaskDelete);
-
 //me
 openapi.get('/api/me', InitMe)
 
+// fs
 openapi.get('/api/path/:path', FsList)
-openapi.get('/api/open/:file', FsOpen)
+openapi.get('/api/open/:fileName', FsOpen)
 
 // Export the Hono app
 export default app;
