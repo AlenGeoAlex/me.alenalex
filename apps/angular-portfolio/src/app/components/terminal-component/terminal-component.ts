@@ -135,6 +135,7 @@ export class TerminalComponent {
         this.onLsCommand();
         break;
       case 'back':
+        this.onBackCommand();
         break;
       case 'clear':
         this.onClearCommand();
@@ -149,7 +150,7 @@ export class TerminalComponent {
         this.onOpenCommand(userCommand.slice(1));
         break;
       case 'download':
-
+        this.onOpenCommand(userCommand.slice(1), false);
         break;
       case 'skills':
 
@@ -204,31 +205,35 @@ export class TerminalComponent {
       default:
         const constructedPath = this.constructPath(directory);
         this.isLoading.set(true);
-        this.pathService.getFsList(
-          constructedPath,
-          true
-        ).subscribe({
-          next: () => {
-            this.isLoading.set(false);
-            this.path.set(constructedPath.split('/'));
-          },
-          error: (err: HttpErrorResponse) => {
-            this.isLoading.set(false);
-            if(err.status === 404){
-              this.pushError(`Directory ${constructedPath} does not exist`);
-              return;
-            }
-
-            if(err.status === 400){
-              this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
-              return;
-            }
-
-            this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
-          }
-        })
+        this.onPathChange(constructedPath);
         break;
     }
+  }
+
+  private onPathChange(newPath: string){
+    this.pathService.getFsList(
+      newPath,
+      true
+    ).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.path.set(newPath.split('/'));
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoading.set(false);
+        if(err.status === 404){
+          this.pushError(`Directory ${newPath} does not exist`);
+          return;
+        }
+
+        if(err.status === 400){
+          this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
+          return;
+        }
+
+        this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
+      }
+    })
   }
 
   private constructPath(newPath: string) : string {
@@ -240,9 +245,16 @@ export class TerminalComponent {
   }
 
   private onBackCommand(){
+    const strings = this.path();
+    if(strings.length <= 1){
+      this.pushError('Cannot go back any further');
+      return;
+    }
 
+    strings.pop();
+    this.path.set(strings);
+    this.onPathChange(this.path().join('/'));
   }
-
 
 
   private onHelpCommand(){
@@ -382,17 +394,18 @@ export class TerminalComponent {
     })
   }
 
-  private onOpenCommand(strings: string[]) {
+  private onOpenCommand(strings: string[], download = false) {
     if(strings.length === 0){
       this.pushError('No file specified');
       return;
     }
 
 
+
     const fileName = this.path().join('/') + '/' + strings[0];
+
     this.isLoading.set(true);
-    console.log(fileName)
-    this.pathService.getFsOpen(fileName, false)
+    this.pathService.getFsOpen(fileName, download)
       .subscribe({
         next: (data) => {
           this.isLoading.set(false);
