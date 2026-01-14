@@ -1,25 +1,13 @@
 import {Bool, OpenAPIRoute, Str} from "chanfana";
 import {z} from "zod";
-import {AppContext, DirectoryNode, FSNode} from "../../types";
-import content from '../../data/me.json'
+import {AppContext, FSNode} from "../../types";
+import content from "../../data/me.json";
 
-const DirectorySchema = z.object({
-    type: z.literal("directory"),
-    name: z.string(),
-    children: z.array(z.object({
-        type: z.enum(["file", "directory"]),
-        name: z.string()
-    }))
-});
+export class FsOpen extends OpenAPIRoute {
 
-const ErrorSchema = z.object({
-    error: z.string()
-});
-
-export class FsList extends OpenAPIRoute {
     schema = {
         tags: ["Path"],
-        summary: "List all paths",
+        summary: "Open a file",
         request: {
             params: z.object({
                 path: Str({
@@ -29,8 +17,8 @@ export class FsList extends OpenAPIRoute {
                 })
             }),
             query: z.object({
-                head: Bool({
-                    description: "Just check if directory exists (returns 200 if exists, 404 if not, 400 if file, no body)",
+                download: Bool({
+                    description: "Should download the data or not",
                     required: false,
                     default: false
                 })
@@ -38,33 +26,25 @@ export class FsList extends OpenAPIRoute {
         },
         responses: {
             "200": {
-                description: "Success - directory exists and listing returned (when head=false) or directory exists (when head=true, no body)",
+                description: "Success - file opened",
                 content: {
-                    "application/json": {
-                        schema: DirectorySchema
-                    }
-                }
-            },
-            "400": {
-                description: "Bad Request - Path is a file, not a directory",
-                content: {
-                    "application/json": {
-                        schema: ErrorSchema
-                    }
+                    "application/json": { schema: z.object({
+                            contentType: z.string(),
+                            content: z.string()
+                        }) },
+
                 }
             },
             "404": {
                 description: "Not Found - Path does not exist",
                 content: {
-                    "application/json": {
-                        schema: ErrorSchema
-                    }
+                    "application/json": { schema: z.object({error: z.string()}) }
                 }
             }
         }
     }
 
-    async handle(c: AppContext)  {
+    async handle(c: AppContext) {
         const data = await this.getValidatedData<typeof this.schema>();
         const url = new URL(c.req.url);
         let pathSplit = url.pathname.split('/');
@@ -85,6 +65,8 @@ export class FsList extends OpenAPIRoute {
         pathSplit = pathSplit.slice(2)
         let currentChildren = content.children as FSNode[];
         let currentPathStr = '~'
+        const fileName = pathSplit.pop();
+
         for (let eachPath of pathSplit) {
             let next = currentChildren.find(x => x.name === eachPath);
             currentPathStr += `/${eachPath}`
@@ -101,17 +83,16 @@ export class FsList extends OpenAPIRoute {
             currentChildren = next.children as FSNode[];
         }
 
-        if (!data.query.head) {
+        const dataNode = currentChildren.find(x => x.name === fileName && x.type === 'file');
+        if(!dataNode || dataNode.type !== 'file')
             return c.json({
-                type: 'directory',
-                name: currentPathStr,
-                children: currentChildren.map(x => ({
-                    type: x.type,
-                    name: x.name
-                }))
-            })
-        }
+                error: 'No file found at ' + currentPathStr
+            }, 404)
 
-        return c.body(undefined, 200);
+        return c.json({
+            contentType: dataNode.contentType,
+            content: dataNode.content
+        }, 200)
     }
+
 }

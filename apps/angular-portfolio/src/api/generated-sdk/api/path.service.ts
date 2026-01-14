@@ -78,7 +78,7 @@ export class PathService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/path/`;
+        let localVarPath = `/api/path/${this.configuration.encodeParam({name: "path", value: path, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<GetFsList200Response>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
