@@ -1,4 +1,15 @@
-import {Component, effect, ElementRef, inject, input, output, signal, viewChild} from '@angular/core';
+import {
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  linkedSignal,
+  output,
+  signal,
+  untracked,
+  viewChild
+} from '@angular/core';
 import {Header} from './header/header';
 import {Body} from './body/body';
 import {IResponseContextInput} from './body/response-context/response-context';
@@ -8,6 +19,7 @@ import {HelpBar} from './help-bar/help-bar';
 import {animate, stagger} from 'motion';
 import {GetFsList200Response, MeService, PathService} from '@api/generated-sdk';
 import {rxResource} from '@angular/core/rxjs-interop';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export type TTerminalContent = { kind: 'command', data: ITerminalCommandOutput, }
   | {kind: 'response', data: IResponseContextInput}
@@ -27,7 +39,7 @@ export class TerminalComponent {
   public readonly title = input<string>('connect me.alenalex:about');
   public readonly  close = output();
   public readonly error = output<Error | string>();
-  protected readonly  path = signal<string[]>(['home']);
+  protected readonly path = signal<string[]>(['home']);
   protected readonly  content = signal<TTerminalContent[]>([]);
   protected readonly isLoading = signal(false);
   private readonly helpBar = viewChild.required<HelpBar>('helpBar');
@@ -35,6 +47,7 @@ export class TerminalComponent {
   private readonly terminalRef = viewChild.required<ElementRef<HTMLElement>>('terminalRef');
   private readonly meService = inject(MeService);
   private readonly pathService = inject(PathService);
+  private readonly initialized = signal(false);
 
   constructor() {
     effect(() => {
@@ -60,9 +73,13 @@ export class TerminalComponent {
         this.error.emit('An unknown error occurred');
         return;
       }
-
+      const initialized = this.initialized();
+      if(initialized) return;
       if(!this.initialResource.hasValue()) return;
 
+      untracked(() => {
+        this.initialized.set(true);
+      })
       this.content.update(x => {
         x.push({kind: 'response', data : {
             contentType: 'text/html',
@@ -129,7 +146,7 @@ export class TerminalComponent {
 
         break;
       case 'open':
-
+        this.onOpenCommand(userCommand.slice(1));
         break;
       case 'download':
 
@@ -154,6 +171,9 @@ export class TerminalComponent {
   private pushError(message: string, addNextCommand = true){
     this.content.update(x => {
       x.push({kind: 'error', data: {message}})
+      if(addNextCommand){
+        x.push({kind: 'command', data: {path: this.path(), command: ''}})
+      }
       return x;
     })
   }
@@ -174,15 +194,49 @@ export class TerminalComponent {
     const directory = newPath[0];
     switch (directory.toLowerCase()) {
       case '~':
-        this.path.set(['/home/']);
+        this.path.set(['']);
+        this.pushNewCommand();
         break;
       case '/':
-        this.path.set(['/']);
+        this.path.set(['home']);
+        this.pushNewCommand();
         break;
       default:
-        this.pushError(`Directory ${directory} does not exist`);
+        const constructedPath = this.constructPath(directory);
+        this.isLoading.set(true);
+        this.pathService.getFsList(
+          constructedPath,
+          true
+        ).subscribe({
+          next: () => {
+            this.isLoading.set(false);
+            this.path.set(constructedPath.split('/'));
+          },
+          error: (err: HttpErrorResponse) => {
+            this.isLoading.set(false);
+            if(err.status === 404){
+              this.pushError(`Directory ${constructedPath} does not exist`);
+              return;
+            }
+
+            if(err.status === 400){
+              this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
+              return;
+            }
+
+            this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
+          }
+        })
         break;
     }
+  }
+
+  private constructPath(newPath: string) : string {
+    if(newPath.startsWith('/')){
+      return newPath;
+    }
+
+    return this.path().join('/') + '/' + newPath;
   }
 
   private onBackCommand(){
@@ -298,7 +352,9 @@ export class TerminalComponent {
 
   private onLsCommand() {
     this.isLoading.set(true);
+    const currentPath = this.path().join('/');
     this.pathService.getFsList(
+      currentPath,
       false
     ).subscribe({
       next: (data: GetFsList200Response) => {
@@ -315,6 +371,7 @@ export class TerminalComponent {
           </div>
            `
         })
+        this.pushNewCommand();
       },
       error: (err) => {
         this.isLoading.set(false);
@@ -323,5 +380,32 @@ export class TerminalComponent {
       complete: () => {
       }
     })
+  }
+
+  private onOpenCommand(strings: string[]) {
+    if(strings.length === 0){
+      this.pushError('No file specified');
+      return;
+    }
+
+
+    const fileName = this.path().join('/') + '/' + strings[0];
+    this.isLoading.set(true);
+    console.log(fileName)
+    this.pathService.getFsOpen(fileName, false)
+      .subscribe({
+        next: (data) => {
+          this.isLoading.set(false);
+          this.pushResponse({
+            contentType: data.contentType as IResponseContextInput['contentType'],
+            content: data.content
+          })
+          this.pushNewCommand();
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
+        }
+      })
   }
 }
