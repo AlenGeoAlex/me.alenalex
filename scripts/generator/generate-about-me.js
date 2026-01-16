@@ -98,7 +98,11 @@ function buildFileNode(filePath, basePath) {
 
 function buildFileSystemTree(dirPath, basePath = dirPath) {
     const stats = fs.statSync(dirPath);
-    const relativeName = path.relative(basePath, dirPath) || path.basename(dirPath);
+    let relativeName = path.relative(basePath, dirPath) || path.basename(dirPath);
+    const fileSplits = relativeName.split('/');
+    if(fileSplits.length > 1){
+        relativeName = fileSplits.pop();
+    }
 
     if (!stats.isDirectory()) {
         throw new Error(`${dirPath} is not a directory`);
