@@ -9,6 +9,7 @@ on:
       - apps/portfolio-backend-hono/**
       - .github/workflows/deploy-portfolio-api.yml
       - packages/about-me/**
+      - ./package.json
 
 jobs:
   deploy-worker:

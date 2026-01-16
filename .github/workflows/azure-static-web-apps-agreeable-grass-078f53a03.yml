@@ -1,11 +1,15 @@
 name: Azure Static Web Apps CI/CD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
-
+      - master
+    paths:
+      - apps/angular-portfolio/**
+      - ./package.json
+      - .github/workflows/azure-static-web-apps-agreeable-grass-078f53a03.yml
 
 jobs:
   build_and_deploy_job:
@@ -22,6 +26,11 @@ jobs:
           lfs: false
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
+
+      - name: Get Node.js version from .nvmrc
+        id: Set nvmrc
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
@@ -30,6 +39,7 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
