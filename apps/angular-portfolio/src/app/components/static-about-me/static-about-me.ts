@@ -1,19 +1,16 @@
-import {Component, inject, signal} from '@angular/core';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {Component, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {AboutCardComponent} from "../about-bubble/about-bubble";
-
 
 
 @Component({
   selector: 'app-static-about-me',
   standalone: true,
-  imports: [CommonModule, AboutCardComponent],
+  imports: [CommonModule],
   templateUrl: './static-about-me.html',
   styleUrl: './static-about-me.scss',
 })
 export class StaticAboutMe {
-  visibleSections: boolean[] = [false, false, false, false];
+  visibleSections= signal([false, false, false, false]);
 
   ngOnInit() {
     this.setupScrollObserver();
@@ -25,7 +22,10 @@ export class StaticAboutMe {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = parseInt(entry.target.getAttribute('data-index') || '0');
-            this.visibleSections[index] = true;
+            this.visibleSections.update(x => {
+              x[index] = true;
+              return x
+            })
           }
         });
       },

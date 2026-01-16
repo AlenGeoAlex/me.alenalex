@@ -9,6 +9,7 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "aws4fetch": "^1.0.20",
     "chanfana": "^2.6.3",
     "hono": "^4.6.20",
     "ulid": "^3.0.2",
