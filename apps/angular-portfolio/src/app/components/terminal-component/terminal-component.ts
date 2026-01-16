@@ -36,7 +36,7 @@ export type TTerminalContent = { kind: 'command', data: ITerminalCommandOutput, 
   styleUrl: './terminal-component.css',
 })
 export class TerminalComponent {
-  public readonly title = input<string>('connect me.alenalex:about');
+  public readonly title = input<string>('connected to me.alenalex:about');
   public readonly  close = output();
   public readonly error = output<Error | string>();
   protected readonly path = signal<string[]>(['home']);
@@ -48,6 +48,9 @@ export class TerminalComponent {
   private readonly meService = inject(MeService);
   private readonly pathService = inject(PathService);
   private readonly initialized = signal(false);
+  private readonly commandHistory = signal<string[]>([]);
+
+  private historyCounter = 0;
 
   constructor() {
     effect(() => {
@@ -102,6 +105,7 @@ export class TerminalComponent {
   }
 
   protected onCommand($event: ITerminalCommandOutput) {
+    this.historyCounter = 0;
     if($event.command.trim().startsWith("rm -rf")){
       this.runEffect();
       return;
@@ -115,6 +119,11 @@ export class TerminalComponent {
         return x;
 
       last.data = $event;
+      return x;
+    })
+
+    this.commandHistory.update(x => {
+      x.push($event.command);
       return x;
     })
 
@@ -218,6 +227,7 @@ export class TerminalComponent {
       next: () => {
         this.isLoading.set(false);
         this.path.set(newPath.split('/'));
+        this.pushNewCommand();
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
@@ -254,6 +264,7 @@ export class TerminalComponent {
     strings.pop();
     this.path.set(strings);
     this.onPathChange(this.path().join('/'));
+    this.pushNewCommand();
   }
 
 
@@ -420,5 +431,9 @@ export class TerminalComponent {
           this.pushError(err.message || err.error || 'An unknown error occurred. Please try again later.');
         }
       })
+  }
+
+  protected onTab($event: any) {
+    $event.preventDefault();
   }
 }

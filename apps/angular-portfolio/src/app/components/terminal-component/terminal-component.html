@@ -1,4 +1,4 @@
-<div #terminalRef class="bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+<div (keydown.tab)="onTab($event)" #terminalRef class="bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
   <terminal-header [title]="title()" (close)="onCloseEmit()"></terminal-header>
   <terminal-help-bar #helpBar></terminal-help-bar>
   <div class="h-[70vh] bg-black rounded-lg overflow-hidden">

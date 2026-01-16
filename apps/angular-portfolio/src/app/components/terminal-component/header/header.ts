@@ -16,6 +16,10 @@ export class Header {
 
   public title = input();
   public close = output();
+
+  protected closeTerminal() {
+    this.close.emit();
+  }
 }
 
 
