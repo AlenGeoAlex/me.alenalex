@@ -58,7 +58,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build Angular Portfolio
         run: pnpm run build:portfolio-app
