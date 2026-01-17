@@ -17,7 +17,7 @@ export async function getSignedUrl(opts: {
 
     const client = new AwsClient({
         service: "s3",
-        region: "auto",
+        region: "us-east-1",
         accessKeyId: opts.accessKeyId,
         secretAccessKey: opts.secretAccessKey,
     });
