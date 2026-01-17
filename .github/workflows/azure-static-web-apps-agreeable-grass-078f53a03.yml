@@ -25,6 +25,17 @@ jobs:
           submodules: true
           lfs: false
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: Install OIDC Client from Core Package
         run: pnpm install -d -w @actions/core@1.6.0 @actions/http-client
 
@@ -45,17 +56,6 @@ jobs:
         run: |
           env "FAVICON_REPLACEMENT_DESTINATION"="apps/angular-portfolio/public/" \
           node ./scripts/deployment/update-favicon-pack.js
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
