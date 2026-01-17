@@ -20,11 +20,15 @@ export class AboutPage {
     'static': true,
     'chat': false
   })
+  protected readonly setDisplayForStatic = signal(false);
 
   constructor() {
     effect(() => {
       const pageType = this.pageType();
       localStorage.setItem('pageType', pageType);
+
+      if(pageType === 'static')
+        this.setDisplayForStatic.set(true);
     })
   }
 

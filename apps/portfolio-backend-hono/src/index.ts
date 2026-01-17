@@ -41,6 +41,7 @@ const openapi = fromHono(app, {
 
 //me
 openapi.get('/api/me', InitMe)
+openapi.get('/api/me/cv', InitMe)
 
 // fs
 openapi.get('/api/path/:path', FsList)

@@ -69,7 +69,7 @@
       @if (pageType() === 'interactive'){
         <app-terminal-component (error)="onInteractiveError($event)" (close)="onInteractiveClose()"></app-terminal-component>
       } @else if(pageType() === 'static') {
-        <app-static-about-me></app-static-about-me>
+        <app-static-about-me [setVisible]="setDisplayForStatic()"></app-static-about-me>
       } @else if(pageType() === 'chat') {
         <!-- Add your chat content here -->
         <div class="text-white">Chat View Content</div>

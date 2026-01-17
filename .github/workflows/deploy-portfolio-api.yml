@@ -42,7 +42,12 @@ jobs:
 
       - name: Update Wrangler Config
         run: | 
-          env "WRANGLER-CFG-vars.ALLOWED_HOST"="http://localhost:4200" \
+          env "WRANGLER-CFG-vars.ALLOWED_HOST"="${{ secrets.BACKEND_ENV_ALLOWED_HOST }}" \
+          "WRANGLER-CFG-vars.R2_ACCOUNT_ID"="${{ secrets.BACKEND_ENV_R2_ACCOUNT_ID }}" \
+          "WRANGLER-CFG-vars.R2_ACCESS_KEY"="${{ secrets.BACKEND_ENV_R2_ACCESS_KEY }}" \
+          "WRANGLER-CFG-vars.R2_SECRET_KEY"="${{ secrets.BACKEND_ENV_R2_SECRET_KEY }}" \
+          "WRANGLER-CFG-vars.R2_CV_PATH"="${{ secrets.BACKEND_ENV_R2_CV_PATH }}" \
+          "WRANGLER-CFG-vars.R2_BUCKET"="${{ secrets.BACKEND_ENV_R2_BUCKET }}" \
           node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
 
       - name: Deploy to Cloudflare Workers

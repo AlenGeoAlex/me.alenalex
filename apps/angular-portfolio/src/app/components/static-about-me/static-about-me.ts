@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, input, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 
@@ -10,10 +10,15 @@ import {CommonModule} from '@angular/common';
   styleUrl: './static-about-me.scss',
 })
 export class StaticAboutMe {
+
+  public setVisible = input(false);
   visibleSections= signal([false, false, false, false]);
 
-  ngOnInit() {
+  constructor() {
     this.setupScrollObserver();
+    const isVisible = this.setVisible();
+    if(isVisible)
+      this.visibleSections.set([true, true, true, true]);
   }
 
   private setupScrollObserver() {

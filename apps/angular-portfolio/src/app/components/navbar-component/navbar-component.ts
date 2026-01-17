@@ -40,4 +40,8 @@ export class NavbarComponent {
       this.closeMobileMenu();
     }
   }
+
+  protected routeToBlog() {
+    window.open("https://blog.alenalex.me", "_blank")
+  }
 }
