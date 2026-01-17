@@ -58,7 +58,13 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify Package Versions
+        run: |
+          echo "Node version: $(node --version)"
+          echo "PNPM version: $(pnpm --version)"
+          pnpm list @angular/core @angular/forms
 
       - name: Build Angular Portfolio
         run: pnpm run build:portfolio-app
