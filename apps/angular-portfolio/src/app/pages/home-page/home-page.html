@@ -43,6 +43,7 @@
 
     <button
       (click)="downloadCV()"
+      [disabled]="isCVLoading()"
       class="cta-button opacity-0 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 select-none">
       Download CV
     </button>

@@ -17,9 +17,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { GetFsList200Response } from '../model/getFsList200Response';
+import { GetCvGet404Response } from '../model/getCvGet404Response';
 // @ts-ignore
-import { GetFsList400Response } from '../model/getFsList400Response';
+import { GetFsList200Response } from '../model/getFsList200Response';
 // @ts-ignore
 import { GetFsOpen200Response } from '../model/getFsOpen200Response';
 

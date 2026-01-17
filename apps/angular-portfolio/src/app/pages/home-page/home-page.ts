@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {animate} from 'motion';
 import {Github, Linkedin, LucideAngularModule, LucideIconData, Mail} from 'lucide-angular';
+import {MeService} from '@api/generated-sdk';
+import {HotToastService} from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-home-page',
@@ -11,6 +13,9 @@ import {Github, Linkedin, LucideAngularModule, LucideIconData, Mail} from 'lucid
 })
 export class HomePage {
 
+  protected readonly isCVLoading = signal(false);
+  private readonly toastService = inject(HotToastService);
+  private readonly meService = inject(MeService);
   ngOnInit() {
     this.initializeAnimations();
   }
@@ -62,7 +67,19 @@ export class HomePage {
   }
 
   downloadCV() {
-    window.open('/assets/your-cv.pdf', '_blank');
+    this.isCVLoading.set(true);
+    this.meService.getCvGet()
+      .subscribe({
+        next: (data) => {
+          this.isCVLoading.set(false);
+          window.open(data.signedUrl, '_blank');
+        },
+        error: (error) => {
+          console.error(error);
+          this.toastService.error('Failed to download CV');
+          this.isCVLoading.set(false);
+        }
+      })
   }
 
 

@@ -10,9 +10,10 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/getCvGet200Response.ts
+model/getCvGet404Response.ts
 model/getFsList200Response.ts
 model/getFsList200ResponseChildrenInner.ts
-model/getFsList400Response.ts
 model/getFsOpen200Response.ts
 model/models.ts
 param.ts
