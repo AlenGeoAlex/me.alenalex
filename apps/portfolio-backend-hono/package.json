@@ -15,6 +15,8 @@
     "aws4fetch": "^1.0.20",
     "chanfana": "^2.6.3",
     "hono": "^4.6.20",
+    "hono-rate-limiter": "^0.5.3",
+    "mimetext": "^3.0.27",
     "ulid": "^3.0.2",
     "zod": "^3.24.1"
   },

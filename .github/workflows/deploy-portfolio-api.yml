@@ -50,6 +50,9 @@ jobs:
           "WRANGLER-CFG-vars.R2_BUCKET"="${{ secrets.BACKEND_ENV_R2_BUCKET }}" \
           "WRANGLER-CFG-vars.R2_PUBLIC_URL"="${{ secrets.BACKEND_ENV_R2_PUBLIC_URL }}" \
           "WRANGLER-CFG-vars.TURNSTILE_SECRET_KEY"="${{ secrets.BACKEND_ENV_TURNSTILE_SECRET_KEY }}" \
+          "WRANGLER-CFG-send_email[0].destination_address"="${{ secrets.BACKEND_ENV_EMAIL_BINDING_1_DESTINATION_ADDRESS }}" \
+          "WRANGLER-CFG-send_email[0].name"="EMAIL_BINDING" \
+          "WRANGLER-CFG-vars.DESTINATION_ADDRESS"="${{ secrets.BACKEND_ENV_EMAIL_BINDING_1_DESTINATION_ADDRESS }}" \
           node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
 
       - name: Deploy to Cloudflare Workers

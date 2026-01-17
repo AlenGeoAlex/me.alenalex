@@ -5,5 +5,11 @@
 	"compatibility_date": "2025-09-27",
 	"observability": {
 		"enabled": true
-	}
+	},
+	"send_email": [
+		{
+			"name": "EMAIL_BINDING",
+			"destination_address": ""
+		}
+	]
 }

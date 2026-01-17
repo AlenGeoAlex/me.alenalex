@@ -5,6 +5,7 @@ packages:
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - core-js-pure
   - esbuild
   - less
   - lmdb

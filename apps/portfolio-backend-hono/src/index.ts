@@ -4,6 +4,9 @@ import {CvGet, InitMe} from "./endpoints/me";
 import { cors } from "hono/cors";
 import {FsList} from "./endpoints/fs";
 import {FsOpen} from "./endpoints/fs/fsOpen";
+import {ContactMe} from "./endpoints/me/contactMe";
+import {rateLimiter} from "hono-rate-limiter";
+import {IPUtils} from "./utils/ip-utils";
 
 const app = new Hono<{ Bindings: Env }>();
 app.use(async (c, next) => {
@@ -35,6 +38,14 @@ app.use(async (c, next) => {
 	c.res.headers.set('X-Response-Time', `${end - start}`)
 });
 
+app.use(
+	rateLimiter({
+		windowMs: 60 * 1000, // 1 minute
+		limit: 60, // Limit each client to 60 requests per minute
+		keyGenerator: (c) => IPUtils.getClientIP(c)
+	})
+);
+
 const openapi = fromHono(app, {
 	docs_url: "/",
 });
@@ -42,6 +53,7 @@ const openapi = fromHono(app, {
 //me
 openapi.get('/api/me', InitMe)
 openapi.get('/api/me/cv', CvGet)
+openapi.post('/api/me/contact', ContactMe)
 
 // fs
 openapi.get('/api/path/:path', FsList)
