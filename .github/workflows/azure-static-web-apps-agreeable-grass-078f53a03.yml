@@ -44,7 +44,7 @@ jobs:
       - name: Update Favicon
         run: |
           env "FAVICON_REPLACEMENT_DESTINATION"="apps/angular-portfolio/public/" \
-          node ./scripts/update-favicon-pack.js
+          node ./scripts/deployment/update-favicon-pack.js
 
       - name: Build And Deploy
         id: builddeploy
