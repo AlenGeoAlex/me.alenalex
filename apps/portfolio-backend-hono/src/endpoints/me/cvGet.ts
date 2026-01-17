@@ -1,7 +1,6 @@
 import {OpenAPIRoute} from "chanfana";
 import {AppContext} from "../../types";
 import {z} from "zod";
-import {getSignedUrl} from "../../utils/s3-utils";
 
 export class CvGet extends OpenAPIRoute {
     schema = {
@@ -33,13 +32,7 @@ export class CvGet extends OpenAPIRoute {
     }
 
     async handle(c: AppContext) {
-        const url = await getSignedUrl({
-            bucket: c.env.R2_BUCKET,
-            accessKeyId: c.env.R2_ACCESS_KEY,
-            secretAccessKey: c.env.R2_SECRET_KEY,
-            accountId: c.env.R2_ACCOUNT_ID,
-            path: c.env.R2_CV_PATH,
-        });
+        const url = `https://${c.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${c.env.R2_BUCKET}/${c.env.R2_CV_PATH}`;
 
         if(!url)
             return c.json({
