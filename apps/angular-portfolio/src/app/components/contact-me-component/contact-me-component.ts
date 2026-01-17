@@ -1,14 +1,14 @@
-import {Component, ComponentRef, effect, ElementRef, signal, viewChild} from '@angular/core';
+import {Component, ElementRef, signal, viewChild} from '@angular/core';
 import {environment} from '@env/environment';
 import {email, Field, form, minLength, required} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-contact-me-component',
-  imports: [
-    Field
-  ],
   templateUrl: './contact-me-component.html',
   styleUrl: './contact-me-component.scss',
+  imports: [
+    Field
+  ]
 })
 export class ContactMeComponent {
 
