@@ -1,5 +1,10 @@
 <div class="min-h-screen bg-gray-900">
-  <app-navbar></app-navbar>
+  <app-navbar (contactMeRequest)="onContactMeRequest()"></app-navbar>
   <app-home-page></app-home-page>
   <app-about-page></app-about-page>
+  <ngx-custom-modal #modalComponent [options]="modalOptions">
+    <ng-template #modalBody>
+      <app-contact-me-component></app-contact-me-component>
+    </ng-template>
+  </ngx-custom-modal>
 </div>

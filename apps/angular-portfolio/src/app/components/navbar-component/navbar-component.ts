@@ -1,7 +1,8 @@
-import {Component, HostListener, signal} from '@angular/core';
+import {Component, HostListener, inject, output, signal, ViewContainerRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {BookOpen, Home, LucideAngularModule, Mail, Menu, User, X} from 'lucide-angular';
+
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,8 @@ import {BookOpen, Home, LucideAngularModule, Mail, Menu, User, X} from 'lucide-a
 export class NavbarComponent {
   isScrolled = signal(false);
   isMobileMenuOpen = signal(false);
+
+  public contactMeRequest = output();
 
   readonly Home = Home;
   readonly User = User;
@@ -43,5 +46,9 @@ export class NavbarComponent {
 
   protected routeToBlog() {
     window.open("https://blog.alenalex.me", "_blank")
+  }
+
+  protected onContactMe() {
+    this.contactMeRequest.emit();
   }
 }

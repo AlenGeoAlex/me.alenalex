@@ -35,6 +35,7 @@
     "lucide-angular": "^0.562.0",
     "marked": "^17.0.1",
     "motion": "^12.25.0",
+    "ngx-custom-modal": "^20.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "typed.js": "^2.1.0"

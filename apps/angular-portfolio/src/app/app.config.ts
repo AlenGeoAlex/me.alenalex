@@ -20,7 +20,8 @@ export const appConfig: ApplicationConfig = {
         }
 
         return new Configuration(params)
-      })
+      }),
+
     ]), provideHotToastConfig()
   ]
 };

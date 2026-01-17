@@ -16,12 +16,12 @@ export class HomePage {
   protected readonly isCVLoading = signal(false);
   private readonly toastService = inject(HotToastService);
   private readonly meService = inject(MeService);
+
   ngOnInit() {
     this.initializeAnimations();
   }
 
   initializeAnimations() {
-    // Animate hero text on load
     animate(
       '.hero-greeting',
       { opacity: [0, 1], y: [30, 0] },

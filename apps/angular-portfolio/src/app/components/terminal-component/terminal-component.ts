@@ -137,9 +137,11 @@ export class TerminalComponent {
 
     const commandToken = userCommand[0];
     switch (commandToken.toLowerCase()) {
+      case 'switch':
       case 'cd':
         this.onCdCommand(userCommand.slice(1));
         break;
+      case 'list':
       case 'ls':
         this.onLsCommand();
         break;
@@ -153,16 +155,17 @@ export class TerminalComponent {
         this.onHelpCommand();
         break;
       case 'about':
-
+        this.pushResponse({
+          contentType: 'text/plain',
+          content: 'This is an interactive terminal for geeks like me who like to dwell a bit into its working and use keyboard rather than mouse. It is a very basic implementation and supports only handful of commands. PLEASE DON\'T BREAK IT :)'
+        })
+        this.pushNewCommand();
         break;
       case 'open':
         this.onOpenCommand(userCommand.slice(1));
         break;
       case 'download':
         this.onOpenCommand(userCommand.slice(1), false);
-        break;
-      case 'skills':
-
         break;
       default:
         this.pushError(`Unknown command: ${commandToken}. Type help for a list of commands?
@@ -269,12 +272,41 @@ export class TerminalComponent {
 
 
   private onHelpCommand(){
-    // this.helpBar().toggleHelp();
-    // setTimeout(() => {
-    //   this.tBody().focusInput();
-    // }, 500)
     const helpMessage = `
-      ### Command
+    ###Commands
+
+    - \`cd <dir>\`
+      Change the current directory
+
+    - \`ls\`
+      List files in the current directory
+
+    - \`list\`
+      Alias for \`ls\`
+
+    - \`back\`
+      Go back to the previous directory
+
+    - \`open <name>\`
+      Open a file or directory
+
+    - \`download <file>\`
+      Download a file
+
+    - \`about\`
+      Print the about file
+
+
+    ###Keybinds
+
+    - **Enter**
+      Execute the current command
+
+    - **Tab**
+      ❌ No autocompletion support :)
+
+    - **Up Arrow**
+      ⚠️ Buggy history support :)
     `;
     this.content.update(x => {
       x.push({kind: 'response', data: {
@@ -315,7 +347,6 @@ export class TerminalComponent {
 
     const lines = getAllTerminalLines();
     if (!lines.length) return;
-    // lines.reverse();
 
     if(this.content().length <= 2){
       animate(

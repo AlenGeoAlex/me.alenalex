@@ -6,7 +6,10 @@
     "baseUrl": "./",
     "paths": {
       "@api": ["src/api/index.ts"],
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@env/*": ["src/environments/*"],
+      "@services/*": ["src/app/services/*"],
+      "@types/*": ["src/app/types/*"],
     }
   },
   "include": [
