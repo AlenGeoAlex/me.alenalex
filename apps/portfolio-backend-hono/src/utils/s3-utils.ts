@@ -5,15 +5,16 @@ export async function getSignedUrl(opts: {
     secretAccessKey: string,
     bucket: string,
     path: string
-    accountId: string
+    accountId: string,
+    publicUrl: string,
     method?: 'GET' | 'PUT',
-    validityInSeconds?: number,
+    validityInSeconds?: number
 }) : Promise<string | undefined> {
     opts.method = opts.method || 'GET';
     if(opts.method === 'PUT')
         return undefined;
 
-    const r2Url = `https://${opts.accountId}.r2.cloudflarestorage.com`;
+    const r2Url = `${opts.publicUrl}`;
 
     const client = new AwsClient({
         service: "s3",
