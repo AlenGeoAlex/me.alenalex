@@ -32,7 +32,7 @@ export class CvGet extends OpenAPIRoute {
     }
 
     async handle(c: AppContext) {
-        const url = `${c.env.R2_PUBLIC_URL}/${c.env.R2_BUCKET}/${c.env.R2_CV_PATH}`;
+        const url = `${c.env.R2_PUBLIC_URL}/${c.env.R2_CV_PATH}`;
 
         if(!url)
             return c.json({
