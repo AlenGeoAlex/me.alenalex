@@ -26,7 +26,7 @@ jobs:
           lfs: false
 
       - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
+        run: pnpm install -d -w @actions/core@1.6.0 @actions/http-client
 
       - name: Get Node.js version from .nvmrc
         id: nvmrc
