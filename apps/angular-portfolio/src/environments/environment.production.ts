@@ -1,5 +1,5 @@
 export const environment = {
-  apiBasePath: 'http://localhost:8787',
+  apiBasePath: 'https://portfolio-backend-hono.alengeoalex123.workers.dev',
   turnstileApiKey: '0x4AAAAAACNDjiCFEeF9f2iu',
   production: true
 }

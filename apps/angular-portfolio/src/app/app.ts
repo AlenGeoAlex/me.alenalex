@@ -1,25 +1,27 @@
-import {Component, signal, viewChild} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {NavbarComponent} from './components/navbar-component/navbar-component';
-import {HomePage} from './pages/home-page/home-page';
-import {AboutPage} from './pages/about-page/about-page';
-import {ModalOptions, NgxCustomModalComponent} from 'ngx-custom-modal';
+import { Component, inject } from '@angular/core';
+import { DialogService } from '@ngneat/dialog';
+import { NavbarComponent } from './components/navbar-component/navbar-component';
+import { HomePage } from './pages/home-page/home-page';
+import { AboutPage } from './pages/about-page/about-page';
 import {ContactMeComponent} from './components/contact-me-component/contact-me-component';
 
 @Component({
   selector: 'app-root',
-  imports: [NavbarComponent, HomePage, AboutPage, NgxCustomModalComponent, ContactMeComponent],
+  standalone: true,
+  imports: [NavbarComponent, HomePage, AboutPage],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-
-  protected readonly contactMeModal = viewChild.required<NgxCustomModalComponent>('modalComponent');
-  protected readonly modalOptions : ModalOptions = {
-
-  }
+  private readonly dialog = inject(DialogService);
 
   protected onContactMeRequest() {
-    this.contactMeModal().open();
+    this.dialog.open(ContactMeComponent, {
+      backdrop: true,
+      draggable: false,
+      size: 'lg',
+      closeButton: false,
+      windowClass: 'bg-gray-900 rounded-2xl shadow-xl p-6 text-white',
+    });
   }
 }

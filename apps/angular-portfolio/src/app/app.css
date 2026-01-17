@@ -6,3 +6,17 @@
   font-style: normal;
 }
 
+ngneat-dialog {
+  .ngneat-dialog-backdrop {
+    @apply bg-black/70;
+  }
+
+  .ngneat-dialog-content {
+    @apply bg-gray-900 rounded-2xl shadow-xl p-6 text-white;
+    border-radius: 1rem;
+  }
+
+  .ngneat-drag-marker {
+    @apply cursor-move;
+  }
+}

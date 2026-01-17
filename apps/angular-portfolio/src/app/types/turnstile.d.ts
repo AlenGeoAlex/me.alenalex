@@ -4,6 +4,7 @@ declare const turnstile: {
     options: {
       sitekey: string;
       callback?: (token: string) => void;
+      "error-callback"?: (errorCode: string) => void;
       theme?: 'light' | 'dark' | 'auto';
       size?: 'normal' | 'compact';
     }
