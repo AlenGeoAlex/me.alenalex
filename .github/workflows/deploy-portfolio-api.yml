@@ -49,6 +49,7 @@ jobs:
           "WRANGLER-CFG-vars.R2_CV_PATH"="${{ secrets.BACKEND_ENV_R2_CV_PATH }}" \
           "WRANGLER-CFG-vars.R2_BUCKET"="${{ secrets.BACKEND_ENV_R2_BUCKET }}" \
           "WRANGLER-CFG-vars.R2_PUBLIC_URL"="${{ secrets.BACKEND_ENV_R2_PUBLIC_URL }}" \
+          "WRANGLER-CFG-vars.TURNSTILE_SECRET_KEY"="${{ secrets.BACKEND_ENV_TURNSTILE_SECRET_KEY }}" \
           node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
 
       - name: Deploy to Cloudflare Workers

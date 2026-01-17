@@ -46,19 +46,34 @@ jobs:
           env "FAVICON_REPLACEMENT_DESTINATION"="apps/angular-portfolio/public/" \
           node ./scripts/deployment/update-favicon-pack.js
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Angular Portfolio
+        run: pnpm run build:portfolio-app
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AGREEABLE_GRASS_078F53A03 }}
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/apps/angular-portfolio/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "/github/workspace/apps/angular-portfolio/dist/angular-portfolio/browser/" # Built app content directory - optional
+          app_location: "/apps/angular-portfolio/"
+          skip_app_build: true
+          api_location: ""
+          output_location: "/github/workspace/apps/angular-portfolio/dist/angular-portfolio/browser/"
           github_id_token: ${{ steps.idtoken.outputs.result }}
-          ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
