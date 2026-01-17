@@ -78,7 +78,7 @@ jobs:
           app_location: "/apps/angular-portfolio/"
           skip_app_build: true
           api_location: ""
-          output_location: "/github/workspace/apps/angular-portfolio/dist/angular-portfolio/browser/"
+          output_location: "/apps/angular-portfolio/dist/angular-portfolio/browser/"
           github_id_token: ${{ steps.idtoken.outputs.result }}
 
   close_pull_request_job:
