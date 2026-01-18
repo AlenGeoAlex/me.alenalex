@@ -6,9 +6,6 @@
 	"observability": {
 		"enabled": true
 	},
-	"compatibility_flags": [
-		"nodejs_compat_v2"
-	],
 	"send_email": [
 		{
 			"name": "EMAIL_BINDING",

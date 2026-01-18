@@ -2,7 +2,7 @@ import {OpenAPIRoute, Str} from "chanfana";
 import {z} from "zod";
 import {AppContext} from "../../types";
 import {IPUtils} from "../../utils/ip-utils";
-import {createMimeMessage} from "mimetext";
+import {createMimeMessage} from "mimetext/browser";
 import {EmailMessage} from "cloudflare:email";
 
 export class ContactMe extends OpenAPIRoute {
