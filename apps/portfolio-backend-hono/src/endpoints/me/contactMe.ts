@@ -2,7 +2,7 @@ import {OpenAPIRoute, Str} from "chanfana";
 import {z} from "zod";
 import {AppContext} from "../../types";
 import {IPUtils} from "../../utils/ip-utils";
-import {createMimeMessage} from "mimetext/browser";
+import {createMimeMessage, Mailbox} from "mimetext/browser";
 import {EmailMessage} from "cloudflare:email";
 
 export class ContactMe extends OpenAPIRoute {
@@ -72,8 +72,10 @@ export class ContactMe extends OpenAPIRoute {
         const msg = createMimeMessage();
         msg.setSender({
             type: 'From',
+            name: 'Contact Mailbox',
             addr: email
         });
+        msg.setHeader('Reply-To', new Mailbox(email))
         msg.setRecipient(c.env.DESTINATION_ADDRESS);
         msg.setSubject(`[me.alenalex] [PORTFOLIO] New message from ${email}]`);
         msg.addMessage({
