@@ -77,7 +77,7 @@ export class ContactMe extends OpenAPIRoute {
         });
         msg.setHeader('Reply-To', new Mailbox(email))
         msg.setRecipient(c.env.DESTINATION_ADDRESS);
-        msg.setSubject(`[me.alenalex] [PORTFOLIO] New message from ${email}]`);
+        msg.setSubject(`[me.alenalex] [PORTFOLIO] New message from ${email}`);
         msg.addMessage({
             contentType: 'text/plain',
             data: message
