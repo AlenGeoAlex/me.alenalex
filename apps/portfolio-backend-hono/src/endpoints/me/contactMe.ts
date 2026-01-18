@@ -87,7 +87,7 @@ export class ContactMe extends OpenAPIRoute {
         });
 
         const emailMessage = new EmailMessage(
-            'contact.alenalex.me',
+            'contact@alenalex.me',
             c.env.DESTINATION_ADDRESS,
             msg.asRaw()
         );

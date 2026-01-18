@@ -80,7 +80,7 @@ export class ContactMeComponent {
         error: (err: HttpErrorResponse) => {
           this.isLoading.set(false)
           if(err.status === 429){
-             toast.updateMessage('You have sent too many messages recently. Please try again later.')
+             toast.updateMessage('You have sent too many messages recently. Please try again after a minute or two..')
           } else if(err.status === 400){
             toast.updateMessage('An unknown error occurred while sending your message. Please try again later. If the problem persists, please contact me directly at discord')
           } else {
