@@ -6,6 +6,12 @@
 	"observability": {
 		"enabled": true
 	},
+	"routes": [
+		{
+			"pattern": "portfolio-api.alenalex.me",
+			"custom_domain": true
+		}
+	],
 	"ratelimits": [
 		{
 			"name": "CONTACT_ME_LIMIT",
