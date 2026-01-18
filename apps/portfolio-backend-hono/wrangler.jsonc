@@ -6,6 +6,16 @@
 	"observability": {
 		"enabled": true
 	},
+	"ratelimits": [
+		{
+			"name": "CONTACT_ME_LIMIT",
+			"namespace_id": "1000",
+			"simple": {
+				"limit": 60,
+				"period": 60
+			}
+		}
+	],
 	"send_email": [
 		{
 			"name": "EMAIL_BINDING",

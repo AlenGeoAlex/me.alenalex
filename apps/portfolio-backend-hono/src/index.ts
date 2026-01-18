@@ -39,9 +39,8 @@ app.use(async (c, next) => {
 });
 
 app.use(
-	rateLimiter({
-		windowMs: 60 * 1000, // 1 minute
-		limit: 60, // Limit each client to 60 requests per minute
+	rateLimiter<{ Bindings: Env }>({
+		binding: (c) => c.env.CONTACT_ME_LIMIT,
 		keyGenerator: (c) => IPUtils.getClientIP(c)
 	})
 );
