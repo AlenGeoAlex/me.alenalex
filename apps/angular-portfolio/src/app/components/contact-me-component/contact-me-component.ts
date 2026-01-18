@@ -4,6 +4,7 @@ import {email, Field, form, minLength, required} from '@angular/forms/signals';
 import {MeService, PostContactMeRequest} from '@api/generated-sdk';
 import {HotToastService} from '@ngxpert/hot-toast';
 import {DialogRef} from '@ngneat/dialog';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-contact-me-component',
@@ -65,17 +66,33 @@ export class ContactMeComponent {
     if(this.isLoading()) return;
 
     this.isLoading.set(true);
+    const toast = this.toastService.loading('Sending message...');
     this.meService.postContactMe(this.formSignal())
-      .pipe(
-        this.toastService.observe({
-          success: 'Thank you for your message! We will get back to you soon.',
-          error: 'An error occurred while sending your message. Please try again later.',
-          loading: 'Please wait while we send your message.'
-        })
-      )
       .subscribe({
-        next: () => this.isLoading.set(false),
-        error: () => this.isLoading.set(false),
+        next: () => {
+          this.isLoading.set(false);
+          toast.updateMessage('Thank you for your message! We will get back to you soon.')
+          toast.updateToast({
+            dismissible: true,
+            duration: 5000,
+          })
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isLoading.set(false)
+          if(err.status === 429){
+             toast.updateMessage('You have sent too many messages recently. Please try again later.')
+          } else if(err.status === 400){
+            toast.updateMessage('An unknown error occurred while sending your message. Please try again later. If the problem persists, please contact me directly at discord')
+          } else {
+            toast.updateMessage('An error occurred while sending your message. Please try again later.')
+          }
+
+
+          toast.updateToast({
+            dismissible: true,
+            duration: 5000,
+          })
+        },
         complete: () => this.ref.close()
       });
   }

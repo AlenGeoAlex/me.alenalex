@@ -72,7 +72,6 @@ export class ContactMe extends OpenAPIRoute {
         const msg = createMimeMessage();
         msg.setSender({
             type: 'From',
-            name: 'Contact Mailbox',
             addr: 'contact@alenalex.me'
         });
         msg.setRecipient(c.env.DESTINATION_ADDRESS);
