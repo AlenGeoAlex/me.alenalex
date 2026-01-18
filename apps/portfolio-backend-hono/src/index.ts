@@ -40,7 +40,15 @@ app.use(async (c, next) => {
 
 app.use(
 	rateLimiter<{ Bindings: Env }>({
-		binding: (c) => c.env.CONTACT_ME_LIMIT,
+		binding: (c) => {
+			if(c.req.url.endsWith("contact") && c.req.method === "POST"){
+				console.info('Applying contact limiter')
+				return c.env.CONTACT_ME_LIMIT
+			}
+
+			console.info('Applying api limiter')
+			return c.env.API_LIMIT;
+		},
 		keyGenerator: (c) => IPUtils.getClientIP(c)
 	})
 );
