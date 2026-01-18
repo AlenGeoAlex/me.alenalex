@@ -1,7 +1,7 @@
 import {Component, HostListener, inject, output, signal, ViewContainerRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import {BookOpen, Home, LucideAngularModule, Mail, Menu, User, X} from 'lucide-angular';
+import {BookOpen, Github, Home, LucideAngularModule, Mail, Menu, User, X} from 'lucide-angular';
 
 
 @Component({
@@ -51,4 +51,10 @@ export class NavbarComponent {
   protected onContactMe() {
     this.contactMeRequest.emit();
   }
+
+  protected routeToGithub(){
+    window.open("https://github.com/AlenGeoAlex/me.alenalex", "_blank")
+  }
+
+  protected readonly Github = Github;
 }
