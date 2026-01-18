@@ -75,12 +75,16 @@ export class ContactMe extends OpenAPIRoute {
             name: 'Contact Mailbox',
             addr: email
         });
-        msg.setHeader('Reply-To', new Mailbox(email))
         msg.setRecipient(c.env.DESTINATION_ADDRESS);
         msg.setSubject(`[me.alenalex] [PORTFOLIO] New message from ${email}`);
         msg.addMessage({
             contentType: 'text/plain',
-            data: message
+            data: `
+            ${message}
+            
+            ---------------------------------------------------------------------------------
+            Failed to set reply-to due to domain restrictions (Please manually reply with your email to ${email})
+            `
         });
 
         const emailMessage = new EmailMessage(
