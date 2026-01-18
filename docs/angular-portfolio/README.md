@@ -16,6 +16,14 @@ This is the personal portfolio application built with Angular. It features a uni
 - **Animations**: [Motion](https://motion.dev/)
 - **Icons**: [Lucide Angular](https://lucide.dev/), [Simple Icons](https://simpleicons.org/)
 - **Parsing**: [Marked](https://marked.js.org/) (for Markdown support)
+- **API Client**: [Generated SDK](./SDK.md) (using OpenAPI Generator)
+
+## API Integration
+
+The application interacts with the [Portfolio API](../portfolio-api/README.md) through a generated SDK.
+
+- The SDK is located at `apps/angular-portfolio/src/api/generated-sdk`.
+- For more details on how the SDK is used and updated, see the [SDK Documentation](./SDK.md).
 
 ## Key Components
 
@@ -44,7 +52,7 @@ The heart of the portfolio is the `TerminalComponent`. It's located in `src/app/
 To start the development server for this app:
 
 ```bash
-pnpm run ng serve
+pnpm run dev:portfolio
 ```
 or from the root:
 ```bash
