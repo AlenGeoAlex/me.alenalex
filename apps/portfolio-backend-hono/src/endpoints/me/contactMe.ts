@@ -109,6 +109,34 @@ export class ContactMe extends OpenAPIRoute {
                 formData.append("response", captchaKey);
                 formData.append("remoteip", ip);
                 formData.append("idempotency_key", idKey);
+
+                const response = await fetch(
+                    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+                    {
+                        method: "POST",
+                        body: formData,
+                    },
+                );
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    return {
+                        success: true,
+                        "error-codes": [],
+                    }
+                }
+
+                if (attempt === maxRetry) {
+                    return {
+                        success: false,
+                        "error-codes": ["internal-error", 'attempt-reached-max'],
+                    }
+                }
+
+                await new Promise((resolve) =>
+                    setTimeout(resolve, Math.pow(2, attempt) * 200),
+                );
             } catch (e) {
                 console.error(e);
                 if (attempt === maxRetry) {

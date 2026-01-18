@@ -21,9 +21,11 @@
             placeholder="your@email.com"
           />
           @if (formField.email().touched() && formField.email().invalid()) {
-            <p class="mt-2 text-sm text-red-400">
-              Please enter a valid email address
-            </p>
+            @for (error of formField.email().errors(); track error.kind){
+              <p class="mt-3 text-sm text-red-400 ps-2">
+                {{ error.message }}
+              </p>
+            }
           }
         </div>
 
@@ -39,9 +41,11 @@
             placeholder="How can I help you?"
           ></textarea>
           @if (formField.message().touched() && formField.message().invalid()) {
-            <p class="mt-2 text-sm text-red-400">
-              Please enter a message
-            </p>
+            @for (error of formField.message().errors(); track error.kind){
+              <p class="mt-3 text-sm text-red-400 ps-2">
+                {{ error.message }}
+              </p>
+            }
           }
         </div>
 
@@ -52,11 +56,18 @@
               {{ turnstileError() }}
             </p>
           }
+          @if (formField.captchaKey().touched() && formField.captchaKey().invalid()){
+            @for (error of formField.captchaKey().errors(); track error.kind){
+              <p class="mt-3 text-sm text-red-400 text-center">
+                {{ error.message }}
+              </p>
+            }
+          }
         </div>
 
         <div class="flex justify-center">
-          <button [disabled]="formField().invalid()" type="submit" class="cta-button px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 select-none disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-            Contact me
+          <button [disabled]="formField().invalid() || isLoading()" type="button" (click)="onSubmit()" class="cta-button px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 select-none disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+            Connect with me
           </button>
         </div>
       </form>

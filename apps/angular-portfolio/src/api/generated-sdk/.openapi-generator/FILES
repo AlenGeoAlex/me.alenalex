@@ -16,5 +16,7 @@ model/getFsList200Response.ts
 model/getFsList200ResponseChildrenInner.ts
 model/getFsOpen200Response.ts
 model/models.ts
+model/postContactMe200Response.ts
+model/postContactMeRequest.ts
 param.ts
 variables.ts
