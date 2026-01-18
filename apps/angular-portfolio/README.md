@@ -1,4 +1,12 @@
-# AngularPortfolio
+# Angular Portfolio
+
+This project is the frontend for the portfolio website.
+
+For detailed information on features, tech stack, and development, please refer to the main documentation:
+
+👉 **[Angular Portfolio Documentation](../../docs/angular-portfolio/README.md)**
+
+---
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
 

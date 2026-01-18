@@ -1,3 +1,13 @@
+# Portfolio API (Hono)
+
+This is the backend API for the portfolio website, built with Hono and deployed on Cloudflare Workers.
+
+For detailed information on the tech stack, endpoints, and environment variables, please refer to the main documentation:
+
+👉 **[Portfolio API Documentation](../../docs/portfolio-api/README.md)**
+
+---
+
 # Cloudflare Workers OpenAPI 3.1
 
 This is a Cloudflare Worker with OpenAPI 3.1 using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono).
