@@ -91,6 +91,7 @@ export class ContactMe extends OpenAPIRoute {
             await c.env.EMAIL_BINDING.send(emailMessage);
             return c.json({success: true});
         }catch (e) {
+            console.error(e);
             return c.json({
                 error: 'Failed to send email'
             }, 400);
