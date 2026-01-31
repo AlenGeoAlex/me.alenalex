@@ -1,0 +1,19 @@
+version: "2"
+plugins:
+  - name: csharp
+    wasm:
+      url: https://github.com/DaredevilOSS/sqlc-gen-csharp/releases/download/v0.22.2/sqlc-gen-csharp.wasm
+      sha256: 40af6dbb1447fb42f9e12d094a79e5adbfcb3669470cf7055896a179ee2e7427
+sql:
+  - schema: "Database/Me.AlenAlex.Bloggi.Database.Sql/schema.sql"
+    queries: "Database/Me.AlenAlex.Bloggi.Database.Sql/Queries"
+    engine: postgresql
+    codegen:
+      - plugin: csharp
+        out: Database/Me.AlenAlex.Bloggi.Database.Gen
+        options:
+          useDapper: false
+          withAsyncSuffix: true
+          targetFramework: net8.0
+          generateCsproj: true
+          namespaceName: Me.AlenAlex.Bloggi.Database.Gen

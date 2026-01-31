@@ -53,3 +53,7 @@ yarn-error.log*
 
 # Generated files
 gen/
+
+bin/
+obj/
+**.DotSettings.user

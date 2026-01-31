@@ -5,6 +5,11 @@ import {InputText} from 'primeng/inputtext';
 import {IconField} from 'primeng/iconfield';
 import {InputIcon} from 'primeng/inputicon';
 import {Appearance} from '@services/appearance.service';
+import {NgClass} from '@angular/common';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {Tooltip} from 'primeng/tooltip';
+import {RouterLink} from '@angular/router';
+import {AutoComplete} from 'primeng/autocomplete';
 
 @Component({
   selector: 'shared-navbar',
@@ -13,7 +18,11 @@ import {Appearance} from '@services/appearance.service';
     Button,
     InputText,
     IconField,
-    InputIcon
+    InputIcon,
+    NgClass,
+    Tooltip,
+    RouterLink,
+    AutoComplete
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
@@ -26,4 +35,9 @@ export class Navbar {
     this.appearanceService.toggleDarkMode();
   }
 
+  protected isDarkTheme = toSignal(this.appearanceService.darkMode$);
+
+  protected login() {
+
+  }
 }

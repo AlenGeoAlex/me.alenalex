@@ -1,59 +1,66 @@
-<nav class="fixed top-0 z-50 w-full px-6 py-3
-            border-b transition-all duration-300 backdrop-blur-xl
-            bg-white/80 border-gray-200
-            dark:bg-[#09090b]/80 dark:border-white/10
-            flex items-center justify-between">
+<nav
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b backdrop-blur-xl shadow-xl"
+  [ngClass]="{
+        'bg-white/60 backdrop-blur-xl shadow-xl border-white/20': !isDarkTheme(),
+        'bg-black/40 backdrop-blur-xl shadow-2xl border-white/10': isDarkTheme()
+      }"
+>
+  <div class="max-w-7xl mx-auto px-1 sm:px-2 lg:px-3">
+    <div class="flex items-center justify-between h-16 md:h-18">
 
-  <div class="flex items-center gap-3 cursor-pointer group">
-    <img src="assets/logo.svg"
-         alt="Logo"
-         class="w-8 h-8 transition-transform group-hover:scale-110"
-    />
-
-    <span class="text-xl font-bold tracking-tight font-sans text-gray-900 dark:text-white">
-      A's Blog
-    </span>
-  </div>
-
-  <div class="flex items-center gap-2 sm:gap-4">
-
-    <div class="hidden md:block">
-      <p-iconfield iconPosition="left">
-        <p-inputicon class="pi pi-search text-gray-400 dark:text-gray-500" />
-        <input
-          type="text"
-          pInputText
-          placeholder="Search..."
-          class="w-48 lg:w-64 rounded-lg py-2! pl-10! text-sm! transition-all
-                       border-transparent! focus:border-primary-500! focus:ring-0
-                       bg-gray-100! text-gray-900 placeholder:text-gray-500
-                       dark:bg-white/5! dark:text-white dark:placeholder:text-gray-400"
-        />
-        <div class="absolute right-3 top-1/2 -translate-y-1/2
-                        border rounded px-1.5 py-0.5 text-[10px]
-                        border-gray-300 text-gray-400
-                        dark:border-gray-700 dark:text-gray-500">
-          ⌘K
+      <a routerLink="/">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-sm border transition-all duration-200"
+               [ngClass]="{
+                   'bg-white/40 border-white/30': !isDarkTheme(),
+                   'bg-white/10 border-white/20': isDarkTheme()
+                 }">
+            <img src="assets/logo.svg" alt="YourBrand Logo">
+          </div>
+          <span
+            class="text-2xl font-bold poppins-font hidden sm:block tracking-tight"
+            [ngClass]="isDarkTheme() ? 'text-white' : 'text-gray-900'"
+          >
+              Alen's Blog
+            </span>
         </div>
-      </p-iconfield>
-    </div>
+      </a>
 
-    <div class="h-6 w-px hidden md:block bg-gray-200 dark:bg-white/10"></div>
+      <div class="hidden md:flex flex-1 max-w-md mx-8">
+        <p-iconfield class="w-full">
+          <p-auto-complete [inputStyleClass]="'w-full'" class="w-full" placeholder="Search..."></p-auto-complete>
+        </p-iconfield>
+      </div>
+
+      <div class="flex items-center space-x-3">
 
 
-    <div class="flex items-center gap-1">
-      <p-button icon="pi pi-search" [rounded]="true" [text]="true" severity="secondary"
-                styleClass="md:hidden !text-gray-600 dark:!text-gray-300 hover:!bg-gray-100 dark:hover:!bg-white/10"></p-button>
+        <p-button
+          [icon]="this.isDarkTheme() ? 'pi pi-moon' : 'pi pi-sun'"
+          [variant]="'outlined'"
+          [size]="'small'"
+          rounded
+          severity="secondary"
+          ariaLabel="dark-theme-switcher"
+          (onClick)="toggleDarkMode()"
+          [pTooltip]="this.isDarkTheme() ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+        ></p-button>
 
-      <p-button icon="pi pi-github" [rounded]="true" [text]="true" severity="secondary"
-                styleClass="!text-gray-600 dark:!text-gray-300 hover:!bg-gray-100 dark:hover:!bg-white/10"></p-button>
+        <p-button
+          [icon]="'pi pi-user'"
+          [variant]="'outlined'"
+          [size]="'small'"
+          [raised]="true"
+          rounded
+          severity="secondary"
+          ariaLabel="user-profile-button"
+          [pTooltip]="'Login to the user account'"
+          (onClick)="login()"
+        ></p-button>
 
-      <p-button icon="pi pi-twitter" [rounded]="true" [text]="true" severity="secondary"
-                styleClass="!text-gray-600 dark:!text-gray-300 hover:!bg-gray-100 dark:hover:!bg-white/10"></p-button>
-
-      <p-button icon="pi pi-moon" [rounded]="true" [text]="true" severity="secondary" (click)="toggleDarkMode()"
-                styleClass="!text-gray-600 dark:!text-gray-300 hover:!bg-gray-100 dark:hover:!bg-white/10"></p-button>
+      </div>
     </div>
   </div>
-
 </nav>
+
+<div class="h-16 md:h-20"></div>

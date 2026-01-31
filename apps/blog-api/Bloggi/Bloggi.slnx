@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Api/">
+    <Project Path="Api/Me.AlenAlex.Bloggi.Api/Me.AlenAlex.Bloggi.Api.csproj" />
+  </Folder>
+  <Folder Name="/Database/">
+    <Project Path="Database/Me.AlenAlex.Bloggi.Database.Migrations/Me.AlenAlex.Bloggi.Database.Migrations.csproj" />
+    <Project Path="Database/Me.AlenAlex.Bloggi.Database.Sql/Me.AlenAlex.Bloggi.Database.Sql.csproj" />
+  </Folder>
+  <Project Path="Bloggi.AppHost/Bloggi.AppHost.csproj" />
+  <Project Path="Bloggi.ServiceDefaults/Bloggi.ServiceDefaults.csproj" />
+</Solution>
