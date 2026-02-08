@@ -9,14 +9,14 @@ const DOCKER_SQLC_IMAGE = "sqlc/sqlc:latest";
 const DOCKER_PULL_COMMAND = `docker pull ${DOCKER_SQLC_IMAGE}`
 const DOCKER_DELETE_IMAGE_COMMAND = `docker rmi ${DOCKER_SQLC_IMAGE}`;
 
-const BACKEND_ROOT_PATH = `${process.cwd()}/apps/blog-api/Bloggi/`;
-const SQL_PATH = `${BACKEND_ROOT_PATH}Database/Me.AlenAlex.Bloggi.Database.Sql/`
+const BACKEND_ROOT_PATH = `${process.cwd()}/apps/bloggi-backend`;
+const SQL_PATH = `${BACKEND_ROOT_PATH}/database`
 
 const PG = {
     host: "host.docker.internal", // This will be run inside another container, so localhost won't work
-    port: 51471,
-    user: "bloggi_user",
-    password: "bloggi_pass_123",
+    port: 5432,
+    user: "local_test_bloggi",
+    password: "local_test",
     database: "bloggi"
 };
 
@@ -26,7 +26,7 @@ function generateSchema() {
     const command = `
 docker run --rm \
   -e PGPASSWORD=${PG.password} \
-  -v ${SQL_PATH}:/out \
+  -v ${SQL_PATH}/schema:/out \
   postgres:17 \
   pg_dump \
     --schema-only \
@@ -92,6 +92,7 @@ function deleteSqlCImage(){
 function sanitizeSchemaFile() {
     const schemaPath = path.join(
         SQL_PATH,
+        "schema",
         "schema.sql"
     );
 

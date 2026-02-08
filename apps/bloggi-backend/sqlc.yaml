@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "database/queries"
+    schema: "database/schema/schema.sql"
+    gen:
+      go:
+        package: "bloggi_db"
+        out: "database/go/bloggi"
+        sql_package: "pgx/v5"
