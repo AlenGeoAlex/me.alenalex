@@ -10,6 +10,7 @@ import {HotToastService} from '@ngxpert/hot-toast';
     LucideAngularModule
   ],
   templateUrl: './home-page.html',
+  styleUrl: './home-page.scss',
 })
 export class HomePage {
 

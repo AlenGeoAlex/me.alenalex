@@ -44,8 +44,27 @@
     <button
       (click)="downloadCV()"
       [disabled]="isCVLoading()"
-      class="cta-button opacity-0 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 select-none">
-      Download CV
+      class="cta-button"
+      [class.is-loading]="isCVLoading()">
+
+      <span class="btn-default-content">
+        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="12" x2="12" y2="18"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+        <span class="btn-text">Download CV</span>
+      </span>
+
+          <span class="btn-loading-content" aria-hidden="true">
+        <span class="progress-bar"></span>
+        <span class="loading-text">Downloading...</span>
+      </span>
+
+      <span class="particle" style="--x: 20%; --y: 30%; --d: 0.1s"></span>
+      <span class="particle" style="--x: 75%; --y: 60%; --d: 0.25s"></span>
+      <span class="particle" style="--x: 45%; --y: 80%; --d: 0s"></span>
     </button>
   </div>
 

@@ -7,6 +7,7 @@ import (
 
 type Config struct {
 	Database DBConfig
+	Jwt      JwtConfig
 }
 
 type DBConfig struct {
@@ -16,6 +17,11 @@ type DBConfig struct {
 	Password string `env:"DB_PASSWORD,required"`
 	Database string `env:"DB_DATABASE,required"`
 	Debug    bool   `env:"DB_DEBUG"`
+}
+
+type JwtConfig struct {
+	Secret string `env:"JWT_SECRET,required"`
+	Issuer string `env:"JWT_ISSUER,required"`
 }
 
 func NewConfig() *Config {
