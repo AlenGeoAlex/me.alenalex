@@ -2,10 +2,11 @@ import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {MeService, GetNowPlaying200Response} from '@api/generated-sdk';
 import {interval, Subscription, switchMap, timer} from 'rxjs';
 import {CommonModule} from '@angular/common';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @Component({
   selector: 'app-spotify-playback-component',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './spotify-playback-component.html',
   styleUrl: './spotify-playback-component.scss',
 })
@@ -14,8 +15,9 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
   protected readonly playback = signal<GetNowPlaying200Response | null>(null);
   protected readonly currentTime = signal<number>(0);
   protected readonly progress = signal<number>(0);
+  protected readonly isClosed = signal<boolean>(false);
+  protected readonly X = X;
 
-  private pollingSub?: Subscription;
   private progressSub?: Subscription;
 
   ngOnInit(): void {
@@ -23,17 +25,11 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.pollingSub?.unsubscribe();
     this.progressSub?.unsubscribe();
   }
 
   private startPolling(): void {
-    // Initial fetch and then poll
     this.fetchPlayback();
-
-    // We'll poll every 30 seconds as a fallback,
-    // but we also have logic to refresh after the song ends.
-    this.pollingSub = interval(30000).subscribe(() => this.fetchPlayback());
   }
 
   private fetchPlayback(): void {
@@ -59,7 +55,6 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
   private updateProgress(data: GetNowPlaying200Response): void {
     this.progressSub?.unsubscribe();
 
-    // Update every second
     this.progressSub = interval(1000).subscribe(() => {
       const nextTime = this.currentTime() + 1000;
       if (nextTime <= data.totalDuration) {
@@ -74,7 +69,6 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
 
   private scheduleNextFetch(data: GetNowPlaying200Response): void {
     const remainingTime = data.totalDuration - data.duration;
-    // Refresh after it reaches the complete time + 10 sec
     const delay = remainingTime + 10000;
 
     timer(delay).subscribe(() => this.fetchPlayback());
@@ -85,5 +79,9 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  protected close(): void {
+    this.isClosed.set(true);
   }
 }

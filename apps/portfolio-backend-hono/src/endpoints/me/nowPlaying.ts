@@ -39,63 +39,43 @@ export class NowPlaying extends OpenAPIRoute {
 
 
     async handle(c: AppContext) {
-        if(c.env.SPOTIFY_REFRESH_TOKEN === undefined)
+        if (c.env.SPOTIFY_REFRESH_TOKEN === undefined)
             return c.json({error: "No spotify credentials provided"}, 401);
 
-        const cache = caches.default;
-        const cachedNowPlaying = await cache.match(c.req.url);
-        if (cachedNowPlaying) {
-            console.log('Returning cached now playing');
-            const newHeaders = new Headers(cachedNowPlaying.headers);
-            newHeaders.set('Cache-Control', 'no-store');
-            if (cachedNowPlaying.status === 200) {
-                newHeaders.set('content-type', 'application/json');
+        let accessToken = await c.env.NowPlayingStore.get('SPOTIFY_ACCESS_TOKEN', "text");
+        if (!accessToken) {
+            console.log('No access token found, generating new one');
+            const credentials = await this.generateCredentials(c);
+            if (credentials instanceof Error) {
+                return c.json({error: "Failed to generate credentials due to [" + credentials.message + "]"}, 500);
             }
 
-            return new Response(cachedNowPlaying.body, {
-                status: cachedNowPlaying.status,
-                headers: newHeaders,
-            });
+            accessToken = credentials.accessToken;
+            await c.env.NowPlayingStore.put('SPOTIFY_ACCESS_TOKEN', accessToken, {expirationTtl: credentials.expiresIn - (60 * 10)});
+            await c.env.NowPlayingStore.put('SPOTIFY_REFRESH_TOKEN', credentials.refreshToken);
         }
 
-        let accessToken = await c.env.NowPlayingStore.get('SPOTIFY_ACCESS_TOKEN', "text");
-        if(!accessToken){
-            console.log('No access token found, generating new one');
-           const credentials = await this.generateCredentials(c);
-           if (credentials instanceof Error) {
-               return c.json({error: "Failed to generate credentials due to ["+credentials.message+"]"}, 500);
-           }
-
-           accessToken = credentials.accessToken;
-           await c.env.NowPlayingStore.put('SPOTIFY_ACCESS_TOKEN', accessToken, {expirationTtl: credentials.expiresIn - (60 * 10)});
-           await c.env.NowPlayingStore.put('SPOTIFY_REFRESH_TOKEN', credentials.refreshToken);
-        }
-
-        const currentPlaying = await this.getNowPlaying(
-            c,
-            accessToken,
-        );
+        const currentPlaying = await this.getNowPlaying(c, accessToken);
 
         const responseHeaders = new Headers();
-        if(currentPlaying instanceof Error) {
-            console.error('Failed to get now playing: '+currentPlaying.message);
+
+        if (currentPlaying instanceof Error) {
+            console.error('Failed to get now playing: ' + currentPlaying.message);
             responseHeaders.set('Cache-Control', 'public, max-age=120');
-            const response = new Response(currentPlaying.message, {
-                status: 500,
-                headers: responseHeaders,
-            });
-            await cache.put(c.req.url,response);
             return c.json({error: currentPlaying.message}, 500);
         }
 
+        if (currentPlaying === undefined) {
+            responseHeaders.set('Cache-Control', 'public, max-age=30');
+            return new Response(null, {status: 204, headers: responseHeaders});
+        }
 
-        responseHeaders.set('Cache-Control', `public, max-age=${((currentPlaying.totalDuration - currentPlaying.duration)/1000)}`);
-        const response = new Response(JSON.stringify(currentPlaying), {
+        const remainingSeconds = Math.floor((currentPlaying.totalDuration - currentPlaying.duration) / 1000);
+        responseHeaders.set('Cache-Control', `public, max-age=${remainingSeconds}`);
+        return new Response(JSON.stringify(currentPlaying), {
             status: 200,
             headers: responseHeaders,
-        })
-        await cache.put(c.req.url,response);
-        return c.json(currentPlaying);
+        });
     }
 
     async getNowPlaying(
