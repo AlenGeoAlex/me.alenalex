@@ -1,6 +1,6 @@
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
-import {CvGet, InitMe} from "./endpoints/me";
+import {CvGet, InitMe, NowPlaying} from "./endpoints/me";
 import { cors } from "hono/cors";
 import {FsList} from "./endpoints/fs";
 import {FsOpen} from "./endpoints/fs/fsOpen";
@@ -61,6 +61,7 @@ const openapi = fromHono(app, {
 openapi.get('/api/me', InitMe)
 openapi.get('/api/me/cv', CvGet)
 openapi.post('/api/me/contact', ContactMe)
+openapi.get('/api/me/now-playing', NowPlaying)
 
 // fs
 openapi.get('/api/path/:path', FsList)

@@ -53,6 +53,8 @@ jobs:
           "WRANGLER-CFG-send_email[0].destination_address"="${{ secrets.BACKEND_ENV_EMAIL_BINDING_1_DESTINATION_ADDRESS }}" \
           "WRANGLER-CFG-send_email[0].name"="EMAIL_BINDING" \
           "WRANGLER-CFG-vars.DESTINATION_ADDRESS"="${{ secrets.BACKEND_ENV_EMAIL_BINDING_1_DESTINATION_ADDRESS }}" \
+          "WRANGLER-CFG-kv_namespaces[0].binding"="${{ secrets.BACKEND_ENV_KV_NAMESPACE_BINDING }}" \
+          "WRANGLER-CFG-kv_namespaces[0].id"="${{ secrets.BACKEND_ENV_KV_NAMESPACE_ID }}" \
           node apps/portfolio-backend-hono/scripts/update-wrangler-config.mjs
 
       - name: Deploy to Cloudflare Workers

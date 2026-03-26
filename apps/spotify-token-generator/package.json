@@ -1,0 +1,22 @@
+{
+  "name": "spotify-token-generator",
+  "version": "1.0.0",
+  "description": "Spotify Access Token Generator",
+  "license": "ISC",
+  "author": "AlenAlex",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "input": "^1.0.1"
+  }
+}
