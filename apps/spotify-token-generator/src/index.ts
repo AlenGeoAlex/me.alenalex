@@ -68,7 +68,7 @@ async function constructUrlForAuthorization(clientId: string, redirectUri: strin
     authorizationUrl.searchParams.append('client_id', clientId);
     authorizationUrl.searchParams.append('response_type', 'code');
     authorizationUrl.searchParams.append('redirect_uri', redirectUri);
-    authorizationUrl.searchParams.append('scope', 'user-read-currently-playing user-read-email');
+    authorizationUrl.searchParams.append('scope', 'user-read-currently-playing user-read-playback-state user-read-email');
     return authorizationUrl.toString();
 }
 

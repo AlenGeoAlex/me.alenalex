@@ -15,6 +15,7 @@ export class NowPlaying extends OpenAPIRoute {
                         schema: z.object({
                             title: z.string(),
                             artist: z.string(),
+                            itemImage: z.string().nullable(),
                             album: z.string().nullable(),
                             albumArt: z.string().nullable(),
                             duration: z.number(),
@@ -43,10 +44,17 @@ export class NowPlaying extends OpenAPIRoute {
 
         const cache = caches.default;
         const cachedNowPlaying = await cache.match(c.req.url);
-        if(cachedNowPlaying && cachedNowPlaying.status === 200)
-        {
+        if (cachedNowPlaying) {
             console.log('Returning cached now playing');
-            return cachedNowPlaying;
+            const newHeaders = new Headers(cachedNowPlaying.headers);
+            if (cachedNowPlaying.status === 200) {
+                newHeaders.set('content-type', 'application/json');
+            }
+
+            return new Response(cachedNowPlaying.body, {
+                status: cachedNowPlaying.status,
+                headers: newHeaders,
+            });
         }
 
         let accessToken = await c.env.NowPlayingStore.get('SPOTIFY_ACCESS_TOKEN', "text");
@@ -69,7 +77,7 @@ export class NowPlaying extends OpenAPIRoute {
 
         const responseHeaders = new Headers();
         if(currentPlaying instanceof Error) {
-            console.log('Failed to get now playing: '+currentPlaying.message);
+            console.error('Failed to get now playing: '+currentPlaying.message);
             responseHeaders.set('Cache-Control', 'public, max-age=120');
             const response = new Response(currentPlaying.message, {
                 status: 500,
@@ -80,7 +88,7 @@ export class NowPlaying extends OpenAPIRoute {
         }
 
 
-        responseHeaders.set('Cache-Control', 'public, max-age=60');
+        responseHeaders.set('Cache-Control', `public, max-age=${((currentPlaying.totalDuration - currentPlaying.duration)/1000)}`);
         const response = new Response(JSON.stringify(currentPlaying), {
             status: 200,
             headers: responseHeaders,
@@ -101,6 +109,7 @@ export class NowPlaying extends OpenAPIRoute {
         totalDuration: number,
         deviceType: string
         trackType: "track" | "episode" | "ad" | "unknown",
+        itemImage?: string,
     } | undefined | Error> {
         const url = new URL(NowPlaying.SPOTIFY_API_URL);
 
@@ -133,6 +142,7 @@ export class NowPlaying extends OpenAPIRoute {
             albumArt: nowPlayingData.item.album.images[0].url,
             duration: nowPlayingData.progress_ms,
             totalDuration: nowPlayingData.item.duration_ms,
+            itemImage: nowPlayingData.item.album.images.length > 0 ? nowPlayingData.item.album.images[0].url : undefined,
         }
     }
 
@@ -144,18 +154,17 @@ export class NowPlaying extends OpenAPIRoute {
         expiresIn: number,
     } | Error> {
         let refreshToken = await c.env.NowPlayingStore.get('SPOTIFY_REFRESH_TOKEN', "text")
-        if(refreshToken === undefined){
+        if(!refreshToken){
             console.log('No refresh token found, Trying to populate from env');
             refreshToken = c.env.SPOTIFY_REFRESH_TOKEN;
         }
 
         // Even after trying to take from env
-        if(refreshToken === undefined){
+        if(!refreshToken){
             return new Error('No refresh token found');
         }
 
         const url = new URL("https://accounts.spotify.com/api/token");
-
         const refreshResponse = await fetch(url, {
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
@@ -165,7 +174,6 @@ export class NowPlaying extends OpenAPIRoute {
             body: new URLSearchParams({
                 grant_type: 'refresh_token',
                 refresh_token: refreshToken,
-                client_id: c.env.SPOTIFY_CLIENT_ID
             }),
         })
 
