@@ -15,6 +15,7 @@ model/getCvGet404Response.ts
 model/getFsList200Response.ts
 model/getFsList200ResponseChildrenInner.ts
 model/getFsOpen200Response.ts
+model/getNowPlaying200Response.ts
 model/models.ts
 model/postContactMe200Response.ts
 model/postContactMeRequest.ts

@@ -47,6 +47,7 @@ export class NowPlaying extends OpenAPIRoute {
         if (cachedNowPlaying) {
             console.log('Returning cached now playing');
             const newHeaders = new Headers(cachedNowPlaying.headers);
+            newHeaders.set('Cache-Control', 'no-store');
             if (cachedNowPlaying.status === 200) {
                 newHeaders.set('content-type', 'application/json');
             }

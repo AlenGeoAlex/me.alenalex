@@ -35,10 +35,10 @@ const BLACKLISTED_FILES = [
 ]
 
 const main = async () => {
-    let response = await askQuestion("Enter open-api spec url: (defaults: https://portfolio-backend-hono.alengeoalex123.workers.dev/openapi.json)");
+    let response = await askQuestion("Enter open-api spec url: (defaults: https://portfolio-api.alenalex.me/openapi.json)");
 
     if(!response || response.trim().length === 0) {
-        response = 'https://portfolio-backend-hono.alengeoalex123.workers.dev/openapi.json';
+        response = 'https://portfolio-api.alenalex.me/openapi.json';
     }
 
     let responseUrl

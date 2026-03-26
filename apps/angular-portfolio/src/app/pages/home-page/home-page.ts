@@ -3,11 +3,13 @@ import {animate} from 'motion';
 import {Github, Linkedin, LucideAngularModule, LucideIconData, Mail} from 'lucide-angular';
 import {MeService} from '@api/generated-sdk';
 import {HotToastService} from '@ngxpert/hot-toast';
+import {SpotifyPlaybackComponent} from '../../components/playback/spotify-playback-component/spotify-playback-component';
 
 @Component({
   selector: 'app-home-page',
   imports: [
-    LucideAngularModule
+    LucideAngularModule,
+    SpotifyPlaybackComponent
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -23,6 +25,12 @@ export class HomePage {
   }
 
   initializeAnimations() {
+    animate(
+      '.hero-playback',
+      { opacity: [0, 1], x: [20, 0] },
+      { duration: 0.8, delay: 0.1 }
+    );
+
     animate(
       '.hero-greeting',
       { opacity: [0, 1], y: [30, 0] },
