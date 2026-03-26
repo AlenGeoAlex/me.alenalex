@@ -1,6 +1,6 @@
 import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {MeService, GetNowPlaying200Response} from '@api/generated-sdk';
-import {interval, Subscription, switchMap, timer} from 'rxjs';
+import {interval, Subscription, timer} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import { LucideAngularModule, X } from 'lucide-angular';
 
@@ -19,37 +19,50 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
   protected readonly X = X;
 
   private progressSub?: Subscription;
+  private pollSub?: Subscription;
 
   ngOnInit(): void {
-    this.startPolling();
+    this.fetchPlayback();
   }
 
   ngOnDestroy(): void {
     this.progressSub?.unsubscribe();
-  }
-
-  private startPolling(): void {
-    this.fetchPlayback();
+    this.pollSub?.unsubscribe();
   }
 
   private fetchPlayback(): void {
     this.meService.getNowPlaying().subscribe({
       next: (data) => {
-        this.playback.set(data);
         if (data && data.trackType !== 'unknown') {
+          this.playback.set(data);
           this.currentTime.set(data.duration);
           this.updateProgress(data);
           this.scheduleNextFetch(data);
         } else {
           this.playback.set(null);
           this.progressSub?.unsubscribe();
+          this.scheduleIdlePoll();
         }
       },
       error: () => {
         this.playback.set(null);
         this.progressSub?.unsubscribe();
+        this.scheduleIdlePoll();
       }
     });
+  }
+
+  private scheduleNextFetch(data: GetNowPlaying200Response): void {
+    this.pollSub?.unsubscribe();
+    const remainingTime = data.totalDuration - data.duration;
+    const delay = remainingTime + 50000;
+
+    this.pollSub = timer(delay).subscribe(() => this.fetchPlayback());
+  }
+
+  private scheduleIdlePoll(): void {
+    this.pollSub?.unsubscribe();
+    this.pollSub = timer(30000).subscribe(() => this.fetchPlayback());
   }
 
   private updateProgress(data: GetNowPlaying200Response): void {
@@ -65,13 +78,6 @@ export class SpotifyPlaybackComponent implements OnInit, OnDestroy {
         this.progressSub?.unsubscribe();
       }
     });
-  }
-
-  private scheduleNextFetch(data: GetNowPlaying200Response): void {
-    const remainingTime = data.totalDuration - data.duration;
-    const delay = remainingTime + 10000;
-
-    timer(delay).subscribe(() => this.fetchPlayback());
   }
 
   protected formatTime(ms: number): string {
