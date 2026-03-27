@@ -1,0 +1,6 @@
+@Bloggi.Backend.Api.Web_HostAddress = http://localhost:5197
+
+GET {{Bloggi.Backend.Api.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
