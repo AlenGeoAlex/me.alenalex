@@ -1,0 +1,26 @@
+<div
+  (keydown.enter)="submitUserCommand($event)"
+>
+    <span class="text-cyan-400">{{user()}}&#64;{{server()}}</span>
+    <span class="text-gray-400">:</span>
+    @if (path() && path()?.length !== 0){
+      <span class="text-blue-400">{{pathComputed()}}</span>
+    } @else {
+      <span class="text-blue-400">~</span>
+    }
+    <span class="text-gray-400">$</span>
+    <span class="relative inline-block">
+    <span class="text-green-400">{{userInput()}}</span>
+      @if (!disabled()){
+        <span class="text-green-400 animate-pulse">▊</span>
+      }
+    <input
+      #terminalInput
+      type="text"
+      [readonly]="disabled()"
+      [(ngModel)]="userInput"
+      class="absolute inset-0 w-full opacity-0 cursor-default"
+      autofocus
+    />
+  </span>
+</div>

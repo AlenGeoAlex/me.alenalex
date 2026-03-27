@@ -1,0 +1,51 @@
+@if (isText()) {
+  <div class="space-y-2 text-gray-300">
+    @for (line of textLines(); track $index){
+    <div class="leading-relaxed" id="terminal-body-item-{{ id() }}">
+      {{ line }}
+    </div>
+    }
+  </div>
+} @else if (isMarkdown()) {
+  <div class="space-y-2 text-gray-300 markdown-content leading-relaxed" id="terminal-body-item-{{ id() }}" [innerHTML]="markdownHtml()">
+  </div>
+} @else if (isImage()) {
+  <div class="border border-gray-600 rounded-lg p-4 bg-gray-800/50 max-w-full overflow-hidden" id="terminal-body-item-{{ id() }}">
+    <img
+      [src]="mediaUrl()"
+      [alt]="'Image content'"
+      class="max-w-full h-auto rounded"
+    />
+  </div>
+} @if (isPdf()) {
+  <div class="border border-gray-600 rounded-lg overflow-hidden bg-gray-800/50" id="terminal-body-item-{{ id() }}">
+    <iframe
+      [src]="mediaUrl()"
+      class="w-full h-96 md:h-150"
+      title="PDF document"
+    ></iframe>
+  </div>
+} @else if (isVideo()) {
+  <div class="border border-gray-600 rounded-lg overflow-hidden bg-gray-800/50 p-4" id="terminal-body-item-{{ id() }}">
+    <video
+      [src]="mediaUrl()"
+      controls
+      class="w-full rounded"
+    >
+      Your browser does not support the video tag.
+    </video>
+  </div>
+} @else if (isAudio()) {
+  <div class="border border-gray-600 rounded-lg p-4 bg-gray-800/50" id="terminal-body-item-{{ id() }}">
+    <audio
+      [src]="mediaUrl()"
+      controls
+      class="w-full"
+    >
+      Your browser does not support the audio tag.
+    </audio>
+  </div>
+} @else if (isHtml()) {
+  <div class="space-y-2 text-gray-300 leading-relaxed" [innerHTML]="safeHtml()" id="terminal-body-item-{{ id() }}">
+  </div>
+}
