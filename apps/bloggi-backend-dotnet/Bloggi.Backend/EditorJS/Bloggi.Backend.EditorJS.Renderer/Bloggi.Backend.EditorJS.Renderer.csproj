@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Bloggi.Backend.EditorJS.Core\Bloggi.Backend.EditorJS.Core.csproj" />
+    </ItemGroup>
+
 </Project>

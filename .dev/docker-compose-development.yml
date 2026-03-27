@@ -1,6 +1,6 @@
 services:
-  postgres_bloggi:
-    image: pgvector/pgvector:pg17
+  postgres_bloggi18:
+    image: pgvector/pgvector:pg18
     container_name: postgres_bloggi
     restart: unless-stopped
     environment:
@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - bloggi_db_data:/var/lib/postgresql/data
+      - bloggi_db_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d vectordb"]
       interval: 30s
