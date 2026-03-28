@@ -26,7 +26,7 @@ const API_OPTIONS = {
     modelSuffix: 'IApi',
     withInterfaces: true,
 }
-const OUTPUT_DIR = 'apps/angular-portfolio/src/api/generated-sdk/'
+const OUTPUT_DIR = 'apps/angular-blog/src/app/services/api/generated-sdk/'
 const BLACKLISTED_FILES = [
     'README.md',
     '__MACOSX',
@@ -35,10 +35,10 @@ const BLACKLISTED_FILES = [
 ]
 
 const main = async () => {
-    let response = await askQuestion("Enter open-api spec url: (defaults: https://portfolio-api.alenalex.me/openapi.json)");
+    let response = await askQuestion("Enter open-api spec url: (defaults: https://raw.githubusercontent.com/AlenGeoAlex/me.alenalex/refs/heads/main/docs/blog-api/swagger-spec.json)");
 
     if(!response || response.trim().length === 0) {
-        response = 'https://portfolio-api.alenalex.me/openapi.json';
+        response = 'https://raw.githubusercontent.com/AlenGeoAlex/me.alenalex/refs/heads/main/docs/blog-api/swagger-spec.json';
     }
 
     let responseUrl

@@ -23,6 +23,7 @@ public static class ConfigurationExtension
             {
                 options.ClientId = config["OAUTH_GOOGLE_CLIENT_ID"] ?? string.Empty;
                 options.RedirectUri = config["OAUTH_GOOGLE_REDIRECT_URI"] ?? string.Empty;
+                options.ClientSecret = config["OAUTH_GOOGLE_CLIENT_SECRET"] ?? string.Empty;
                 options.AllowRegistration = config.GetValue("OAUTH_GOOGLE_ALLOW_REGISTRATION", false);
             })
             .ValidateDataAnnotations()

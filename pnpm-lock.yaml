@@ -45,6 +45,12 @@ importers:
       '@editorjs/editorjs':
         specifier: ^2.31.5
         version: 2.31.5
+      '@ngneat/overview':
+        specifier: 7.0.0
+        version: 7.0.0(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))
+      '@ngxpert/hot-toast':
+        specifier: ^6.1.0
+        version: 6.1.0(@angular/common@21.2.6(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))(@ngneat/overview@7.0.0(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1)))
       '@primeuix/themes':
         specifier: ^2.0.3
         version: 2.0.3
@@ -7183,11 +7189,23 @@ snapshots:
       '@angular/core': 21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1)
       tslib: 2.8.1
 
+  '@ngneat/overview@7.0.0(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))':
+    dependencies:
+      '@angular/core': 21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1)
+      tslib: 2.8.1
+
   '@ngxpert/hot-toast@6.1.0(@angular/common@21.0.8(@angular/core@21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1))(@ngneat/overview@7.0.0(@angular/core@21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1)))':
     dependencies:
       '@angular/common': 21.0.8(@angular/core@21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@angular/core': 21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1)
       '@ngneat/overview': 7.0.0(@angular/core@21.0.8(@angular/compiler@21.0.8)(rxjs@7.8.2)(zone.js@0.15.1))
+      tslib: 2.8.1
+
+  '@ngxpert/hot-toast@6.1.0(@angular/common@21.2.6(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))(@ngneat/overview@7.0.0(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1)))':
+    dependencies:
+      '@angular/common': 21.2.6(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
+      '@angular/core': 21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1)
+      '@ngneat/overview': 7.0.0(@angular/core@21.2.6(@angular/compiler@21.2.6)(rxjs@7.8.2)(zone.js@0.15.1))
       tslib: 2.8.1
 
   '@npmcli/agent@4.0.0':

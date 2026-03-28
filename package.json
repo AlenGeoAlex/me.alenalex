@@ -13,6 +13,7 @@
     "git:portfolio:block-sensitive": "node scripts/git/block-sensitive-files.mjs",
 
     "generate:portfolio-angular:backend-api-sdk": "node scripts/generator/generate-api-sdk.js",
+    "generate:blog-angular:backend-api-sdk": "node scripts/generator/generate-api-blog-sdk.js",
     "generate:portfolio-backend-hono:env-example": "node apps/portfolio-backend-hono/scripts/generate-env-example.mjs",
     "generate:about-me": "node scripts/generator/generate-about-me.js",
     "generate:sqlc": "node scripts/generator/generate-sqlc.js",

@@ -26,6 +26,7 @@ internal static partial class Login
     class Handler(
         ILogger<Login.Handler> logger,
         IOptionsSnapshot<GoogleOAuthOptions> googleOAuthOptions,
+        IOptions<TokenOptions> tokenOptions,
         AuthService authService,
         UserService userService,
         TokenService tokenService
@@ -48,7 +49,12 @@ internal static partial class Login
             HttpContext.Response.Cookies.Delete(Constants.Auth.StateCookieName);
             logger.LogInformation("Google OAuth state cookie deleted");
 
-            var googleResult = await authService.ValidateAndExchangePayloadAsync(req.Code, ct);
+            var codeResult = await authService.ExchangeCodeForTokenAsync(req.Code, ct);
+            if (codeResult.IsError)
+                return codeResult.Errors;
+            
+            logger.LogInformation("Google OAuth code exchanged for token");
+            var googleResult = await authService.ValidateOAuthPayloadAsync(codeResult.Value, ct);
             if (googleResult.IsError)
                 return googleResult.Errors;
 
@@ -112,6 +118,15 @@ internal static partial class Login
             
             if (token.IsError)
                 return token.Errors;
+            
+            HttpContext.Response.Cookies.Append(Constants.Auth.AccessTokenCookieName, token.Value, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure   = true,
+                SameSite = SameSiteMode.Strict,
+                MaxAge   = TimeSpan.FromHours(tokenOptions.Value.ExpiryHours),
+                Path     = "*"
+            });
             
             return new Response(token.Value, googlePayload.Picture, googlePayload.Email, googlePayload.Name);
         }

@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
     "@editorjs/editorjs": "^2.31.5",
+    "@ngneat/overview": "7.0.0",
+    "@ngxpert/hot-toast": "^6.1.0",
     "@primeuix/themes": "^2.0.3",
     "primeicons": "^7.0.0",
     "primeng": "^21.1.4",

@@ -5,5 +5,6 @@ public static partial class Constants
     public static class Auth
     {
         public const string StateCookieName = "bloggi-oauth-state";
+        public const string AccessTokenCookieName = "bloggi-access-token";
     }
 }

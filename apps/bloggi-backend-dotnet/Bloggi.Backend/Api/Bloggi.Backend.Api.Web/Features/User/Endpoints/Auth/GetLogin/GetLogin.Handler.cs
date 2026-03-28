@@ -11,7 +11,7 @@ internal static partial class GetLogin
         AuthService authService
         ) : EndpointWithoutRequest<ErrorOr<Response>>
     {
-        public override async Task<ErrorOr<Response>> HandleAsync(CancellationToken ct)
+        public override async Task<ErrorOr<Response>> ExecuteAsync(CancellationToken ct)
         {
             var result = authService.GetGoogleOAuthLink(ct);
             if (result.IsError)
@@ -24,7 +24,7 @@ internal static partial class GetLogin
                 Secure   = true,
                 SameSite = SameSiteMode.Strict,
                 MaxAge   = TimeSpan.FromMinutes(10),
-                Path     = "/auth/login"
+                Path     = "/api/v1/auth/login"
             });
             
             return new Response(googleOAuthLink.Url);

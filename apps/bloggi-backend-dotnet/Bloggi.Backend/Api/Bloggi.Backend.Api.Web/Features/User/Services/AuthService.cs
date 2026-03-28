@@ -3,6 +3,8 @@ using System.Web;
 using Bloggi.Backend.Api.Web.Options;
 using ErrorOr;
 using Google.Apis.Auth;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
 using Microsoft.Extensions.Options;
 
 namespace Bloggi.Backend.Api.Web.Features.User.Services;
@@ -47,17 +49,63 @@ public class AuthService(
     }
 
     /// <summary>
-    /// Validates a Google ID token, exchanges it for its payload, and returns the result.
+    /// Exchanges a Google OAuth authorization code for an access token.
     /// </summary>
-    /// <param name="idToken">The Google ID token to validate and exchange.</param>
+    /// <param name="code">The authorization code received from Google OAuth.</param>
     /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <seealso cref="Errors.Auth.InvalidOAuthJwt"/>
     /// <seealso cref="Errors.Auth.MissingGoogleOAuthCredentials"/>
-    /// <seealso cref="Errors.Auth.GoogleOAuthLoginFailed"/>
     /// <returns>
-    /// An ErrorOr containing the GoogleJsonWebSignature.Payload if the token is successfully validated.
-    /// Returns an error if the token is invalid or if required Google OAuth credentials are missing.
+    /// An ErrorOr containing the access token as a string if the exchange is successful.
+    /// Returns an error if the required Google OAuth credentials are missing or if the exchange fails.
     /// </returns>
-    public async Task<ErrorOr<GoogleJsonWebSignature.Payload>> ValidateAndExchangePayloadAsync(
+    public async Task<ErrorOr<string>> ExchangeCodeForTokenAsync(string code,
+        CancellationToken cancellationToken = default)
+    {
+        var valueClientSecret = googleOAuthOptions.Value.ClientSecret;
+        var valueClientId = googleOAuthOptions.Value.ClientId;
+        if (string.IsNullOrWhiteSpace(valueClientSecret) || string.IsNullOrWhiteSpace(valueClientId))
+            return Errors.Auth.MissingGoogleOAuthCredentials;
+        
+        try
+        {
+            var flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
+            {
+                ClientSecrets = new ClientSecrets
+                {
+                    ClientId     = valueClientId,
+                    ClientSecret = valueClientSecret,
+                }
+            });
+
+            logger.LogInformation("Exchanging Google OAuth code for token");
+            var tokenResponse = await flow.ExchangeCodeForTokenAsync(
+                userId: "user",
+                code: code,
+                redirectUri: googleOAuthOptions.Value.RedirectUri,
+                taskCancellationToken: cancellationToken);
+
+            return tokenResponse.IdToken;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "Failed to exchange Google OAuth code");
+            return Errors.Auth.GoogleOAuthLoginFailed;
+        }
+    }
+
+    /// <summary>
+    /// Validates a Google OAuth ID token and returns its payload if the token is successfully verified.
+    /// </summary>
+    /// <param name="idToken">The Google OAuth ID token to be validated.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <seealso cref="Errors.Auth.InvalidOAuthJwt"/>
+    /// <seealso cref="Errors.Auth.MissingGoogleOAuthCredentials"/>
+    /// <returns>
+    /// An ErrorOr containing the GoogleJsonWebSignature.Payload if the validation is successful.
+    /// Returns an error if the token is invalid, the credentials are missing, or the validation fails.
+    /// </returns>
+    public async Task<ErrorOr<GoogleJsonWebSignature.Payload>> ValidateOAuthPayloadAsync(
         string idToken,
         CancellationToken cancellationToken = default
         )
@@ -79,7 +127,7 @@ public class AuthService(
         catch (InvalidJwtException exception)
         {
             logger.LogError(exception, "Failed to validate Google JWT");
-            return Errors.Auth.GoogleOAuthLoginFailed;
+            return Errors.Auth.InvalidOAuthJwt;
         }
     }
 

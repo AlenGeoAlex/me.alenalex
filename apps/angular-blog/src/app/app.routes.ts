@@ -14,7 +14,7 @@ export const routes: Routes = [
       },
       {
         path: 'google/callback',
-        //loadComponent: () => import('./pages/auth/google-oauth/google-oauth-callback').then((m) => m.GoogleOAuthCallback),
+        loadComponent: () => import('./pages/auth/google-callback/google-callback').then((m) => m.GoogleCallback),
       }
     ]
   },
