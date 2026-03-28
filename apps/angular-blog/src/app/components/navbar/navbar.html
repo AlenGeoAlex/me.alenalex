@@ -1,0 +1,114 @@
+<nav class="glass-heavy sticky top-0 z-50 flex h-14 w-full items-center justify-between px-4 sm:px-6">
+  <div class="ms-2">
+    <div class="flex items-center gap-2">
+      <a routerLink="/" class="font-serif text-xl sm:text-2xl font-normal text-(--ink) flex items-center gap-1">
+        Alen's Blog
+      </a>
+    </div>
+  </div>
+
+  <div class="hidden md:flex flex-1 max-w-md mx-8">
+    <p-iconfield class="relative w-full">
+      <p-inputicon class="pi pi-search" />
+      <input type="text"
+             pInputText
+             class="w-full pl-9 h-9 bg-(--bg-2)! border-(--border)! rounded-(--r-md)! font-mono! text-sm! focus:border-(--border-focus)! focus:ring-(--accent-dim)!"
+             placeholder="Search posts..." />
+    </p-iconfield>
+  </div>
+
+  <div class="flex items-center gap-1 sm:gap-2">
+    <div class="hidden sm:flex items-center gap-1 sm:gap-2">
+      <a
+        pButton
+        icon="pi pi-info-circle"
+        [href]="ABOUT_LINK"
+        class="p-button-text p-button-rounded"
+        title="About"
+      ></a>
+
+      <a
+        pButton
+        icon="pi pi-github"
+        [href]="GITHUB_LINK"
+        target="_blank"
+        class="p-button-text p-button-rounded"
+        title="GitHub"
+      ></a>
+
+      <a
+        pButton
+        [icon]="darkModeSignal() ? 'pi pi-moon' : 'pi pi-sun'"
+        (click)="toggleDarkMode()"
+        class="p-button-text p-button-rounded"
+        title="About"
+      ></a>
+
+      <button
+        pButton
+        icon="pi pi-user"
+        class="p-button-text p-button-rounded"
+        title="Profile"
+      ></button>
+    </div>
+
+    <div class="flex sm:hidden items-center gap-1">
+      <button
+        pButton
+        icon="pi pi-search"
+        class="p-button-text p-button-rounded"
+        (click)="onSearchClick()"
+      ></button>
+
+      <button
+        pButton
+        [icon]="mobileOpen() ? 'pi pi-times' : 'pi pi-bars'"
+        class="p-button-text p-button-rounded"
+        (click)="toggleMobile()"
+      ></button>
+    </div>
+  </div>
+</nav>
+
+@if(mobileOpen()) {
+  <div class="fixed inset-0 top-14 z-40 sm:hidden glass-heavy bg-(--bg-glass-heavy) animate-in fade-in slide-in-from-top-4 duration-300">
+    <div class="flex flex-col p-6 gap-4">
+      <div class="relative w-full mb-2">
+        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-(--ink-3) text-sm"></i>
+        <input
+          type="text"
+          pInputText
+          placeholder="Search posts..."
+          class="w-full pl-9 h-11 bg-(--bg-2)! border-(--border)! rounded-(--r-md)! font-mono! focus:border-(--border-focus)! focus:ring-(--accent-dim)!"
+        />
+      </div>
+
+      <a
+        [href]="ABOUT_LINK"
+        (click)="closeMobile()"
+        class="flex items-center gap-3 p-3 rounded-(--r-md) text-(--ink-2) hover:bg-(--accent-dim) hover:text-(--accent) transition-colors"
+      >
+        <i class="pi pi-info-circle"></i>
+        <span class="font-sans font-medium">About</span>
+      </a>
+
+      <a
+        [href]="GITHUB_LINK"
+        target="_blank"
+        (click)="closeMobile()"
+        class="flex items-center gap-3 p-3 rounded-(--r-md) text-(--ink-2) hover:bg-(--accent-dim) hover:text-(--accent) transition-colors"
+      >
+        <i class="pi pi-github"></i>
+        <span class="font-sans font-medium">GitHub</span>
+      </a>
+
+      <button
+        (click)="closeMobile()"
+        class="flex items-center gap-3 p-3 rounded-(--r-md) text-(--ink-2) hover:bg-(--accent-dim) hover:text-(--accent) text-left transition-colors"
+      >
+        <i class="pi pi-user"></i>
+        <span class="font-sans font-medium">Profile</span>
+      </button>
+    </div>
+  </div>
+}

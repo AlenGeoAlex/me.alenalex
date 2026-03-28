@@ -1,0 +1,48 @@
+<div class="relative min-h-screen w-full overflow-x-hidden" style="background: var(--bg);">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none fixed rounded-full"
+    style="
+      width: 700px; height: 700px;
+      top: -280px; right: -180px;
+      background: radial-gradient(circle, var(--accent-dim) 0%, transparent 65%);
+      filter: blur(80px);
+      z-index: 0;
+      opacity: 0.9;
+    "
+  ></div>
+
+  <div
+    aria-hidden="true"
+    class="pointer-events-none fixed rounded-full"
+    style="
+      width: 500px; height: 500px;
+      bottom: 5%; left: -150px;
+      background: radial-gradient(circle, rgba(120,113,108,0.10) 0%, transparent 65%);
+      filter: blur(80px);
+      z-index: 0;
+      opacity: 1;
+    "
+  ></div>
+
+  <div
+    aria-hidden="true"
+    class="pointer-events-none fixed rounded-full"
+    style="
+      width: 400px; height: 400px;
+      top: 40%; right: -100px;
+      background: radial-gradient(circle, var(--accent-dim) 0%, transparent 65%);
+      filter: blur(80px);
+      z-index: 0;
+      opacity: 0.5;
+    "
+  ></div>
+  
+  <div class="relative z-10 flex min-h-screen flex-col">
+    <bloggi-navbar ></bloggi-navbar>
+    <main class="flex-1">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+</div>

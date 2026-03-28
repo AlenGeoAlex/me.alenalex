@@ -1,0 +1,695 @@
+/*
+ * styles.css  (Angular global stylesheet)
+ *
+ * Three responsibilities:
+ *   1. Design-system CSS variables (:root / .dark) — the single source of
+ *      truth for ALL custom component styles. Angular components reference
+ *      these vars only — never hardcode hex values in component CSS.
+ *
+ *   2. PrimeNG glass-surface overrides — applies the glass aesthetic to
+ *      PrimeNG overlay components (dropdowns, dialogs, tooltips, toasts).
+ *      These use ::ng-deep-safe global selectors because PrimeNG overlays
+ *      are appended to <body> outside Angular component trees.
+ *
+ *   3. Utility / helper classes referenced by the design system doc.
+ *
+ * Font import — Instrument Serif + Geist + Geist Mono
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   1. DESIGN SYSTEM TOKENS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Backgrounds */
+  --bg:              #F5F2ED;
+  --bg-2:            #EDE9E3;
+  --bg-3:            #E5E1DA;
+  --bg-glass:        rgba(245, 242, 237, 0.72);
+  --bg-glass-heavy:  rgba(245, 242, 237, 0.88);
+
+  /* Text */
+  --ink:             #1C1917;
+  --ink-2:           #44403C;
+  --ink-3:           #78716C;
+
+  /* Accent */
+  --accent:          #D97706;
+  --accent-hover:    #B45309;
+  --accent-dim:      rgba(217, 119, 6, 0.12);
+  --accent-dim-2:    rgba(217, 119, 6, 0.20);
+
+  /* Semantic */
+  --success:         #16A34A;
+  --success-bg:      rgba(22, 163, 74, 0.08);
+  --warning:         #D97706;
+  --warning-bg:      rgba(217, 119, 6, 0.08);
+  --danger:          #DC2626;
+  --danger-bg:       rgba(220, 38, 38, 0.08);
+  --info:            #2563EB;
+  --info-bg:         rgba(37, 99, 235, 0.08);
+
+  /* Borders */
+  --border:          rgba(28, 25, 23, 0.10);
+  --border-2:        rgba(28, 25, 23, 0.18);
+  --border-focus:    rgba(217, 119, 6, 0.50);
+
+  /* Effects */
+  --blur:            saturate(180%) blur(20px);
+  --blur-heavy:      saturate(200%) blur(32px);
+  --shadow-sm:       0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:       0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg:       0 12px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
+
+  /* Border radii */
+  --r-sm:            6px;
+  --r-md:            10px;
+  --r-lg:            14px;
+  --r-xl:            20px;
+  --r-full:          999px;
+
+  /* Motion */
+  --ease:            cubic-bezier(0.16, 1, 0.3, 1);
+  --fast:            0.15s;
+  --mid:             0.25s;
+  --slow:            0.4s;
+}
+
+.dark {
+  --bg:              #0F0E0D;
+  --bg-2:            #1A1917;
+  --bg-3:            #242220;
+  --bg-glass:        rgba(15, 14, 13, 0.72);
+  --bg-glass-heavy:  rgba(15, 14, 13, 0.90);
+
+  --ink:             #F5F2ED;
+  --ink-2:           #D6D3D1;
+  --ink-3:           #78716C;
+
+  --accent:          #F59E0B;
+  --accent-hover:    #FBBF24;
+  --accent-dim:      rgba(245, 158, 11, 0.12);
+  --accent-dim-2:    rgba(245, 158, 11, 0.20);
+
+  --border:          rgba(245, 242, 237, 0.08);
+  --border-2:        rgba(245, 242, 237, 0.14);
+  --border-focus:    rgba(245, 158, 11, 0.45);
+
+  --shadow-sm:       0 1px 3px rgba(0,0,0,0.20);
+  --shadow-md:       0 4px 16px rgba(0,0,0,0.30);
+  --shadow-lg:       0 12px 40px rgba(0,0,0,0.40);
+
+  /* Semantic colours keep same hue in dark — only bg changes */
+  --success-bg:      rgba(22, 163, 74, 0.10);
+  --warning-bg:      rgba(245, 158, 11, 0.10);
+  --danger-bg:       rgba(220, 38, 38, 0.10);
+  --info-bg:         rgba(37,  99, 235, 0.10);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2. BASE RESET
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }*/
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  /* Smooth theme toggle — only bg/color/border, avoids animating everything */
+  transition: background var(--fast), color var(--fast), border-color var(--fast);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3. CUSTOM SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. DESIGN SYSTEM UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Glass surfaces */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+
+.glass-heavy {
+  background: var(--bg-glass-heavy);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border: 1px solid var(--border);
+}
+
+/* Typography scale */
+.t-display   { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; color: var(--ink); }
+.t-title     { font-family: 'Instrument Serif', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; color: var(--ink); }
+.t-heading   { font-family: 'Geist', sans-serif;       font-size: 1.125rem;   font-weight: 500; color: var(--ink); }
+.t-subheading{ font-family: 'Geist', sans-serif;       font-size: 0.8125rem;  font-weight: 500; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+.t-body      { font-family: 'Geist', sans-serif;       font-size: 1rem;       font-weight: 300; color: var(--ink-2); }
+.t-small     { font-family: 'Geist', sans-serif;       font-size: 0.875rem;   font-weight: 400; color: var(--ink-3); }
+.t-mono      { font-family: 'Geist Mono', monospace;   font-size: 0.875rem;   font-weight: 400; color: var(--accent); }
+
+/* Page entry animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-up   { animation: fadeUp  0.5s var(--ease) both; }
+.anim-fade-up-2 { animation: fadeUp  0.5s var(--ease) 80ms  both; }
+.anim-fade-up-3 { animation: fadeUp  0.5s var(--ease) 160ms both; }
+.anim-fade-up-4 { animation: fadeUp  0.5s var(--ease) 240ms both; }
+.anim-scale-in  { animation: scaleIn 0.5s var(--ease) both; }
+
+/* Background orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 {
+  width: 700px; height: 700px;
+  top: -300px; right: -200px;
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+  opacity: 1;
+}
+.orb-2 {
+  width: 500px; height: 500px;
+  bottom: 5%; left: -150px;
+  background: radial-gradient(circle, rgba(120,113,108,0.09) 0%, transparent 70%);
+  opacity: 1;
+}
+.orb-3 {
+  width: 400px; height: 400px;
+  top: 40%; right: -100px;
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+  opacity: 0.5;
+}
+
+/* Status badges */
+.badge-dot::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 0.375rem;
+  vertical-align: middle;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. PRIMENG GLASS OVERRIDES
+   PrimeNG appends overlays to <body> so component-scoped styles can't reach
+   them. These global selectors apply the glass aesthetic to every PrimeNG
+   overlay, matching the design system's glass-heavy spec.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Shared overlay base ── */
+.p-select-overlay,
+.p-autocomplete-overlay,
+.p-multiselect-overlay,
+.p-cascadeselect-overlay,
+.p-datepicker-overlay,
+.p-tieredmenu,
+.p-contextmenu,
+.p-menu,
+.p-megamenu,
+.p-menubar,
+.p-breadcrumb,
+.p-listbox,
+.p-overlaypanel,
+.p-popover {
+  background: var(--bg-glass-heavy) !important;
+  backdrop-filter: var(--blur-heavy) !important;
+  -webkit-backdrop-filter: var(--blur-heavy) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--ink) !important;
+}
+
+/* ── Dialog / Modal ── */
+.p-dialog {
+  background: var(--bg-glass-heavy) !important;
+  backdrop-filter: var(--blur-heavy) !important;
+  -webkit-backdrop-filter: var(--blur-heavy) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-xl) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.p-dialog .p-dialog-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--ink) !important;
+  font-family: 'Geist', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.p-dialog .p-dialog-content {
+  background: transparent !important;
+  color: var(--ink-2) !important;
+}
+
+.p-dialog .p-dialog-footer {
+  background: transparent !important;
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Mask / backdrop */
+.p-overlay-mask {
+  background: rgba(0, 0, 0, 0.40) !important;
+}
+
+.dark .p-overlay-mask {
+  background: rgba(0, 0, 0, 0.60) !important;
+}
+
+/* ── Drawer / Sidebar ── */
+.p-drawer {
+  background: var(--bg-glass-heavy) !important;
+  backdrop-filter: var(--blur-heavy) !important;
+  -webkit-backdrop-filter: var(--blur-heavy) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--ink) !important;
+}
+
+/* ── Toast ── */
+.p-toast .p-toast-message {
+  background: var(--bg-glass-heavy) !important;
+  backdrop-filter: var(--blur-heavy) !important;
+  -webkit-backdrop-filter: var(--blur-heavy) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--ink-2) !important;
+  min-width: 260px;
+  max-width: 380px;
+  padding: 0.875rem 1.125rem;
+}
+
+/* Toast severity border tints */
+.p-toast .p-toast-message-success  { border-left: 3px solid var(--success) !important;  }
+.p-toast .p-toast-message-warn     { border-left: 3px solid var(--warning) !important;  }
+.p-toast .p-toast-message-error    { border-left: 3px solid var(--danger)  !important;  }
+.p-toast .p-toast-message-info     { border-left: 3px solid var(--info)    !important;  }
+
+/* ── Tooltip ── */
+.p-tooltip .p-tooltip-text {
+  background: var(--bg-glass-heavy) !important;
+  backdrop-filter: var(--blur) !important;
+  -webkit-backdrop-filter: var(--blur) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--ink-2) !important;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem;
+}
+
+/* ── Input focus ring — matches --border-focus ── */
+.p-inputtext:focus,
+.p-textarea:focus,
+.p-select:focus-within,
+.p-multiselect:focus-within,
+.p-autocomplete:focus-within {
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px var(--accent-dim) !important;
+  outline: none !important;
+}
+
+/* ── Form field backgrounds ── */
+.p-inputtext,
+.p-textarea,
+.p-password input,
+.p-select .p-select-label,
+.p-multiselect {
+  background: var(--bg-2) !important;
+  border-color: var(--border) !important;
+  color: var(--ink) !important;
+  border-radius: var(--r-md) !important;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.9375rem;
+  transition: border-color var(--fast), box-shadow var(--fast);
+}
+
+.p-inputtext::placeholder,
+.p-textarea::placeholder {
+  color: var(--ink-3) !important;
+}
+
+.p-inputtext:hover,
+.p-textarea:hover {
+  border-color: var(--border-2) !important;
+}
+
+/* ── Button ── */
+.p-button {
+  border-radius: var(--r-md) !important;
+  font-family: 'Geist', sans-serif !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  transition: all var(--fast) !important;
+  padding: 0.5rem 1.125rem !important;
+}
+
+/* Primary button — amber */
+.p-button-primary,
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(.p-button-secondary):not(.p-button-success):not(.p-button-warning):not(.p-button-danger):not(.p-button-info) {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.p-button-primary:hover,
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(.p-button-secondary):not(.p-button-success):not(.p-button-warning):not(.p-button-danger):not(.p-button-info):hover {
+  background: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Secondary button — glass */
+.p-button-secondary {
+  background: var(--bg-glass) !important;
+  backdrop-filter: var(--blur) !important;
+  border-color: var(--border) !important;
+  color: var(--ink) !important;
+}
+
+.p-button-secondary:hover {
+  background: var(--bg-2) !important;
+  border-color: var(--border-2) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Danger button */
+.p-button-danger {
+  background: var(--danger-bg) !important;
+  border-color: rgba(220, 38, 38, 0.25) !important;
+  color: var(--danger) !important;
+}
+
+.p-button-danger:hover {
+  background: rgba(220, 38, 38, 0.15) !important;
+}
+
+/* Ghost / text button */
+.p-button-text, .p-button-link {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--ink-2) !important;
+}
+
+.p-button-text:hover, .p-button-link:hover {
+  background: var(--accent-dim) !important;
+  color: var(--ink) !important;
+}
+
+/* Disabled */
+.p-button:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Tag / Badge ── */
+.p-tag {
+  border-radius: var(--r-full) !important;
+  font-family: 'Geist Mono', monospace !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+}
+
+/* ── DataTable ── */
+.p-datatable .p-datatable-thead > tr > th {
+  background: transparent !important;
+  color: var(--ink-3) !important;
+  font-family: 'Geist Mono', monospace !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 0.625rem 1.25rem !important;
+  font-weight: 500 !important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  background: transparent !important;
+  color: var(--ink-2) !important;
+  font-size: 0.9375rem !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 0.875rem 1.25rem !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover > td {
+  background: var(--accent-dim) !important;
+  transition: background var(--fast) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
+
+/* ── Card ── */
+.p-card {
+  background: var(--bg-glass) !important;
+  backdrop-filter: var(--blur) !important;
+  -webkit-backdrop-filter: var(--blur) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-xl) !important;
+  box-shadow: none !important;
+  color: var(--ink) !important;
+  transition: border-color var(--fast), box-shadow var(--fast) !important;
+}
+
+.p-card:hover {
+  border-color: var(--border-2) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* ── Tabs ── */
+.p-tabs .p-tab {
+  color: var(--ink-3) !important;
+  font-family: 'Geist', sans-serif !important;
+  font-size: 0.875rem !important;
+  border-radius: var(--r-md) !important;
+  transition: color var(--fast), background var(--fast) !important;
+}
+
+.p-tabs .p-tab:hover {
+  color: var(--ink) !important;
+}
+
+.p-tabs .p-tab.p-tab-active {
+  background: var(--accent-dim) !important;
+  color: var(--accent) !important;
+}
+
+.p-tabs .p-tablist-active-bar {
+  background: var(--accent) !important;
+}
+
+/* ── ToggleSwitch ── */
+.p-toggleswitch .p-toggleswitch-slider {
+  background: var(--bg-3) !important;
+  border-radius: var(--r-full) !important;
+  transition: background var(--mid) !important;
+}
+
+.p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+  background: var(--accent) !important;
+}
+
+/* ── Select list item hover/active ── */
+.p-select-option:hover,
+.p-listbox-option:hover,
+.p-multiselect-option:hover {
+  background: var(--accent-dim) !important;
+  color: var(--ink) !important;
+}
+
+.p-select-option.p-select-option-selected,
+.p-listbox-option.p-listbox-option-selected,
+.p-multiselect-option.p-multiselect-option-selected {
+  background: var(--accent-dim-2) !important;
+  color: var(--accent) !important;
+}
+
+/* ── Paginator ── */
+.p-paginator .p-paginator-page.p-paginator-page-selected {
+  background: var(--accent-dim) !important;
+  color: var(--accent) !important;
+  border-color: var(--border-focus) !important;
+}
+
+/* ── Chip ── */
+.p-chip {
+  background: var(--bg-glass) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-full) !important;
+  color: var(--ink-3) !important;
+  font-family: 'Geist Mono', monospace !important;
+  font-size: 0.75rem !important;
+}
+
+/* ── Avatar ── */
+.p-avatar {
+  background: var(--bg-glass) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--accent) !important;
+  font-family: 'Geist Mono', monospace !important;
+}
+
+/* ── Progress bar ── */
+.p-progressbar {
+  background: var(--bg-3) !important;
+  border-radius: var(--r-full) !important;
+}
+
+.p-progressbar .p-progressbar-value {
+  background: var(--accent) !important;
+  border-radius: var(--r-full) !important;
+}
+
+/* ── Divider ── */
+.p-divider::before {
+  border-color: var(--border) !important;
+}
+
+/* ── Accordion ── */
+.p-accordionheader {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border-radius: var(--r-lg) !important;
+  transition: background var(--fast) !important;
+}
+
+.p-accordionheader:hover {
+  background: var(--bg-2) !important;
+}
+
+.p-accordionheader[aria-expanded="true"] {
+  background: var(--accent-dim) !important;
+  color: var(--accent) !important;
+}
+
+.p-accordioncontent-content {
+  background: transparent !important;
+  color: var(--ink-2) !important;
+}
+
+/* ── Skeleton ── */
+.p-skeleton {
+  background: var(--bg-2) !important;
+  border-radius: var(--r-md) !important;
+}
+
+/* ── Breadcrumb ── */
+.p-breadcrumb {
+  background: transparent !important;
+  border: none !important;
+}
+
+.p-breadcrumb .p-breadcrumb-item-link {
+  color: var(--ink-3) !important;
+  transition: color var(--fast) !important;
+}
+
+.p-breadcrumb .p-breadcrumb-item-link:hover {
+  color: var(--ink) !important;
+}
+
+.p-breadcrumb .p-breadcrumb-item:last-child .p-breadcrumb-item-link {
+  color: var(--accent) !important;
+}
+
+/* ── Navigation menu items ── */
+.p-menu .p-menu-item-link,
+.p-contextmenu .p-menu-item-link,
+.p-tieredmenu .p-menu-item-link {
+  color: var(--ink-2) !important;
+  border-radius: var(--r-md) !important;
+  transition: background var(--fast), color var(--fast) !important;
+}
+
+.p-menu .p-menu-item-link:hover,
+.p-contextmenu .p-menu-item-link:hover,
+.p-tieredmenu .p-menu-item-link:hover {
+  background: var(--accent-dim) !important;
+  color: var(--ink) !important;
+}
+
+.p-menu .p-menu-item-link.p-menu-item-link-active,
+.p-tieredmenu .p-menu-item-link.p-menu-item-link-active {
+  background: var(--accent-dim) !important;
+  color: var(--accent) !important;
+}
+
+/* ── Rating ── */
+.p-rating .p-rating-icon { color: var(--border-2) !important; }
+.p-rating .p-rating-icon.p-rating-icon-active { color: var(--accent) !important; }
+
+/* ── Slider ── */
+.p-slider .p-slider-range { background: var(--accent) !important; }
+.p-slider .p-slider-handle {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. DARK MODE OVERRIDES
+   When .dark is on <html>, adjust any PrimeNG components that need explicit
+   dark treatment beyond what the theme preset handles.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.dark .p-inputtext,
+.dark .p-textarea,
+.dark .p-password input,
+.dark .p-select .p-select-label,
+.dark .p-multiselect {
+  background: var(--bg-2) !important;   /* #1A1917 */
+  border-color: var(--border) !important;
+  color: var(--ink) !important;         /* #F5F2ED */
+}
+
+.dark .p-card {
+  background: var(--bg-glass) !important;   /* rgba(15,14,13,0.72) */
+  border-color: var(--border) !important;
+}
+
+.dark .p-datatable .p-datatable-thead > tr > th,
+.dark .p-datatable .p-datatable-tbody > tr > td {
+  background: transparent !important;
+  border-color: var(--border) !important;
+}
+
+.dark .p-overlay-mask { background: rgba(0, 0, 0, 0.60) !important; }
