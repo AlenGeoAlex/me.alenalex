@@ -11,15 +11,25 @@
     }
   ],
   "paths": {
-    "/test": {
-      "get": {
+    "/v1/auth/logout": {
+      "delete": {
         "tags": [
-          "Test"
+          "Auth"
         ],
-        "operationId": "BloggiBackendApiWebFeaturesUserEndpointsAuthLoginTestEndpoint",
+        "operationId": "Logout",
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
           }
         }
       }
@@ -27,7 +37,6 @@
     "/v1/auth/login": {
       "post": {
         "tags": [
-          "Auth",
           "Auth"
         ],
         "operationId": "Login",
@@ -69,7 +78,6 @@
       },
       "get": {
         "tags": [
-          "Auth",
           "Auth"
         ],
         "operationId": "GetLogin",
@@ -100,45 +108,6 @@
   },
   "components": {
     "schemas": {
-      "BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLogin_Response": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "avatarUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string"
-          },
-          "displayName": {
-            "type": "string"
-          }
-        }
-      },
-      "BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLogin_Request": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "code",
-          "state"
-        ],
-        "properties": {
-          "code": {
-            "type": "string",
-            "minLength": 1,
-            "nullable": false
-          },
-          "state": {
-            "type": "string",
-            "minLength": 1,
-            "nullable": false
-          }
-        }
-      },
       "FastEndpointsProblemDetails": {
         "type": "object",
         "description": "RFC7807 compatible problem details/ error response class. this can be used by configuring startup like so:\napp.UseFastEndpoints(c => c.Errors.UseProblemDetails())",
@@ -202,6 +171,42 @@
             "type": "string",
             "description": "the severity of the error",
             "nullable": true
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLogin_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLogin_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "state"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
           }
         }
       },
