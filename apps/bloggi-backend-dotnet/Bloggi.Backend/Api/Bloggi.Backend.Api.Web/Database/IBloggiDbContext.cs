@@ -32,4 +32,6 @@ public interface IBloggiDbContext
     DbSet<Glossary> Glossary { get; }
 
     #endregion
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

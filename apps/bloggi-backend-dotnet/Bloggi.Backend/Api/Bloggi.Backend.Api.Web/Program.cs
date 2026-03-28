@@ -1,29 +1,50 @@
+using System.Text.Json.Serialization;
 using Bloggi.Backend.Api.Web.Database;
 using Bloggi.Backend.Api.Web.Extensions;
+using Bloggi.Backend.Api.Web.Features.Glossary;
+using Bloggi.Backend.Api.Web.Features.Post;
+using Bloggi.Backend.Api.Web.Features.User;
+using Bloggi.Backend.Api.Web.Infrastructure;
+using ErrorOr;
+using FastEndpoints;
+using FastEndpoints.Swagger;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 var configurationManager = builder.InitializeConfiguration();
 var loggerFactory = builder.InitializeLogger();
-// Add services to the container.
+builder.Services.AddFastEndpoints()
+    .SwaggerDocument(op =>
+    {
+        op.MaxEndpointVersion = 1;
+    });
 
 builder.UseBloggiDatabase(loggerFactory);
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddGlossaryModule(configurationManager);
+builder.Services.AddPostModule(configurationManager);
+builder.Services.AddUserModule(configurationManager);
+builder.Services.AddContext();
+builder.ConfigureTokenSecrets();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
+app.UseFastEndpoints(c =>
+{
+    c.Errors.UseProblemDetails();
+    c.Versioning.Prefix = "v";
+    c.Versioning.PrependToRoute = true;
+    c.Serializer.Options.Converters.Add(new JsonStringEnumConverter());
+    c.Endpoints.Configurator = (ep) =>
+    {
+        if (!ep.ResDtoType.IsAssignableTo(typeof(IErrorOr))) return;
+        ep.DontAutoSendResponse();
+        ep.PostProcessor<ResponseSender>(Order.After);
+    };
+});
+app.UseSwaggerGen();
 
 app.Run();

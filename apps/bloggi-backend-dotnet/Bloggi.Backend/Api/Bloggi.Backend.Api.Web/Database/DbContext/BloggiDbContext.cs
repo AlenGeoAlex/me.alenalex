@@ -15,7 +15,7 @@ public class BloggiDbContext : Microsoft.EntityFrameworkCore.DbContext, IBloggiD
     public DbSet<PostMeta> PostMetas { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Glossary> Glossary { get; set; }
-    
+
     public BloggiDbContext(DbContextOptions<BloggiDbContext> options) : base(options)
     {
     }
