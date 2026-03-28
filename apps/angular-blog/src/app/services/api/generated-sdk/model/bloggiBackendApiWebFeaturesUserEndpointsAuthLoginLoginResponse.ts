@@ -10,7 +10,6 @@
 
 
 export interface BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginResponse { 
-    token?: string;
     avatarUrl?: string | null;
     email?: string;
     displayName?: string;

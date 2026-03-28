@@ -27,7 +27,6 @@ public static class BloggiDatabaseExtension
             conf.UseNpgsql(connectionString, o =>
                 {
                     o.SetPostgresVersion(Version.Parse("18.0"));
-                    o.EnableRetryOnFailure();
                     o.MigrationsHistoryTable("bloggi_migrations", "bloggi");
                     o.UseVector();
                 })

@@ -13,6 +13,7 @@ public static partial class Errors
         public static readonly Error GoogleOAuthLoginFailed = Error.Failure($"{nameof(Auth)}.{nameof(GoogleOAuthLoginFailed)}", "Google OAuth Login failed.");
         public static readonly Error RegistrationDisabled = Error.Forbidden($"{nameof(Auth)}.{nameof(RegistrationDisabled)}", "Registration is disabled.");
         public static readonly Error InvalidOAuthJwt = Error.Failure($"{nameof(Auth)}.{nameof(InvalidOAuthJwt)}", "Invalid Google OAuth JWT.");
+        public static readonly Error InSufficientPermissions = Error.Forbidden($"{nameof(Auth)}.{nameof(InSufficientPermissions)}", "Insufficient permissions.");
     }
 
     public static class User

@@ -24,7 +24,7 @@ export class ThemeService {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(enabled => {
-        document.documentElement.classList.toggle('fof-dark-mode-toggle', enabled);
+        document.documentElement.classList.toggle('dark', enabled);
       });
   }
 

@@ -700,5 +700,25 @@ export const BlogTheme = definePreset(Aura, {
       // @ts-ignore
       gutterBackground: '{content.borderColor}',
     },
+
+    // Select Button
+    selectbutton: {
+      root: {
+        borderRadius: '{borderRadius.md}',   // 10px — matches --r-md
+        invalidBorderColor: '{red.600}',
+      },
+      colorScheme: {
+        light: {
+          root: {
+            invalidBorderColor: '{red.600}',
+          },
+        },
+        dark: {
+          root: {
+            invalidBorderColor: '{red.500}',
+          },
+        },
+      },
+    },
   }, // end components
 });

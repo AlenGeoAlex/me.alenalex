@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Bloggi.Backend.Api.Web.Features.User.Events;
 using Bloggi.Backend.Api.Web.Features.User.Services;
 using Bloggi.Backend.Api.Web.Infrastructure.Services;
@@ -64,34 +65,35 @@ internal static partial class Login
             UserService.UserBySubject? user = null; 
             if (userBySubjectResult.IsError)
             {
-                if (userBySubjectResult.Errors.Any(x => x.Type == ErrorType.NotFound && x.Code == Errors.User.UserNotFound.Code))
-                {
-                    if (!googleOAuthOptions.Value.AllowRegistration)
-                    {
-                        return Errors.Auth.RegistrationDisabled;
-                    }
-
-                    var createUserRequest = new UserService.CreateUserRequest(
-                        googlePayload.Subject,
-                        googlePayload.Name,
-                        googlePayload.Email,
-                        googlePayload.Picture
-                    );
-                    var userCreateResult = await userService.CreateUserAsync(createUserRequest, true, ct);
-                    
-                    if(userCreateResult.IsError)
-                        return userCreateResult.Errors;
-
-                    user = new UserService.UserBySubject(
-                        userCreateResult.Value,
-                        googlePayload.Email,
-                        googlePayload.Name,
-                        googlePayload.Picture,
-                        createUserRequest.CanWrite
-                    );
-                }
+                // If the error is not - user not found, then its some other shit! return early
+                if (!userBySubjectResult.Errors.Any(x =>
+                        x.Type == ErrorType.NotFound && x.Code == Errors.User.UserNotFound.Code))
+                    return userBySubjectResult.Errors;   
                 
-                return userBySubjectResult.Errors;
+                // If its not found, but no registration is allowed, then return early
+                if (!googleOAuthOptions.Value.AllowRegistration)
+                {
+                    return Errors.Auth.RegistrationDisabled;
+                }
+
+                var createUserRequest = new UserService.CreateUserRequest(
+                    googlePayload.Subject,
+                    googlePayload.Name,
+                    googlePayload.Email,
+                    googlePayload.Picture
+                );
+                var userCreateResult = await userService.CreateUserAsync(createUserRequest, true, ct);
+                    
+                if(userCreateResult.IsError)
+                    return userCreateResult.Errors;
+
+                user = new UserService.UserBySubject(
+                    userCreateResult.Value,
+                    googlePayload.Email,
+                    googlePayload.Name,
+                    googlePayload.Picture,
+                    createUserRequest.CanWrite
+                );
             }
             else
             {
@@ -113,22 +115,35 @@ internal static partial class Login
                 ), Mode.WaitForNone, ct);
             }
 
+            if (!user.CanWrite)
+                return Errors.Auth.InSufficientPermissions;
+
             var token = tokenService.GenerateToken(
                 new TokenService.GenerateTokenRequest(user.Id, user.Email, user.DisplayName, user.CanWrite));
             
             if (token.IsError)
                 return token.Errors;
             
+            // Don't use MaxAge, so that it can be session cookie, that means, once all tab is closed, its done
             HttpContext.Response.Cookies.Append(Constants.Auth.AccessTokenCookieName, token.Value, new CookieOptions
             {
                 HttpOnly = true,
                 Secure   = true,
                 SameSite = SameSiteMode.Strict,
-                MaxAge   = TimeSpan.FromHours(tokenOptions.Value.ExpiryHours),
-                Path     = "*"
+                Path     = "/"
+            });
+            var response = new Response(googlePayload.Picture, googlePayload.Email, googlePayload.Name);
+            HttpContext.Response.Cookies.Append(Constants.Auth.UserInfoCookieName, JsonSerializer.Serialize(response, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            }), new CookieOptions()
+            {
+                Secure   = true,
+                SameSite = SameSiteMode.Strict,
+                Path     = "/"
             });
             
-            return new Response(token.Value, googlePayload.Picture, googlePayload.Email, googlePayload.Name);
+            return response;
         }
 
         public override void Configure()
@@ -140,24 +155,9 @@ internal static partial class Login
             {
                 x.WithSummary("Login the user using the GoogleOAuth");
                 x.WithName("Login");
-                x.WithTags(["Auth"]);
                 x.Produces<Response>(200);
                 x.ProducesProblemDetails();
             });
         }
-    }
-}
-
-public class TestEndpoint : EndpointWithoutRequest
-{
-    public override void Configure()
-    {
-        Get("/test");
-        AllowAnonymous();
-    }
-
-    public override async Task HandleAsync(CancellationToken ct)
-    {
-        
     }
 }

@@ -11,5 +11,10 @@ public static class InfrastructureExtension
         serviceCollection.AddScoped<IContextFactory, ApiContextFactory>();
         serviceCollection.AddScoped<TokenService>();
         return serviceCollection;
-    } 
+    }
+
+    public static IServiceCollection AddPipelineServices(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection;
+    }
 }

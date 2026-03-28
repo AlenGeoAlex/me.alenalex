@@ -2,7 +2,7 @@
   <div class="ms-2">
     <div class="flex items-center gap-2">
       <a routerLink="/" class="font-serif text-xl sm:text-2xl font-normal text-(--ink) flex items-center gap-1">
-        Alen's Blog
+        {{ routeBasedTitle() }}
       </a>
     </div>
   </div>
@@ -44,13 +44,25 @@
         title="About"
       ></a>
 
-      <button
-        pButton
-        routerLink="/auth/google"
-        icon="pi pi-user"
-        class="p-button-text p-button-rounded"
-        title="Profile"
-      ></button>
+      @if(isAuthenticatedSignal()){
+        @let user = authenticationStatus();
+        <p-avatar
+          [image]="user?.avatarUrl"
+          [label]="user?.displayName?.[0] || user?.email?.[0] || 'U'"
+          shape="circle"
+          class="p-button-text p-button-rounded"
+          (click)="logout()"
+          pTooltip="Logout"
+        ></p-avatar>
+      } @else {
+        <button
+          pButton
+          routerLink="/auth/google"
+          icon="pi pi-user"
+          class="p-button-text p-button-rounded"
+          title="Profile"
+        ></button>
+      }
     </div>
 
     <div class="flex sm:hidden items-center gap-1">

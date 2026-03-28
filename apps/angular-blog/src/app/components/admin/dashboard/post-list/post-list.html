@@ -1,0 +1,14 @@
+<div class="mt-6 px-6">
+  <div class="card">
+    <p-toolbar class="mb-6">
+      <ng-template #start>
+        <p-button label="New Post" [severity]="'secondary'" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+        <p-button label="New Series" [severity]="'secondary'" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+      </ng-template>
+      <ng-template #end>
+        <p-button severity="danger" label="Series" [badgeSeverity]="'help'" icon="pi pi-arrow-up-right" class="mr-2" outlined (onClick)="draftSelected()" [disabled]="!tableSelectedIds().length" />
+        <p-button severity="danger" label="Draft Selected" icon="pi pi-file-import" outlined (onClick)="draftSelected()" [disabled]="!tableSelectedIds().length" />
+      </ng-template>
+    </p-toolbar>
+  </div>
+</div>

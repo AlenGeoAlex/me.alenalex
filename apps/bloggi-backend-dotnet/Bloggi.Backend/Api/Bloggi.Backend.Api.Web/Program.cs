@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Bloggi.Backend.Api.Web.Database;
 using Bloggi.Backend.Api.Web.Extensions;
@@ -19,13 +20,18 @@ builder.Services.AddFastEndpoints()
     {
         op.MaxEndpointVersion = 1;
     });
-
+builder.Services.AddExceptionHandler<ResponseExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.UseBloggiDatabase(loggerFactory);
 builder.Services.AddGlossaryModule(configurationManager);
 builder.Services.AddPostModule(configurationManager);
 builder.Services.AddUserModule(configurationManager);
 builder.Services.AddContext();
 builder.ConfigureTokenSecrets();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
 
 var app = builder.Build();
 
@@ -38,6 +44,7 @@ app.UseFastEndpoints(c =>
     c.Versioning.Prefix = "v";
     c.Versioning.PrependToRoute = true;
     c.Serializer.Options.Converters.Add(new JsonStringEnumConverter());
+    c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     c.Endpoints.Configurator = (ep) =>
     {
         if (!ep.ResDtoType.IsAssignableTo(typeof(IErrorOr))) return;
@@ -46,5 +53,5 @@ app.UseFastEndpoints(c =>
     };
 });
 app.UseSwaggerGen();
-
-app.Run();
+app.UseExceptionHandler();
+await app.RunAsync();

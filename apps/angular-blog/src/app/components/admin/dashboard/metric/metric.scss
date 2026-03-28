@@ -1,0 +1,86 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  backdrop-filter: var(--blur);
+  transition: all var(--mid) var(--ease);
+  min-height: 140px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-2);
+  }
+
+  .card-title {
+    position: absolute;
+    top: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-2);
+    width: calc(100% - 2rem);
+
+    &.text-left {
+      left: 1rem;
+      text-align: left;
+    }
+
+    &.text-right {
+      right: 1rem;
+      text-align: right;
+    }
+  }
+
+  .card-number {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--ink);
+    transition: all var(--mid) var(--ease);
+  }
+
+  &:hover .card-number {
+    transform: scale(1.1);
+    // Use the variable if we can, but since it's a hex we might need to be careful.
+    // However, Tailwind/CSS variables usually work fine.
+    // If --accent is #D97706, we can't easily use it in rgba() without more work.
+    // Let's use a standard glow or reference the color directly.
+    filter: drop-shadow(0 0 8px rgba(217, 119, 6, 0.4));
+  }
+}
+
+.card-1 {
+  background: rgba(37, 99, 235, 0.1); // Info blue
+  &:hover {
+    background: rgba(37, 99, 235, 0.15);
+  }
+}
+
+.card-2 {
+  background: rgba(22, 163, 74, 0.1); // Success green
+  &:hover {
+    background: rgba(22, 163, 74, 0.15);
+  }
+}
+
+.card-3 {
+  background: rgba(217, 119, 6, 0.1); // Warning orange
+  &:hover {
+    background: rgba(217, 119, 6, 0.15);
+  }
+}
+
+.card-4 {
+  background: rgba(220, 38, 38, 0.1); // Danger red
+  &:hover {
+    background: rgba(220, 38, 38, 0.15);
+  }
+}

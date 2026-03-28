@@ -1,9 +1,20 @@
 import { Routes } from '@angular/router';
+import {accessGuard} from '@guards/access-guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+  },
+  {
+    path: 'admin',
+    canActivate: [accessGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/admin/admin-home/admin-home').then((m) => m.AdminHome),
+      }
+    ]
   },
   {
     path: 'auth',

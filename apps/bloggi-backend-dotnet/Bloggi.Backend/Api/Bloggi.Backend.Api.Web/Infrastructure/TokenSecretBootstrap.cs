@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Bloggi.Backend.Api.Web.Features.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -146,6 +147,17 @@ public static class TokenSecretBootstrap
                     TokenDecryptionKey = !string.IsNullOrWhiteSpace(encKey)
                         ? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(encKey))
                         : null
+                };
+
+                options.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (!context.Request.Cookies.TryGetValue(Constants.Auth.AccessTokenCookieName,
+                                out var accessToken)) return Task.CompletedTask;
+                        context.Token = accessToken;
+                        return Task.CompletedTask;
+                    }
                 };
             });
         builder.Services.AddAuthorization();

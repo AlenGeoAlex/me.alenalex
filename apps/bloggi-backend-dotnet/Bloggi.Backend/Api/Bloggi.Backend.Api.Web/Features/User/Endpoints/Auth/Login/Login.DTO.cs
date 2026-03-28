@@ -23,7 +23,6 @@ internal static partial class Login
     /// <param name="Email">The email address associated with the authenticated user.</param>
     /// <param name="DisplayName">The display name of the authenticated user.</param>
     private  record Response(
-        string Token,
         string? AvatarUrl,
         string Email,
         string DisplayName

@@ -1,6 +1,7 @@
 import {
+  APP_INITIALIZER,
   ApplicationConfig,
-  importProvidersFrom,
+  importProvidersFrom, provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -9,6 +10,7 @@ import { providePrimeNG } from 'primeng/config';
 import { BlogTheme } from './bloggi-theme';
 import { ApiModule, Configuration, ConfigurationParameters } from '@services/api/generated-sdk';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import {appAuthStateInitializer} from './angular/initializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,7 +28,10 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
-    provideHotToastConfig(),
+    provideHotToastConfig({
+      position: 'bottom-right',
+    }),
+    provideAppInitializer(appAuthStateInitializer)
   ],
 };
 

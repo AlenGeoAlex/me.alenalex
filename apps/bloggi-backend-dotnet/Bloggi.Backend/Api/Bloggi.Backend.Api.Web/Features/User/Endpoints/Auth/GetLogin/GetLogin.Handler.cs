@@ -39,7 +39,6 @@ internal static partial class GetLogin
             {
                 x.WithSummary("Get the login request");
                 x.WithName("GetLogin");
-                x.WithTags(["Auth"]);
                 x.ProducesProblemDetails();
                 x.Produces<Response>(200);
             });
