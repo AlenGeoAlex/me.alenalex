@@ -11,6 +11,7 @@ import {ButtonModule} from 'primeng/button';
 import {DividerModule} from 'primeng/divider';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {PostService} from '@services/api/generated-sdk';
 
 @Component({
   selector: 'bloggi-create-post',
@@ -40,6 +41,7 @@ export class CreatePost {
     tags: [],
     seriesId: null,
   })
+  private readonly postService = inject(PostService);
   protected readonly isSubmitting = signal(false);
   protected readonly postForm = form(this.postModel, (schemaPath) => {
     required(schemaPath.title);
@@ -64,7 +66,7 @@ export class CreatePost {
     stream: (params) => {
       return of([{
         label: 'Angular',
-        id: 'angular'
+        id: 'Angular'
       }]).pipe(
         delay(2000)
       )
@@ -104,9 +106,19 @@ export class CreatePost {
 
   protected onCreate() {
     this.isSubmitting.set(true);
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-    }, 2000)
+    this.postService.createPost(this.postModel())
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+        },
+        error: (err) => {
+          console.error('Error creating post:', err);
+          this.isSubmitting.set(false);
+        },
+        complete: () => {
+          this.isSubmitting.set(false);
+        }
+      })
   }
 }
 

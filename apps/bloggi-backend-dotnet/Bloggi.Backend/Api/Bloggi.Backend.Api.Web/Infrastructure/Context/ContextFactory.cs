@@ -1,3 +1,6 @@
+using Bloggi.Backend.Api.Web.Features.User;
+using Microsoft.Extensions.Primitives;
+
 namespace Bloggi.Backend.Api.Web.Infrastructure.Context;
 
 public interface IContextFactory
@@ -28,7 +31,8 @@ public class ApiContextFactory : IContextFactory
     private IContext CreateContext()
     {
         var ctx = _contextAccessor.HttpContext;
-        if (ctx == null || string.IsNullOrEmpty(ctx.Request.Headers.Authorization)) return new NonValidatedContext();
+        if (ctx == null || 
+            (!ctx.Request.Cookies.TryGetValue(Constants.Auth.AccessTokenCookieName, out var tokenValue) || string.IsNullOrWhiteSpace(tokenValue)) ) return new NonValidatedContext();
 
         var ctxUser = ctx.User;
         return new RequestContext(ctxUser);

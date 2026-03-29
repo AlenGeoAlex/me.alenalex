@@ -1,4 +1,5 @@
 using Bloggi.Backend.Api.Web.Database;
+using Bloggi.Backend.Api.Web.Extensions;
 using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -30,6 +31,7 @@ public class PostService(
                 CreatedAt = timeNow,
                 UpdatedAt = timeNow,
                 Title = request.Title,
+                Slug = request.Title.Slugify(),
                 Excerpt = request.Excerpt,
                 Status = Enum.Parse<Api.Database.Posts.Post.PostStatus>(request.Status),
             });
@@ -65,8 +67,7 @@ public class PostService(
 
             await dbContext.Database.ExecuteSqlRawAsync(deleteSql,
                 new NpgsqlParameter("postId", request.PostId),
-                new NpgsqlParameter("tagIds", request.TagIds),
-                ct);
+                new NpgsqlParameter("tagIds", request.TagIds));
 
             if (request.TagIds.Length > 0)
             {
@@ -80,8 +81,7 @@ public class PostService(
 
                 await dbContext.Database.ExecuteSqlRawAsync(insertSql,
                     new NpgsqlParameter("postIds", postIds),
-                    new NpgsqlParameter("tagIds",  request.TagIds),
-                    ct);
+                    new NpgsqlParameter("tagIds",  request.TagIds));
             }
 
             await transaction.CommitAsync(ct);

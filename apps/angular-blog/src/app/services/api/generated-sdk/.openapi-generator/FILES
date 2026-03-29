@@ -5,10 +5,13 @@ api.base.service.ts
 api.module.ts
 api/api.ts
 api/auth.service.ts
+api/post.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/bloggiBackendApiWebFeaturesPostEndpointsPostCreatePostCreatePostRequest.ts
+model/bloggiBackendApiWebFeaturesPostEndpointsPostCreatePostCreatePostResponse.ts
 model/bloggiBackendApiWebFeaturesUserEndpointsAuthGetLoginGetLoginResponse.ts
 model/bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginRequest.ts
 model/bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginResponse.ts

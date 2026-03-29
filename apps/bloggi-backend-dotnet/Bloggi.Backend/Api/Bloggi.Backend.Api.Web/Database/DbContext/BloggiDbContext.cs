@@ -14,8 +14,8 @@ public class BloggiDbContext : Microsoft.EntityFrameworkCore.DbContext, IBloggiD
     public DbSet<PostBlock> PostBlocks { get; set; }
     public DbSet<PostRevision> PostRevisions { get; set; }
     public DbSet<PostMeta> PostMetas { get; set; }
-    public DbSet<Tags> Tags { get; }
-    public DbSet<PostTag> PostTags { get; }
+    public DbSet<Tags> Tags { get; set; }
+    public DbSet<PostTag> PostTags { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Glossary> Glossary { get; set; }
 
