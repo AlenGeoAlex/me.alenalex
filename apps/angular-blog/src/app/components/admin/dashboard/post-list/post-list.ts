@@ -23,14 +23,7 @@ import {CreatePost} from '@components/admin/dashboard/create-post/create-post';
 })
 export class PostList {
 
-  protected tableState = [{
-    label: 'Post',
-    value: 'post',
-  }, {
-    label: 'Series',
-    value: 'series',
-  }];
-  protected readonly currentState = signal<string>(this.tableState[0].value);
+
   protected readonly tableSelectedIds = signal<string[]>([]);
   protected readonly dialogService = inject(DialogService);
 
@@ -41,11 +34,13 @@ export class PostList {
       CreatePost,
       {
         modal: false,
-        width: '50vw',
-        height: '70vh',
+        width: '70vw',
+        height: '80vh',
         dismissableMask: true,
         baseZIndex: 10000,
         header: 'Create New Post',
+        closeOnEscape: true,
+        closable: true,
       }
     )
 

@@ -1,1 +1,79 @@
-<p>create-post works!</p>
+@if (isSubmitting()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <p-progress-spinner />
+  </div>
+}
+
+<div class="mt-4">
+  <div class="w-full flex flex-col gap-4">
+    <div class="px-4 w-full flex flex-col">
+      <span class="text-lg font-semibold">Title of the post <span class="text-lg font-extralight">*</span></span>
+      <span class="text-sm font-light mb-4">The post slug and other SEO related parameters will be crafted of from this. The title must be at least 5 characters long.</span>
+      <input type="text" id="postTitle" autocomplete="off"  [formField]="postForm.title" pInputText placeholder="How do I create a blog in Angular?" />
+      <span class="text-xs font-mono mt-2 px-2" [class.text-red-500]="postForm.title().invalid() && postForm.title().touched()" >{{postModel().title.length}} out of 200 characters. {{ postForm.title().errors().length ? postForm.title().errors()[0].message : '' }}</span>
+    </div>
+
+    <div class="px-4 w-full flex flex-col">
+      <span class="text-lg font-semibold">Excerpt of the post (Description)</span>
+      <span class="text-sm font-light mb-4">This will be used in opengraph and other SEO related parameters</span>
+      <textarea rows="5" id="postExcerpt" [formField]="postForm.excerpt" pInputText placeholder="This blog post explains how to create a blog in Angular using Angular CLI, routing, and content management system"></textarea>
+      <span class="text-xs font-mono mt-2 px-2" [class.text-red-500]="postForm.excerpt().invalid() && postForm.excerpt().touched()" >{{postModel().excerpt.length}} out of 200 characters. {{ postForm.excerpt().errors().length ? postForm.excerpt().errors()[0].message : '' }}</span>
+    </div>
+
+    <div class="px-4 w-full flex flex-col">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="text-lg font-semibold">Tags</span>
+          <span class="text-sm font-light mb-4">Select multiple tags for better SEO (Max of 10)</span>
+          <p-multi-select
+            [options]="tags.status() === 'error' ? [] : tags.value()"
+            [loading]="tags.isLoading()"
+            [lazy]="true"
+            [showClear]="true"
+            [showToggleAll]="false"
+            (onFilter)="onSearchTags($event)"
+            [formField]="postForm.tags"
+            [emptyMessage]="tags.isLoading() ? 'Loading...' : 'No tags found'"
+            placeholder="Select or search for tags"
+            optionLabel="label"
+            optionValue="id"
+            display="chip"
+          ></p-multi-select>
+          <span
+            class="text-xs font-mono mt-2 px-2"
+            [class.text-red-500]="postForm.tags().invalid() && postForm.tags().touched()"
+          >
+            {{ postForm.tags().errors().length ? postForm.tags().errors()[0].message : '' }}
+          </span>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-lg font-semibold">Series</span>
+          <span class="text-sm font-light mb-4">If this is a post in a series. (More can be managed at Series page)</span>
+          <p-select placeholder="Select or search for series"
+                    optionLabel="label"
+                    optionValue="id"
+                    [lazy]="true"
+                    (onFilter)="onSearchSeries($event)"
+                    [options]="series.status() === 'error' ? [] : series.value()"
+                    [loading]="series.isLoading()"
+                    [emptyMessage]="series.isLoading() ? 'Loading...' : 'No series found'"
+          ></p-select>
+          <span
+            class="text-xs font-mono mt-2 px-2"
+            [class.text-red-500]="postForm.seriesId().invalid() && postForm.seriesId().touched()"
+          >
+            {{ postForm.seriesId().errors().length ? postForm.seriesId().errors()[0].message : '' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <p-divider />
+
+    <div class="px-4 py-3 flex justify-end gap-2">
+      <p-button label="Reset" severity="danger" [disabled]="isSubmitting()" (onClick)="onReset()" />
+      <p-button label="Create" severity="primary" [loading]="isSubmitting()" [disabled]="isInvalid()" (onClick)="onCreate()" />
+    </div>
+  </div>
+</div>
