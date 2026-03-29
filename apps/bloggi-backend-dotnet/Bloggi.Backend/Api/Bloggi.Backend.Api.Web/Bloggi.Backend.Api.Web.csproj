@@ -37,7 +37,6 @@
 
     <ItemGroup>
       <Folder Include="Features\Glossary\Endpoints\" />
-      <Folder Include="Features\Post\Endpoints\" />
       <Folder Include="Features\User\Endpoints\User\" />
     </ItemGroup>
 

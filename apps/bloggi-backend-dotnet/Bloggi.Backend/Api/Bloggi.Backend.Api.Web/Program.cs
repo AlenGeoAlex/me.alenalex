@@ -20,6 +20,7 @@ builder.Services.AddFastEndpoints()
     {
         op.MaxEndpointVersion = 1;
     });
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddExceptionHandler<ResponseExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.UseBloggiDatabase(loggerFactory);

@@ -12,5 +12,6 @@ public static class PostExtension
         services.AddScoped<IPostModule, PostModule>();
         services.AddScoped<PostService>();
         services.AddScoped<PreviewService>();
+        services.AddScoped<TagsService>();
     }
 }

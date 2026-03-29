@@ -3,6 +3,7 @@ using Bloggi.Backend.Api.Database.Glossary;
 using Bloggi.Backend.Api.Database.Posts;
 using Bloggi.Backend.Api.Database.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Bloggi.Backend.Api.Web.Database.DbContext;
 
@@ -13,6 +14,8 @@ public class BloggiDbContext : Microsoft.EntityFrameworkCore.DbContext, IBloggiD
     public DbSet<PostBlock> PostBlocks { get; set; }
     public DbSet<PostRevision> PostRevisions { get; set; }
     public DbSet<PostMeta> PostMetas { get; set; }
+    public DbSet<Tags> Tags { get; }
+    public DbSet<PostTag> PostTags { get; }
     public DbSet<User> Users { get; set; }
     public DbSet<Glossary> Glossary { get; set; }
 
