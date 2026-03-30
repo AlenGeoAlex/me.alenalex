@@ -105,6 +105,71 @@
         }
       }
     },
+    "/v1/post/{id}": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "GetPost",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_GetPostIncludeProperty"
+              }
+            },
+            "example": [
+              "Tags"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post": {
       "post": {
         "tags": [
@@ -269,6 +334,93 @@
             "type": "string"
           }
         }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_TagDto"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_StatusDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_TagDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_StatusDto": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Published",
+          "Draft"
+        ],
+        "enum": [
+          "Published",
+          "Draft"
+        ]
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_GetPostIncludeProperty": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Tags",
+          "Author"
+        ],
+        "enum": [
+          "Tags",
+          "Author"
+        ]
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPostCreatePostCreatePost_Response": {
         "type": "object",
