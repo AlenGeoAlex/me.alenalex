@@ -1,0 +1,59 @@
+<div class="glassy-navbar sticky top-14 z-40 w-full flex items-center justify-center p-2">
+  <div class="flex items-center gap-1 sm:gap-4 p-1 rounded-full bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg">
+
+    <!-- Editor Tab -->
+    <button
+      pButton
+      type="button"
+      [class]="'p-button-text p-button-rounded transition-all duration-300 ' + (activeTab() === 'editor' ? 'bg-white/20 dark:bg-white/10' : '')"
+      (click)="onTabClick('editor')"
+      pTooltip="Editor"
+      tooltipPosition="bottom"
+    >
+      <div class="flex items-center gap-2 px-2">
+        <i class="pi pi-pencil text-lg" [class.text-blue-400]="activeTab() === 'editor'"></i>
+        <span class="hidden sm:inline font-medium">Editor</span>
+        @if (editorDirty()) {
+          <i class="pi pi-circle-fill text-[8px] text-orange-500 animate-pulse"></i>
+        }
+      </div>
+    </button>
+
+    <!-- Preview Tab -->
+    <button
+      pButton
+      type="button"
+      [class]="'p-button-text p-button-rounded transition-all duration-300 ' + (activeTab() === 'preview' ? 'bg-white/20 dark:bg-white/10' : '')"
+      (click)="onTabClick('preview')"
+      pTooltip="Preview"
+      tooltipPosition="bottom"
+    >
+      <div class="flex items-center gap-2 px-2">
+        <i class="pi pi-eye text-lg" [class.text-green-400]="activeTab() === 'preview'"></i>
+        <span class="hidden sm:inline font-medium">Preview</span>
+        @if (previewDirty()) {
+          <i class="pi pi-circle-fill text-[8px] text-orange-500 animate-pulse"></i>
+        }
+      </div>
+    </button>
+
+    <!-- Metadata Tab -->
+    <button
+      pButton
+      type="button"
+      [class]="'p-button-text p-button-rounded transition-all duration-300 ' + (activeTab() === 'metadata' ? 'bg-white/20 dark:bg-white/10' : '')"
+      (click)="onTabClick('metadata')"
+      pTooltip="Metadata"
+      tooltipPosition="bottom"
+    >
+      <div class="flex items-center gap-2 px-2">
+        <i class="pi pi-cog text-lg" [class.text-purple-400]="activeTab() === 'metadata'"></i>
+        <span class="hidden sm:inline font-medium">Metadata</span>
+        @if (metadataDirty()) {
+          <i class="pi pi-circle-fill text-[8px] text-orange-500 animate-pulse"></i>
+        }
+      </div>
+    </button>
+
+  </div>
+</div>

@@ -3,7 +3,7 @@ using Google.Apis.Auth;
 
 namespace Bloggi.Backend.Api.Web.Features.User;
 
-public static partial class Errors
+internal static class Errors
 {
     public static class Auth
     {

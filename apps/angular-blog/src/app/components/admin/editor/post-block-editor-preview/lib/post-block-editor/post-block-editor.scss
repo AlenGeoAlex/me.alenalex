@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+:host ::ng-deep {
+  .ce-block__content,
+  .ce-toolbar__content {
+    max-width: none;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .codex-editor__redactor {
+    padding-bottom: 100px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .ce-block {
+    width: 100%;
+  }
+}

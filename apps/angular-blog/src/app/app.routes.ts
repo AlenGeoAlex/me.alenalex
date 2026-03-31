@@ -13,6 +13,10 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./pages/admin/admin-home/admin-home').then((m) => m.AdminHome),
+      },
+      {
+        path: 'post/:postId',
+        loadComponent: () => import('./pages/admin/post-editor/post-editor').then((m) => m.PostEditor),
       }
     ]
   },

@@ -1,0 +1,23 @@
+.glassy-navbar {
+  /* This ensures the navbar has a slight glass effect even if the children cover most of it */
+  pointer-events: none;
+
+  & > div {
+    pointer-events: auto;
+  }
+}
+
+:host ::ng-deep {
+  .p-button.p-button-text {
+    color: var(--ink-2);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--ink);
+    }
+  }
+
+  .dark .p-button.p-button-text:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}

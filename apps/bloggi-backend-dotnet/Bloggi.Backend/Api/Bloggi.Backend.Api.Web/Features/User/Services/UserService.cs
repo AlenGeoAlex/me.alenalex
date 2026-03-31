@@ -62,6 +62,7 @@ public class UserService(
     /// <param name="cancellationToken">
     /// An optional token to monitor for cancellation requests.
     /// </param>
+    /// <seealso cref="Errors.User.UserNotFound"/>
     /// <returns>
     /// A task that represents the asynchronous operation. The task result contains an
     /// <c>ErrorOr&lt;UserById&gt;</c> object, where <c>UserById</c> holds the user details

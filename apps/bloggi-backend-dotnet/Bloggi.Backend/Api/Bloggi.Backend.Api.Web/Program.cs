@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Bloggi.Backend.Api.Web.Attributes;
 using Bloggi.Backend.Api.Web.Database;
 using Bloggi.Backend.Api.Web.Extensions;
 using Bloggi.Backend.Api.Web.Features.Glossary;
@@ -19,6 +21,10 @@ builder.Services.AddFastEndpoints()
     .SwaggerDocument(op =>
     {
         op.MaxEndpointVersion = 1;
+        op.DocumentSettings = settings =>
+        {
+            settings.OperationProcessors.Add(new QueryEnumOperationProcessor());
+        };
     });
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddExceptionHandler<ResponseExceptionHandler>();

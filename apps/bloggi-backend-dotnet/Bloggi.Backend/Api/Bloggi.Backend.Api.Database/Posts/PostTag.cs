@@ -6,7 +6,9 @@ namespace Bloggi.Backend.Api.Database.Posts;
 public class PostTag
 {
     public Guid PostId { get; set; }
+    public Post Post { get; set; } = null!;
     public Guid TagId { get; set; }
+    public Tags Tag { get; set; } = null!;
 }
 
 public class PostTagEntityConfiguration : IEntityTypeConfiguration<PostTag>
@@ -17,5 +19,7 @@ public class PostTagEntityConfiguration : IEntityTypeConfiguration<PostTag>
         builder.HasKey(x => new { x.PostId, x.TagId });
         builder.HasIndex(x => x.TagId);
         builder.HasIndex(x => x.PostId);
+        
+        
     }
 }

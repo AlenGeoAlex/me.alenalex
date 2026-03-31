@@ -11,20 +11,18 @@
     "git": "npm run git:portfolio:revert-me && npm run git:portfolio:block-sensitive",
     "git:portfolio:revert-me": "node scripts/git/revert-me-json.js",
     "git:portfolio:block-sensitive": "node scripts/git/block-sensitive-files.mjs",
-
     "generate:portfolio-angular:backend-api-sdk": "node scripts/generator/generate-api-sdk.js",
     "generate:blog-angular:backend-api-sdk": "node scripts/generator/generate-api-blog-sdk.js",
     "generate:portfolio-backend-hono:env-example": "node apps/portfolio-backend-hono/scripts/generate-env-example.mjs",
     "generate:about-me": "node scripts/generator/generate-about-me.js",
     "generate:sqlc": "node scripts/generator/generate-sqlc.js",
-
     "deploy:prepare-env-backend-hono": "node scripts/deployment/update-env-backend-hono.mjs",
     "build:portfolio-app": "pnpm --filter angular-portfolio build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@10.33.0",
   "devDependencies": {
     "husky": "^9.1.7"
   },

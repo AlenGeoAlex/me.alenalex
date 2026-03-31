@@ -536,6 +536,27 @@ namespace Bloggi.Backend.Api.Web.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("Bloggi.Backend.Api.Database.Posts.PostTag", b =>
+                {
+                    b.HasOne("Bloggi.Backend.Api.Database.Posts.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_post_tags_posts_post_id");
+
+                    b.HasOne("Bloggi.Backend.Api.Database.Posts.Tags", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_post_tags_tags_tag_id");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Bloggi.Backend.Api.Database.Posts.Post", b =>
                 {
                     b.Navigation("Blocks");
@@ -545,7 +566,14 @@ namespace Bloggi.Backend.Api.Web.Migrations
                     b.Navigation("Metadata")
                         .IsRequired();
 
+                    b.Navigation("PostTags");
+
                     b.Navigation("Revisions");
+                });
+
+            modelBuilder.Entity("Bloggi.Backend.Api.Database.Posts.Tags", b =>
+                {
+                    b.Navigation("PostTags");
                 });
 
             modelBuilder.Entity("Bloggi.Backend.Api.Database.Users.User", b =>

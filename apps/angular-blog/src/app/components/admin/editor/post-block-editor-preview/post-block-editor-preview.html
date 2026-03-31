@@ -1,0 +1,11 @@
+<p-splitter [panelSizes]="[50, 50]" class="flex-1 min-h-0 w-full">
+  <ng-template pTemplate="content">
+    <bloggi-post-block-editor
+      class="w-full h-full"
+      [postId]="postId()"
+    ></bloggi-post-block-editor>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <bloggi-post-block-preview class="w-full h-full"></bloggi-post-block-preview>
+  </ng-template>
+</p-splitter>

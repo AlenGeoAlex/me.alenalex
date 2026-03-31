@@ -32,7 +32,8 @@ internal static partial class GetLogin
 
         public override void Configure()
         {
-            Get("/auth/login");
+            Get("/login");
+            Group<AuthGroup>();
             AllowAnonymous();
             Version(1);
             Description(x =>

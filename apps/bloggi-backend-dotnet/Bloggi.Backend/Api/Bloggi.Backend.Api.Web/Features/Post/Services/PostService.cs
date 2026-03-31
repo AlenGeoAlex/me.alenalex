@@ -12,12 +12,29 @@ public class PostService(
     TimeProvider timeProvider
     )
 {
-
+    /// <summary>
+    /// Asynchronously creates a new post based on the provided request data and optionally saves it to the database.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing details of the post to be created, including title, excerpt, author ID, and status.
+    /// </param>
+    /// <param name="executeInstantly">
+    /// A boolean indicating whether the changes should be saved to the database immediately.
+    /// Defaults to true.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <seealso cref="Error.Unexpected"/>
+    /// <returns>
+    /// Returns a result containing either the ID of the newly created post wrapped in a <see cref="CreatePostResponse"/>
+    /// object, or an error if the operation fails.
+    /// </returns>
     public async Task<ErrorOr<CreatePostResponse>> CreatePostAsync(
-        CreatePostRequest request, 
+        CreatePostRequest request,
         bool executeInstantly = true,
         CancellationToken ct = default
-        )
+    )
     {
         var postId = Guid.CreateVersion7();
         var timeNow = timeProvider.GetUtcNow();
@@ -48,6 +65,18 @@ public class PostService(
         }
     }
 
+    /// <summary>
+    /// Asynchronously links specified tags to a post by updating the tags associated with a given post ID in the database.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing the post ID for which the tags need to be linked, and an array of tag IDs to associate with the post.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns a result indicating success or failure of the tag linking operation. On success, returns true. On failure, returns an error object describing the issue.
+    /// </returns>
     public async Task<ErrorOr<bool>> LinkPostTagsAsync(
         LinkPostTagRequest request,
         CancellationToken ct = default)
@@ -95,7 +124,96 @@ public class PostService(
         }
     }
 
+    /// <summary>
+    /// Asynchronously retrieves a summary of the specified post, including details such as title, slug, excerpt,
+    /// and optionally associated tags.
+    /// </summary>
+    /// <param name="postId">
+    /// The unique identifier of the post to retrieve.
+    /// </param>
+    /// <param name="includeTags">
+    /// A boolean indicating whether to include associated tags in the summary. Defaults to true.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns a result containing either the post summary encapsulated in a <see cref="PostSummary"/> object,
+    /// or an error if the post could not be found or if another failure occurs.
+    /// </returns>
+    public async Task<ErrorOr<PostSummary>> GetPostSummaryAsync(
+        Guid postId,
+        bool includeTags = true,
+        CancellationToken ct = default)
+    {
+        var queryable = dbContext.Posts
+            .AsNoTracking();
+
+        if (includeTags)
+        {
+            logger.LogInformation("Including tags in post summary query");
+            queryable.Include(x => x.PostTags)
+                .ThenInclude(x => x.Tag);
+        }
+            
+        queryable = queryable.Where(x => x.Id == postId);
+        var post = await queryable.FirstOrDefaultAsync(ct);
+        
+        if(post is null)
+            return Errors.Post.PostNotFound;
+
+        // Populate tags first
+        PostTagSummary[] tags = new PostTagSummary[post.PostTags?.Count ?? 0];
+        if (post.PostTags is not null)
+        {
+            for (var i = 0; i < post.PostTags.Count; i++)
+            {
+                var tag = post.PostTags[i];
+                tags[i] = new PostTagSummary(tag.TagId, tag.Tag.Slug, tag.Tag.DisplayName);
+            }
+        }
+
+        var postSummary = new PostSummary(
+            post.Id,
+            post.Title,
+            post.Slug,
+            post.Excerpt,
+            post.UserId,
+            post.CreatedAt,
+            post.UpdatedAt,
+            post.PublishedAt,
+            post.Status,
+            tags
+        );
+        
+        return postSummary;
+    }
+
     #region Models
+
+    public record PostSummary(
+        Guid Id,
+        string Title,
+        string Slug,
+        string? Excerpt,
+        Guid AuthorId,
+        DateTimeOffset CreatedAt,
+        DateTimeOffset UpdatedAt,
+        DateTimeOffset? PublishedAt,
+        Api.Database.Posts.Post.PostStatus Status,
+        PostTagSummary[] Tags
+    );
+
+    public record PostTagSummary(
+        Guid TagId,
+        string Slug,
+        string DisplayName
+    );
+    
+    public record PostTags(
+        Guid PostId,
+        Guid[] TagIds
+    );
 
     /// <summary>
     /// Represents the request model for linking tags to a specific post.

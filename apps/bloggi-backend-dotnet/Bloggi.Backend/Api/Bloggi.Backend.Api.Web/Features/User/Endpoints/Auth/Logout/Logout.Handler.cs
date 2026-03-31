@@ -20,7 +20,8 @@ internal static partial class Logout
 
         public override void Configure()
         {
-            Delete("/auth/logout");
+            Delete("/logout");
+            Group<AuthGroup>();
             AllowAnonymous();
             Version(1);
             Description(x =>

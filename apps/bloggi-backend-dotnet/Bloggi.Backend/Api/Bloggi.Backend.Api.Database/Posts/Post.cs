@@ -36,6 +36,8 @@ public class Post : IEntity, IAuditable
     
     public IList<PostRevision> Revisions { get; set; } = null!;
     
+    public IList<PostTag> PostTags { get; set; } = null!;
+    
     public enum PostStatus
     {
         Published,
@@ -94,6 +96,11 @@ public class PostConfiguration : AuditableEntityConfiguration<Post>
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasMany(x => x.Revisions)
+            .WithOne(x => x.Post)
+            .HasForeignKey(x => x.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.PostTags)
             .WithOne(x => x.Post)
             .HasForeignKey(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);

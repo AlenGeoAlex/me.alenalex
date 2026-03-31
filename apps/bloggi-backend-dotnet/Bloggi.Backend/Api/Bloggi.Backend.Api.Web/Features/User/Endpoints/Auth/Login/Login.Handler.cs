@@ -148,7 +148,8 @@ internal static partial class Login
 
         public override void Configure()
         {
-            Post("/auth/login");
+            Post("/login");
+            Group<AuthGroup>();
             AllowAnonymous();
             Version(1);
             Description(x =>

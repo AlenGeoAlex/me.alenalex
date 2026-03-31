@@ -12,6 +12,8 @@ import {DividerModule} from 'primeng/divider';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {PostService} from '@services/api/generated-sdk';
+import {HotToastService} from '@ngxpert/hot-toast';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'bloggi-create-post',
@@ -41,6 +43,7 @@ export class CreatePost {
     tags: [],
     seriesId: null,
   })
+  private readonly toastService = inject(HotToastService);
   private readonly postService = inject(PostService);
   protected readonly isSubmitting = signal(false);
   protected readonly postForm = form(this.postModel, (schemaPath) => {
@@ -57,6 +60,7 @@ export class CreatePost {
     const isSubmitting = this.isSubmitting();
     return invalid || isSubmitting;
   });
+  private readonly router = inject(Router);
   protected readonly tagsSearch = signal('');
   protected readonly seriesSearch = signal('');
   protected readonly tags = rxResource({
@@ -107,9 +111,17 @@ export class CreatePost {
   protected onCreate() {
     this.isSubmitting.set(true);
     this.postService.createPost(this.postModel())
+      .pipe(
+        this.toastService.observe({
+          loading: 'Hold on',
+          success: 'Post created successfully',
+          error: 'Failed to create post'
+        })
+      )
       .subscribe({
         next: (res) => {
-          console.log(res);
+          this.router.navigate(['/', 'admin','post', res.id])
+            .catch(console.error)
         },
         error: (err) => {
           console.error('Error creating post:', err);

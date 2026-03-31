@@ -35,7 +35,7 @@ const BLACKLISTED_FILES = [
 ]
 
 const main = async () => {
-    let response = await askQuestion("Enter open-api spec url: (defaults: https://raw.githubusercontent.com/AlenGeoAlex/me.alenalex/refs/heads/main/docs/blog-api/swagger-spec.json)");
+    let response = await askQuestion("Enter open-api spec url: (defaults: https://raw.githubusercontent.com/AlenGeoAlex/me.alenalex/refs/heads/main/docs/blog-api/swagger.json)");
 
     if(!response || response.trim().length === 0) {
         response = 'https://raw.githubusercontent.com/AlenGeoAlex/me.alenalex/refs/heads/main/docs/blog-api/swagger.json';

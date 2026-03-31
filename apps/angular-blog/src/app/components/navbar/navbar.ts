@@ -4,7 +4,7 @@ import {ButtonModule} from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import {InputIcon, InputIconModule} from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import {ThemeService} from '@services/theme-service';
+import {ThemeService} from '@services/theme.service';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {AuthStateService} from '@services/auth-state.service';
 import {AvatarModule} from 'primeng/avatar';
@@ -78,10 +78,14 @@ export class Navbar {
   }
 
   protected logout() {
+    this.router.navigate(['/'])
+      .catch(() => {
+        console.error('Navigation failed');
+      })
     this.authService.logout()
       .subscribe(() => {
         this.authStateService.reloadState({
-          redirect: true,
+          redirect: false,
         });
       });
   }

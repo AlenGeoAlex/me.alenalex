@@ -12,6 +12,8 @@ public class Tags : IEntity
     public string DisplayName { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; }
+    
+    public IList<PostTag> PostTags { get; set; } = new List<PostTag>();
 }
 
 public class TagsEntityConfiguration : EntityConfiguration<Tags>
@@ -35,5 +37,10 @@ public class TagsEntityConfiguration : EntityConfiguration<Tags>
         builder.Property(x => x.CreatedAt)
             .IsRequired()
             .HasDefaultValueSql("now()");
+        
+        builder.HasMany(x => x.PostTags)
+            .WithOne(x => x.Tag)
+            .HasForeignKey(x => x.TagId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

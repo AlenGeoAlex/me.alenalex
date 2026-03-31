@@ -4,6 +4,8 @@ using System.Text.Json;
 using Bloggi.Backend.Api.Web.Features.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Bloggi.Backend.Api.Web.Infrastructure;
 
@@ -23,7 +25,7 @@ public static class TokenSecretBootstrap
         var secretsPath = ResolveSecretsPath(configuration, logger);
         var existingSecrets = LoadExistingSecrets(secretsPath);
 
-        var secret = configuration["TOKEN_SECRET"];
+        var secret = existingSecrets["TOKEN_SECRET"];
         if (string.IsNullOrWhiteSpace(secret))
         {
             secret = GenerateSecret(SecretByteLength);
@@ -39,6 +41,11 @@ public static class TokenSecretBootstrap
                 "Mount this file or set the env variable explicitly to persist tokens across restarts.",
                 secretsPath
             );
+        }
+        else
+        {
+            logger.LogInformation("TOKEN_SECRET found in {SecretsPath}", secretsPath);
+            configuration["TOKEN_SECRET"] = secret;
         }
 
         ValidateEncryptionKey(configuration, logger);
@@ -84,7 +91,10 @@ public static class TokenSecretBootstrap
     private static Dictionary<string, string> LoadExistingSecrets(string path)
     {
         if (!File.Exists(path))
+        {
+            Log.Logger.Warning("Secrets file not found at {Path}", path);
             return new Dictionary<string, string>();
+        }
 
         try
         {
