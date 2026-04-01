@@ -29,6 +29,19 @@ public static class ConfigurationExtension
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
+        builder.Services.AddOptions<S3FileServiceOptions>()
+            .Configure<IConfiguration>((options, config) =>
+            {
+                options.ClientId = config["S3_CLIENT_ID"] ?? string.Empty;
+                options.ClientSecret = config["S3_CLIENT_SECRET"] ?? string.Empty;
+                options.Region = config["S3_REGION"] ?? "auto";
+                options.Endpoint = config["S3_ENDPOINT"] ?? string.Empty;
+                options.Bucket = config["S3_BUCKET"] ?? "bloggi";
+                options.PublicUrl = config["S3_PUBLIC_URL"] ?? string.Empty;
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
         builder.Services.AddOptions<TokenOptions>()
             .Configure<IConfiguration>((options, config) =>
             {

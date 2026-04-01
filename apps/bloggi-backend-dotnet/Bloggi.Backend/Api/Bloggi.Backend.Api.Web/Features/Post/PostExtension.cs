@@ -13,5 +13,6 @@ public static class PostExtension
         services.AddScoped<PostService>();
         services.AddScoped<PreviewService>();
         services.AddScoped<TagsService>();
+        services.AddScoped<PostBlockService>();
     }
 }

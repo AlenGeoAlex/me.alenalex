@@ -38,6 +38,8 @@ public class Post : IEntity, IAuditable
     
     public IList<PostTag> PostTags { get; set; } = null!;
     
+    public IList<PostFile> Files { get; set; } = null!;
+    
     public enum PostStatus
     {
         Published,

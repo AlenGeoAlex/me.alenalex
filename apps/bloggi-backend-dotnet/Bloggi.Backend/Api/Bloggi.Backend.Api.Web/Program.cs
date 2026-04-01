@@ -34,6 +34,7 @@ builder.Services.AddGlossaryModule(configurationManager);
 builder.Services.AddPostModule(configurationManager);
 builder.Services.AddUserModule(configurationManager);
 builder.Services.AddContext();
+builder.Services.AddPipelineServices();
 builder.ConfigureTokenSecrets();
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

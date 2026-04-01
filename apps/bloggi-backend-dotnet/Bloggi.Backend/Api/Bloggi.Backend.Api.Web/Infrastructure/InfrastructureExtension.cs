@@ -1,5 +1,6 @@
 using Bloggi.Backend.Api.Web.Infrastructure.Context;
 using Bloggi.Backend.Api.Web.Infrastructure.Services;
+using Bloggi.Backend.Api.Web.Infrastructure.Services.Contracts;
 
 namespace Bloggi.Backend.Api.Web.Infrastructure;
 
@@ -15,6 +16,7 @@ public static class InfrastructureExtension
 
     public static IServiceCollection AddPipelineServices(this IServiceCollection serviceCollection)
     {
+        serviceCollection.AddScoped<IFileService, S3FileService>();
         return serviceCollection;
     }
 }

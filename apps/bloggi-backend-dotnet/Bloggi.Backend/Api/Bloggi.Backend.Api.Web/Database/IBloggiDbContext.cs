@@ -23,9 +23,12 @@ public interface IBloggiDbContext
     DbSet<Tags> Tags { get; }
     
     DbSet<PostTag> PostTags { get; }
+    
+    DbSet<PostFile> PostFiles { get; }
 
     #endregion
 
+    
     #region Users
 
     DbSet<User> Users { get; }

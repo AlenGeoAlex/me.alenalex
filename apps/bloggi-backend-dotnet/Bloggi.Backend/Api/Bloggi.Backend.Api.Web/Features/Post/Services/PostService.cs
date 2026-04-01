@@ -189,7 +189,70 @@ public class PostService(
         return postSummary;
     }
 
+    /// <summary>
+    /// Asynchronously creates a new file for an existing post based on the provided request data.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing details of the file to be created, including the post ID, file name,
+    /// type, size, and hash.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <seealso cref="Errors.PostFile.PostAssociationNotFound"/>
+    /// <seealso cref="Errors.Post.PostNotFound"/>   
+    /// <returns>
+    /// Returns a result containing either the ID of the newly created file wrapped in a <see cref="CreatePostFileResponse"/>
+    /// object, or an error if the operation fails.
+    /// </returns>
+    public async Task<ErrorOr<CreatePostFileResponse>> CreateFileForPostAsync(CreatePostFileRequest request,
+        CancellationToken ct = default)
+    {
+        var id = Guid.CreateVersion7();
+        var query = """
+                    INSERT INTO post.post_files (id, post_id, file_name, type, size, hash, created_at, updated_at)
+                    VALUES (@id, @postId, @fileName, @type, @size, @hash, @createdAt, @updatedAt)
+                    ON CONFLICT (post_id, file_name)
+                    DO UPDATE SET hash = @hash
+                    RETURNING id, post_id;
+                    """;
+
+        var now = timeProvider.GetUtcNow();
+        var response = await dbContext.PostFiles.FromSqlRaw(query,
+            new NpgsqlParameter("id", id),
+            new NpgsqlParameter("postId", request.PostId),
+            new NpgsqlParameter("fileName", request.FileName),
+            new NpgsqlParameter("type", request.Type),
+            new NpgsqlParameter("size", request.Size),
+            new NpgsqlParameter("hash", request.Hash),
+            new NpgsqlParameter("createdAt", now),
+            new NpgsqlParameter("updatedAt", now)
+        ).FirstOrDefaultAsync(ct);
+        
+        if(response is null)
+            return Errors.PostFile.PostAssociationNotFound;
+        
+        if(!response.PostId.HasValue)
+            return Errors.Post.PostNotFound;
+        
+        return new CreatePostFileResponse(response.Id, response.PostId.Value, response.Id != id);
+    }
+
     #region Models
+
+    public record CreatePostFileRequest(
+        Guid PostId,
+        string FileName,
+        string Type,
+        long Size,
+        string Hash
+    );
+
+    public record CreatePostFileResponse(
+        Guid FileId,
+        Guid PostId,
+        bool Exists
+    );
 
     public record PostSummary(
         Guid Id,
@@ -238,5 +301,6 @@ public class PostService(
     );
 
     #endregion
+    
 
 }
