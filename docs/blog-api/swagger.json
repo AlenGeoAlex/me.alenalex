@@ -359,7 +359,7 @@
         ]
       }
     },
-    "/v1/post/{postId}/block/post-block": {
+    "/v1/post/{postId}/block": {
       "post": {
         "tags": [
           "Post"
@@ -396,6 +396,53 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlock_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "GetPostBlocksByPostId",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlock_Response"
                 }
               }
             }
@@ -827,12 +874,45 @@
         "description": "",
         "x-enumNames": [
           "Unknown",
-          "Header"
+          "Paragraph",
+          "Header",
+          "Link",
+          "Embed",
+          "Quote",
+          "Code",
+          "Table",
+          "Warning",
+          "InlineCode",
+          "List",
+          "Image"
         ],
         "enum": [
           "Unknown",
-          "Header"
+          "Paragraph",
+          "Header",
+          "Link",
+          "Embed",
+          "Quote",
+          "Code",
+          "Table",
+          "Warning",
+          "InlineCode",
+          "List",
+          "Image"
         ]
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlock_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "outputData": {
+            "$ref": "#/components/schemas/BloggiBackendEditorJSCoreModelsOutputData"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlock_Request": {
+        "type": "object",
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
