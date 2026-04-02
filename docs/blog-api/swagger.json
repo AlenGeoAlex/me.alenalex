@@ -240,15 +240,6 @@
               "type": "string",
               "format": "guid"
             }
-          },
-          {
-            "name": "postId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            }
           }
         ],
         "requestBody": {
