@@ -22,18 +22,24 @@ public sealed class S3FileService(IOptionsSnapshot<S3FileServiceOptions> options
     {
         get
         {
-            if(field is not null) return field;
-            
+            if (field is not null) return field;
+
             var credentials = new BasicAWSCredentials(_options.ClientId, _options.ClientSecret);
+            var hasCustomEndpoint = !string.IsNullOrWhiteSpace(_options.Endpoint);
 
             var config = new AmazonS3Config
             {
-                ForcePathStyle = _options.Endpoint is not null,
+                ForcePathStyle = hasCustomEndpoint
             };
 
-            if (_options.Endpoint is not null)
+            if (hasCustomEndpoint)
             {
                 config.ServiceURL = _options.Endpoint;
+
+                if (Uri.TryCreate(_options.Endpoint, UriKind.Absolute, out var uri))
+                {
+                    config.UseHttp = uri.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase);
+                }
             }
             else
             {
@@ -90,7 +96,10 @@ public sealed class S3FileService(IOptionsSnapshot<S3FileServiceOptions> options
         };
 
         var url = S3.GetPreSignedURL(presignRequest);
-
+        if(string.IsNullOrWhiteSpace(url))
+            throw new Exception("Failed to get presigned URL");
+        
+        url = NormalizePresignedUrlScheme(url);
         return Task.FromResult(new IFileService.GetPresignedUrlForUploadResponse(
             PresignedUrl: url,
             FileKey: fileKey,
@@ -152,7 +161,7 @@ public sealed class S3FileService(IOptionsSnapshot<S3FileServiceOptions> options
         }
     }
     
-    private string BuildPublicUrl(string fileKey)
+    public string BuildPublicUrl(string fileKey)
     {
         var escapedKey = string.Join("/", fileKey
             .Split('/', StringSplitOptions.RemoveEmptyEntries)
@@ -166,6 +175,56 @@ public sealed class S3FileService(IOptionsSnapshot<S3FileServiceOptions> options
         }
 
         return $"https://{_options.Bucket}.s3.{_options.Region}.amazonaws.com/{escapedKey}";
+    }
+
+    public async Task<IFileService.SaveFileResponse> SaveFileAsync(
+        IFileService.SaveFileRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(request.FileKey);
+        ArgumentException.ThrowIfNullOrWhiteSpace(request.ContentType);
+
+        using var stream = new MemoryStream(request.Bytes);
+
+        await S3.PutObjectAsync(new PutObjectRequest
+        {
+            BucketName = _options.Bucket,
+            Key = request.FileKey,
+            InputStream = stream,
+            ContentType = request.ContentType,
+            Metadata =
+            {
+                ["x-amz-meta-filename"] = request.FileName,
+            }
+        }, cancellationToken);
+
+        return new IFileService.SaveFileResponse(
+            FileKey: request.FileKey,
+            PublicUrl: BuildPublicUrl(request.FileKey)
+        );
+    }
+    
+    private string NormalizePresignedUrlScheme(string url)
+    {
+        var endpoint = _options.Endpoint;
+
+        if (string.IsNullOrWhiteSpace(endpoint))
+            return url;
+
+        if (!Uri.TryCreate(endpoint, UriKind.Absolute, out var endpointUri))
+            return url;
+
+        if (!endpointUri.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase))
+            return url;
+
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var signedUri))
+            return url;
+
+        return new UriBuilder(signedUri)
+        {
+            Scheme = Uri.UriSchemeHttp,
+            Port = endpointUri.Port
+        }.Uri.ToString();
     }
     
 

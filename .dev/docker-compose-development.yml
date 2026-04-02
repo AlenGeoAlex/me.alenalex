@@ -30,10 +30,24 @@ services:
       -c default_statistics_target=100
       -c random_page_cost=1.1
       -c effective_io_concurrency=200
+  localstack_bloggi:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+      - EAGER_SERVICE_LOADING=1
+      - DISABLE_CORS_HEADERS=1
+    volumes:
+      - bloggi_localstack_data:/var/lib/localstack
+      - ./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh
       
 
 volumes:
   bloggi_db_data:
+    driver: local
+  bloggi_localstack_data:
     driver: local
 
 

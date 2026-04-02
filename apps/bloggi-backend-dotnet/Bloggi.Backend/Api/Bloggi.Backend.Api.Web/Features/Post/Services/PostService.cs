@@ -210,11 +210,11 @@ public class PostService(
     {
         var id = Guid.CreateVersion7();
         var query = """
-                    INSERT INTO post.post_files (id, post_id, file_name, type, size, hash, created_at, updated_at)
+                    INSERT INTO post.post_files (id, post_id, name, content_type, size, hash, created_at, updated_at)
                     VALUES (@id, @postId, @fileName, @type, @size, @hash, @createdAt, @updatedAt)
-                    ON CONFLICT (post_id, file_name)
-                    DO UPDATE SET hash = @hash
-                    RETURNING id, post_id;
+                    ON CONFLICT (post_id, hash)
+                    DO UPDATE SET name = @fileName, updated_at = @updatedAt
+                    RETURNING *
                     """;
 
         var now = timeProvider.GetUtcNow();
@@ -227,7 +227,7 @@ public class PostService(
             new NpgsqlParameter("hash", request.Hash),
             new NpgsqlParameter("createdAt", now),
             new NpgsqlParameter("updatedAt", now)
-        ).FirstOrDefaultAsync(ct);
+        ).AsAsyncEnumerable().FirstOrDefaultAsync(ct);
         
         if(response is null)
             return Errors.PostFile.PostAssociationNotFound;

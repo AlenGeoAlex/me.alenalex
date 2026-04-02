@@ -6,7 +6,9 @@ namespace Bloggi.Backend.EditorJS.Core;
 public enum BlockTypes
 {
     Unknown,
-    Header
+    Paragraph,
+    Header,
+    Image,
 }
 
 public static class BlockTypesExtensions
@@ -14,12 +16,6 @@ public static class BlockTypesExtensions
     public static string Identifier(this BlockTypes blockType) => blockType
         .ToString()
         .ToLower();
-}
-
-public static class BlockTypesConstants
-{
-    public const BlockTypes Unknown = BlockTypes.Unknown;
-    public const BlockTypes Header = BlockTypes.Header;
 }
 
 /// <summary>

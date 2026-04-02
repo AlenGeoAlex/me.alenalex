@@ -1,4 +1,4 @@
-import {Component, inject, input, viewChild} from '@angular/core';
+import {Component, effect, inject, input, signal, viewChild} from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import {EditorService} from '@services/editor.service';
 
@@ -10,12 +10,25 @@ import {EditorService} from '@services/editor.service';
 })
 export class PostBlockEditor {
 
-  readonly postId = input.required<string>();
+  public readonly postId = input.required<string>();
+  protected readonly editorInitialized = signal(false);
   private readonly editorComponent = viewChild<HTMLDivElement>('editor')
-  private readonly editor: EditorJS;
+  private _editor?: EditorJS ;
   private readonly editorService = inject(EditorService);
 
   constructor() {
-    this.editor = this.editorService.createEngine(this.postId());
+    effect(() => {
+      const postId = this.postId();
+      this._editor = this.editorService.createEngine(this.postId());
+      setInterval(() => {
+        this.editor.save().then(data => {
+          console.log(data)
+        })
+      }, 5000)
+    })
+  }
+
+  public get editor() {
+    return this._editor!;
   }
 }

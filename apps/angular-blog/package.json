@@ -19,6 +19,7 @@
     "@angular/router": "^21.2.0",
     "@editorjs/editorjs": "^2.31.5",
     "@editorjs/header": "^2.8.8",
+    "@editorjs/image": "^2.10.3",
     "@editorjs/link": "^2.6.2",
     "@ngneat/overview": "7.0.0",
     "@ngxpert/hot-toast": "^6.1.0",

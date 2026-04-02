@@ -2,7 +2,7 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.Post.SaveFile;
+namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.File.SaveFile;
 
 internal static partial class SaveFile
 {

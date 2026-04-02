@@ -17,6 +17,7 @@ public static class InfrastructureExtension
     public static IServiceCollection AddPipelineServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IFileService, S3FileService>();
+        serviceCollection.AddHttpClient();
         return serviceCollection;
     }
 }

@@ -1,4 +1,5 @@
 using System.Net;
+using Bloggi.Backend.Api.Web.Features.Post.Endpoints.Post;
 using Bloggi.Backend.Api.Web.Features.Post.Services;
 using Bloggi.Backend.Api.Web.Infrastructure.Services.Contracts;
 using Bloggi.Backend.Api.Web.Options;
@@ -6,7 +7,7 @@ using ErrorOr;
 using FastEndpoints;
 using Microsoft.Extensions.Options;
 
-namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.Post.SaveFile;
+namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.File.SaveFile;
 
 internal static partial class SaveFile
 {

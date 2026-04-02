@@ -31,8 +31,24 @@ public interface IFileService : IDisposable, IAsyncDisposable
     Task<GetPublicUrlIfExistsResponse?> GetPublicUrlIfExistsAsync(
         GetPublicUrlIfExistsRequest request,
         CancellationToken cancellationToken = default);
-    
-    
+
+    /// <summary>
+    /// Stores a file in the configured storage provider and returns metadata about the stored file.
+    /// </summary>
+    /// <param name="request">The request containing details of the file to be saved, such as its file key, name, content type, and binary content.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A response containing the file key and public URL of the saved file.</returns>
+    Task<IFileService.SaveFileResponse> SaveFileAsync(
+        IFileService.SaveFileRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Constructs a public URL for accessing a file in the storage service.
+    /// </summary>
+    /// <param name="fileKey">The unique identifier of the file whose public URL is to be generated.</param>
+    /// <returns>A string representing the public URL of the specified file.</returns>
+    string BuildPublicUrl(string fileKey);
+
     public sealed record GetPublicUrlIfExistsRequest(
         string FileKey
     );
@@ -77,4 +93,15 @@ public interface IFileService : IDisposable, IAsyncDisposable
         long? ContentLength = null
     );
 
+    public record SaveFileRequest(
+        string FileKey,
+        string FileName,
+        string ContentType,
+        byte[] Bytes
+    );
+
+    public record SaveFileResponse(
+        string FileKey,
+        string PublicUrl
+    );
 }
