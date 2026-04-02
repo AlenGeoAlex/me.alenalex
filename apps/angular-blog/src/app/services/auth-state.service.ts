@@ -13,7 +13,8 @@ export class AuthStateService {
   private readonly _isAuthenticatedSignal = computed(() => this._authStateSignal() !== null);
   private readonly router = inject(Router);
   constructor() {
-    this.reloadState();
+    this.reloadState()
+      .catch(console.error);
   }
 
   public get authState$() {
@@ -27,7 +28,6 @@ export class AuthStateService {
   public async reloadState(options? : {
     redirect?: boolean,
   }) {
-    console.log('Reloading state');
     const cookie = await window.cookieStore.get('bloggi-user-info')
     if(!cookie || !cookie.value) {
       this._authState.next(null);

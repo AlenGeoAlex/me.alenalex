@@ -14,7 +14,7 @@ internal static partial class SaveFile
         long Size
     );
 
-    public record Response(
+    private record Response(
         string Url,
         string? SignedUrl,
         DateTimeOffset? ExpiresAt

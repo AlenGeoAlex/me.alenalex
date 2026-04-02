@@ -2,6 +2,7 @@ export * from './bloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFileReq
 export * from './bloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFileResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrlRequest';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrlResponse';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockRequest';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostCreatePostCreatePostRequest';

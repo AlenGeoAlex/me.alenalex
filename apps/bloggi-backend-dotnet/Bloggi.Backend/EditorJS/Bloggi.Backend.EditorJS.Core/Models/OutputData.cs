@@ -4,11 +4,11 @@ namespace Bloggi.Backend.EditorJS.Core.Models;
 
 public class OutputData
 {
-    [JsonPropertyName("time")] public long Time { get; private set; }
+    [JsonPropertyName("time")] public long Time { get; set; }
     
     [JsonIgnore] public DateTimeOffset TimeParsed => DateTimeOffset.FromUnixTimeMilliseconds(Time);
     
-    [JsonPropertyName("version")] public string Version { get; private set; }
+    [JsonPropertyName("version")] public string Version { get; set; }
 
-    [JsonPropertyName("blocks")] public IReadOnlySet<EditorBlock> Blocks { get; private set; }
+    [JsonPropertyName("blocks")] public List<EditorBlock> Blocks { get; set; }
 }

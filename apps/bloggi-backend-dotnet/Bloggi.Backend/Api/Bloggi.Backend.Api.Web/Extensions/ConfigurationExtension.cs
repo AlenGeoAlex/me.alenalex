@@ -42,6 +42,14 @@ public static class ConfigurationExtension
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
+        builder.Services.AddOptions<AppOptions>()
+            .Configure<IConfiguration>((options, config) =>
+            {
+                options.BaseUrl = config["APP_BASE_URL"] ?? string.Empty;
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();       
+        
         builder.Services.AddOptions<TokenOptions>()
             .Configure<IConfiguration>((options, config) =>
             {

@@ -26,7 +26,7 @@ export class PostEditor {
 
   protected readonly postId = signal<string>('');
   private readonly postService = inject(PostService);
-  private readonly postResource = rxResource(
+  protected readonly postResource = rxResource(
     {
       params: () => ({
         postId: this.postId(),
@@ -47,9 +47,9 @@ export class PostEditor {
         this.toastService.error('Failed to fetch post');
         return;
       }
-
-
     })
+
+
     const postId = this.route.snapshot.paramMap.get('postId');
     if(!postId){
       this.toastService.error('Invalid post ID');
@@ -65,5 +65,15 @@ export class PostEditor {
 
   protected onTabChange(tab: PostEditorTab) {
     this.activeTab.set(tab);
+  }
+
+  protected onEditorDirty($event: boolean) {
+    this.isEditorDirty.set($event);
+  }
+
+  protected onEditorLastMutatedOn($event: Date | undefined) {
+    if($event){
+      this.isEditorDirty.set(true);
+    }
   }
 }

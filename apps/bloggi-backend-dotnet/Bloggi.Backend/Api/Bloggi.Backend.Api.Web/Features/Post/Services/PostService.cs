@@ -1,7 +1,10 @@
+using Bloggi.Backend.Api.Database.Posts;
 using Bloggi.Backend.Api.Web.Database;
 using Bloggi.Backend.Api.Web.Extensions;
+using Bloggi.Backend.Api.Web.Options;
 using ErrorOr;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace Bloggi.Backend.Api.Web.Features.Post.Services;
@@ -9,6 +12,7 @@ namespace Bloggi.Backend.Api.Web.Features.Post.Services;
 public class PostService(
     ILogger<PostService> logger,
     IBloggiDbContext dbContext,
+    IOptionsSnapshot<AppOptions> appOptions,
     TimeProvider timeProvider
     )
 {
@@ -40,7 +44,7 @@ public class PostService(
         var timeNow = timeProvider.GetUtcNow();
         try
         {
-            dbContext.Posts.Add(new Api.Database.Posts.Post()
+            var post = new Api.Database.Posts.Post()
             {
                 Id = postId,
                 UserId = request.AuthorId,
@@ -51,7 +55,22 @@ public class PostService(
                 Slug = request.Title.Slugify(),
                 Excerpt = request.Excerpt,
                 Status = Enum.Parse<Api.Database.Posts.Post.PostStatus>(request.Status),
-            });
+            };
+            dbContext.Posts.Add(post);
+
+            var appBaseUrl = new Uri($"{appOptions.Value.BaseUrl}/blog/{post.Slug}");
+            var postMeta = new PostMeta()
+            {
+                Id = Guid.CreateVersion7(),
+                PostId = postId,
+                OpenGraphTitle = null,
+                OpenGraphDescription = null,
+                OpenGraphImageUrl = null,
+                CanonicalUrl = appBaseUrl.ToString(),
+                Robot = "index, follow",
+                EditorVersion = string.Empty,
+            };
+            dbContext.PostMetas.Add(postMeta);
             
             if (!executeInstantly) return new CreatePostResponse(postId);
             

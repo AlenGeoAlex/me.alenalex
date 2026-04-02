@@ -21,6 +21,7 @@ public class PostMeta : IEntity, IAuditable, IDisposable
     public string? CanonicalUrl { get; set; } = null!;
     
     public string Robot { get; set; } = $"{nameof(MetaRobot.Index)},{nameof(MetaRobot.Follow)}";
+    public string EditorVersion { get; set; }
 
     public JsonDocument? SchemaOrgJson { get; set; }
     
@@ -68,7 +69,8 @@ public class PostMetaConfiguration : AuditableEntityConfiguration<PostMeta>
         builder.Property(x => x.Robot)
             .HasDefaultValue($"{nameof(PostMeta.MetaRobot.Index)},{nameof(PostMeta.MetaRobot.Follow)}")
             .IsRequired();
-        
-        
+
+        builder.Property(x => x.EditorVersion)
+            .IsRequired();
     }
 }

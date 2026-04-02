@@ -8,6 +8,14 @@ public enum BlockTypes
     Unknown,
     Paragraph,
     Header,
+    Link,
+    Embed,
+    Quote,
+    Code,
+    Table,
+    Warning,
+    InlineCode,
+    List,
     Image,
 }
 

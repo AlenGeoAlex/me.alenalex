@@ -16,13 +16,16 @@ internal static partial class UpsertPostBlock
     {
         public override async Task<ErrorOr<Response>> ExecuteAsync(Request req, CancellationToken ct)
         {
-            var blockIds = await postBlockService.UpsertBlocksAsync(req.PostId, (IReadOnlyList<EditorBlock>)req.EditorJsData.Blocks, ct);
-            return new Response(blockIds);
+            var upsertBlockResult = await postBlockService.UpsertBlocksAsync(new PostBlockService.UpsertBlockDataRequest(req.PostId, req.EditorJsData.Version, (IReadOnlyList<EditorBlock>)req.EditorJsData.Blocks), ct);
+            if (upsertBlockResult.IsError)
+                return upsertBlockResult.Errors;
+            var upsertBlock = upsertBlockResult.Value;
+            return new Response(upsertBlock.BlockId);
         }
 
         public override void Configure()
         {
-            Post("/post-block/");
+            Post("/");
             Group<PostBlockGroup>();
             
             Version(1);

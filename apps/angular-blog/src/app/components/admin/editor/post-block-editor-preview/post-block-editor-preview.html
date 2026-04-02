@@ -1,11 +1,33 @@
 <p-splitter [panelSizes]="[50, 50]" class="flex-1 min-h-0 w-full">
   <ng-template pTemplate="content">
-    <bloggi-post-block-editor
-      class="w-full h-full"
-      [postId]="postId()"
-    ></bloggi-post-block-editor>
+    <div class="flex flex-col w-full h-full overflow-hidden px-4">
+      <bloggi-post-block-editor
+        class="w-full h-full"
+        [post]="post()"
+        (editorReady)="onEditorReady($event)"
+        (editorLastMutatedOn)="onEditorLastMutatedOn($event)"
+        [(editorData)]="editorData"
+      ></bloggi-post-block-editor>
+    </div>
   </ng-template>
   <ng-template pTemplate="content">
-    <bloggi-post-block-preview class="w-full h-full"></bloggi-post-block-preview>
+    <div class="flex flex-col w-full h-full overflow-hidden px-4">
+      @if (!editorInitialized())
+      {
+        <div class="flex-1 flex flex-col items-center justify-center space-y-4 p-4 text-center">
+          <i class="pi pi-eye-slash text-5xl text-surface-300 dark:text-surface-600"></i>
+          <div class="flex flex-col space-y-1">
+            <span class="text-xl font-semibold text-surface-600 dark:text-surface-300">No preview available</span>
+            <p class="text-surface-500 dark:text-surface-400">Preview will be rendered once the editor is ready</p>
+          </div>
+        </div>
+      } @else {
+        <bloggi-post-block-preview
+          [ngClass]="{'hidden': !editorInitialized()}"
+          class="w-full h-full"
+        ></bloggi-post-block-preview>
+      }
+
+    </div>
   </ng-template>
 </p-splitter>

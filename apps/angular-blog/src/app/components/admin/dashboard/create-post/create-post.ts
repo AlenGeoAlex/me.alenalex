@@ -120,6 +120,7 @@ export class CreatePost {
       )
       .subscribe({
         next: (res) => {
+          this.dialogRef.close(res);
           this.router.navigate(['/', 'admin','post', res.id])
             .catch(console.error)
         },

@@ -12,12 +12,32 @@
 /**
  * 
  */
-export type BloggiBackendEditorJSCoreBlockTypes = 'Unknown' | 'Header';
+export type BloggiBackendEditorJSCoreBlockTypes = 'Unknown' | 'Paragraph' | 'Header' | 'Link' | 'Embed' | 'Quote' | 'Code' | 'Table' | 'Warning' | 'InlineCode' | 'List' | 'Image';
 
 export const BloggiBackendEditorJSCoreBlockTypes = {
 
     Unknown: 'Unknown' as BloggiBackendEditorJSCoreBlockTypes,
 
-    Header: 'Header' as BloggiBackendEditorJSCoreBlockTypes
+    Paragraph: 'Paragraph' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Header: 'Header' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Link: 'Link' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Embed: 'Embed' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Quote: 'Quote' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Code: 'Code' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Table: 'Table' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Warning: 'Warning' as BloggiBackendEditorJSCoreBlockTypes,
+
+    InlineCode: 'InlineCode' as BloggiBackendEditorJSCoreBlockTypes,
+
+    List: 'List' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Image: 'Image' as BloggiBackendEditorJSCoreBlockTypes
 };
 

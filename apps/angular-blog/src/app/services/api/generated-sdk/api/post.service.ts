@@ -25,6 +25,8 @@ import { BloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrlRequest } fro
 // @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrlResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrlResponse';
 // @ts-ignore
+import { BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse';
+// @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockRequest } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockRequest';
 // @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockResponse';
@@ -178,6 +180,62 @@ export class PostService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param postId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPostBlocksByPostId(postId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse>;
+    public getPostBlocksByPostId(postId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse>>;
+    public getPostBlocksByPostId(postId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse>>;
+    public getPostBlocksByPostId(postId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (postId === null || postId === undefined) {
+            throw new Error('Required parameter postId was null or undefined when calling getPostBlocksByPostId.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (JWTBearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('JWTBearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            'application/problem+json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/block`;
+        return this.httpClient.request<BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -383,7 +441,7 @@ export class PostService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/block/post-block`;
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/block`;
         return this.httpClient.request<BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
