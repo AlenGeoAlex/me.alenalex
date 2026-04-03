@@ -25,6 +25,7 @@
         <bloggi-post-block-preview
           [ngClass]="{'hidden': !editorInitialized()}"
           class="w-full h-full"
+          [response]="editorPreview()"
         ></bloggi-post-block-preview>
       }
 

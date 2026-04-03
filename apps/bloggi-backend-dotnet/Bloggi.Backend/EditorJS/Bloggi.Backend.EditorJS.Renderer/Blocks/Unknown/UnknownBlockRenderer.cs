@@ -14,8 +14,10 @@ public class UnknownBlockRenderer(ILogger<AbstractBlockRenderer> logger, InlineP
         Logger.LogWarning("Unknown block type encountered with id: " + block.Id + "");
         if(options.IsPreview)
             return $"""
+                   <span style=\"color: red;\">
                    An unknown type of block was encountered. blockId: {block.Id}.
-                   The block data: {JsonSerializer.Serialize(block.Data)} 
+                   The block data: {JsonSerializer.Serialize(block.Data)}
+                   </span> 
                    """;
         
         throw new InvalidOperationException("Unknown block type encountered with id: " + block.Id + "");

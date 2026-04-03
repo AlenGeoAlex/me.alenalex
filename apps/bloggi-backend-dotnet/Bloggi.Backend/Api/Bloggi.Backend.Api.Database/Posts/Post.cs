@@ -69,7 +69,7 @@ public class PostConfiguration : AuditableEntityConfiguration<Post>
         
         builder.Property(x => x.Excerpt)
             .HasMaxLength(255)
-            .IsRequired(false);
+            .IsRequired();
         
         builder.Property(x => x.Status)
             .HasDefaultValue(Post.PostStatus.Draft);

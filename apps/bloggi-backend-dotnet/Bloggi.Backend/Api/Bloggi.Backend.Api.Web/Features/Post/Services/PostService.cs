@@ -1,14 +1,18 @@
 using System.Text.Json;
 using Bloggi.Backend.Api.Database.Posts;
 using Bloggi.Backend.Api.Web.Database;
+using Bloggi.Backend.Api.Web.Events;
 using Bloggi.Backend.Api.Web.Extensions;
+using Bloggi.Backend.Api.Web.Features.Post.Events;
 using Bloggi.Backend.Api.Web.Options;
 using Bloggi.Backend.EditorJS.Core;
 using Bloggi.Backend.EditorJS.Core.Models;
 using ErrorOr;
+using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Bloggi.Backend.Api.Web.Features.Post.Services;
 
@@ -16,6 +20,7 @@ public class PostService(
     ILogger<PostService> logger,
     IBloggiDbContext dbContext,
     IOptionsSnapshot<AppOptions> appOptions,
+    IFusionCache cache,
     TimeProvider timeProvider
     )
 {
@@ -135,6 +140,12 @@ public class PostService(
                     new NpgsqlParameter("tagIds",  request.TagIds));
             }
 
+            await new ClearCacheEventHandler.Event(
+                [
+                    $"{PostCacheKeys.PostMasterKey}:{request.PostId}",
+                ],
+                [PostCacheKeys.PostCacheTags.Template, $"{PostCacheKeys.PostMasterKey}:{request.PostId}"]
+            ).PublishAsync(Mode.WaitForNone, cancellation: ct);
             await transaction.CommitAsync(ct);
             return true;
         }
@@ -168,6 +179,14 @@ public class PostService(
         bool includeTags = true,
         CancellationToken ct = default)
     {
+        var cacheKey = $"{PostCacheKeys.PostMasterKey}:{postId}:{PostCacheKeys.PostSummaryCacheKey}:{includeTags}";
+        var cachedResponse =  await cache.GetOrDefaultAsync<PostSummary>(cacheKey, token: ct);
+        if (cachedResponse is not null)
+        {
+            logger.LogInformation("Post summary retrieved from cache for {CacheKey}", cacheKey);
+            return cachedResponse;
+        }
+        
         var queryable = dbContext.Posts
             .AsNoTracking();
 
@@ -207,6 +226,11 @@ public class PostService(
             post.Status,
             tags
         );
+
+        await cache.SetAsync(cacheKey, postSummary, options =>
+        {
+            options.Duration = TimeSpan.FromMinutes(10);
+        }, [postId.ToString(), "tags", "post", $"{PostCacheKeys.PostMasterKey}:{post.Id}"], ct);
         
         return postSummary;
     }
@@ -262,6 +286,14 @@ public class PostService(
 
     public async Task<ErrorOr<GetPostByIdResponse>> GetPost(GetPostByIdRequest request, CancellationToken ct = default)
     {
+        var cacheKey = $"{PostCacheKeys.PostMasterKey}:{request.PostId}:{PostCacheKeys.PostByIdCacheKey}:{request.IncludeTags}:{request.IncludeAuthor}:{request.IncludeMeta}:{request.IncludeHead}:{request.IncludeBlocks}";
+        var cachedResponse = await cache.GetOrDefaultAsync<GetPostByIdResponse>(cacheKey, token: ct);
+        if (cachedResponse is not null)
+        {
+            logger.LogInformation("Post retrieved from cache for {CacheKey}", cacheKey);
+            return cachedResponse;       
+        }
+        
         var posts = dbContext.Posts.AsNoTracking();
         if (request.IncludeTags)
         {
@@ -335,6 +367,32 @@ public class PostService(
                 : []
         };
 
+        List<string> cacheTags = [
+            $"{PostCacheKeys.PostMasterKey}:{post.Id}"
+        ];
+        if (request.IncludeAuthor)
+        {
+            cacheTags.Add(PostCacheKeys.PostCacheTags.User);
+            cacheTags.Add(post.User.Id.ToString());
+        }
+
+        if (request.IncludeMeta)
+            cacheTags.Add(PostCacheKeys.PostCacheTags.Meta);
+        
+        if (request.IncludeHead)
+            cacheTags.Add(PostCacheKeys.PostCacheTags.Head);
+        
+        if (request.IncludeTags)
+            cacheTags.Add(PostCacheKeys.PostCacheTags.Tag);
+        
+        if (request.IncludeBlocks)
+            cacheTags.Add(PostCacheKeys.PostCacheTags.Block);       
+        
+        await cache.SetAsync(cacheKey, response, options =>
+        {
+            options.Duration = TimeSpan.FromMinutes(20);
+        }, cacheTags, ct);
+        
         return response;
     }
 

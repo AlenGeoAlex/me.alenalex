@@ -6,6 +6,7 @@ using Bloggi.Backend.Api.Web.Infrastructure.Services;
 using Bloggi.Backend.EditorJS.Core;
 using Bloggi.Backend.EditorJS.Core.Models;
 using ErrorOr;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Bloggi.Backend.Api.Web.Features.Post.Services;
 
@@ -14,16 +15,16 @@ public class RenderService(
     PostService postService,
     PostBlockService blockService,
     TemplateService templateService,
-    EditorJsRenderer renderer
+    EditorJsRenderer renderer,
+    IFusionCache cache
     )
 {
-    
     public const string ArticlePostContentId = "post-content";
     public const string BreadCrumbPostTitle = "breadcrumb-post-title";
     public const string TagsContainer = "post-tags-container";
     public const string PostTitle = "post-title";
     public const string PostExcerpt = "post-excerpt";
-    public const string AuthorInitialis = "author-initials";
+    public const string AuthorInitials = "author-initials";
     public const string AuthorName = "author-name";
     public const string PublishedAt = "published-at";
     public const string PublishedAtFooter = "published-at-fotter";
@@ -36,40 +37,57 @@ public class RenderService(
     /// <param name="request">The render request containing the post ID and preview flag.</param>
     /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the rendered content as a string.</returns>
-    public async Task<ErrorOr<string>> RenderAsync(
+    public async Task<ErrorOr<RenderResponse>> RenderAsync(
         RenderRequest request,
         CancellationToken ct = default
     )
     {
-        var postResult = await postService.GetPost(new PostService.GetPostByIdRequest(request.PostId), ct);
-        if(postResult.IsError)
-            return postResult.Errors;
-
-        var post = postResult.Value;
-        var templateStringResult = await templateService.GetTemplateMainAsync(post.Template, ct);
-        if(templateStringResult.IsError)
-            return templateStringResult.Errors;
-        
-        var template = templateStringResult.Value;
+        var cacheKey = $"{PostCacheKeys.RenderCacheKey}:{request.PostId}";
+        var rawTemplate = await cache.GetOrDefaultAsync<string>(cacheKey, token: ct);
+        string html = "";
+        List<Error?> errors = [];
         var configuration = Configuration.Default;
         using var context = BrowsingContext.New(configuration);
-        using var document = await context.OpenAsync(req => req.Content(template), cancel: ct);
-        
-        List<Error?> errors = [];
-
         var renderOptions = new RenderOptions()
         {
             IsPreview = request.IsPreview
         };
-        errors.AddRange(await RenderMetadataAsync(document, post, renderOptions, ct));
-        errors.AddIfNotNull(await RenderBreadCrumbsAsync(document, post, renderOptions, ct));
-        errors.AddIfNotNull(await RenderBlockAsync(document, post.Blocks, renderOptions, ct));
-        errors.AddIfNotNull(await RenderFooterPublishedAtAsync(document, post, renderOptions, ct));
-        errors.AddIfNotNull(await RenderTagsAsync(document, post, renderOptions, ct));
-        errors.AddRange((await RenderPostHeaderAsync(document, post, renderOptions, ct)));
-        errors.AddRange((await RenderAuthorAsync(document, post, renderOptions, ct)));
+        if (rawTemplate is not null)
+        {
+            using var document = await context.OpenAsync(req => req.Content(rawTemplate), cancel: ct);
+            var blocksResult = await blockService.GetBlocksForPostAsync(new PostBlockService.GetBlocksForPostRequest(request.PostId, false, false), ct);
+            if(blocksResult.IsError)
+                return blocksResult.Errors;
+            
+            var blocks = blocksResult.Value;
+            errors.AddIfNotNull(await RenderBlockAsync(document, blocks.Blocks, renderOptions, ct));
+            html = document.ToHtml();
+        }
+        else
+        {
+            var postResult = await postService.GetPost(new PostService.GetPostByIdRequest(request.PostId), ct);
+            if(postResult.IsError)
+                return postResult.Errors;
+
+            var post = postResult.Value;
+            var templateStringResult = await templateService.GetTemplateMainAsync(post.Template, ct);
+            if(templateStringResult.IsError)
+                return templateStringResult.Errors;
         
-        return document.ToHtml();
+            var template = templateStringResult.Value;
+            
+            using var document = await context.OpenAsync(req => req.Content(template), cancel: ct);
+            errors.AddRange(await RenderMetadataAsync(document, post, renderOptions, ct));
+            errors.AddIfNotNull(await RenderBreadCrumbsAsync(document, post, renderOptions, ct));
+            errors.AddIfNotNull(await RenderFooterPublishedAtAsync(document, post, renderOptions, ct));
+            errors.AddIfNotNull(await RenderTagsAsync(document, post, renderOptions, ct));
+            errors.AddRange((await RenderPostHeaderAsync(document, post, renderOptions, ct)));
+            errors.AddRange((await RenderAuthorAsync(document, post, renderOptions, ct)));
+            errors.AddIfNotNull(await RenderBlockAsync(document, post.Blocks, renderOptions, ct));
+            html = document.ToHtml();
+        }
+        
+        return new RenderResponse(html, errors);
     }
 
     /// <summary>
@@ -233,7 +251,7 @@ public class RenderService(
     )
     {
         List<Error?> errors = [];
-        var authorInitials = document.GetElementById(AuthorInitialis);
+        var authorInitials = document.GetElementById(AuthorInitials);
         if (authorInitials is null)
         {
             logger.LogWarning("Element with id 'author-initials' not found");
@@ -469,7 +487,7 @@ public class RenderService(
         {
             var text = await renderer.RenderAllAsync(blocks, options, ct);
 
-            var elementById = document.GetElementById("post-content");
+            var elementById = document.GetElementById(ArticlePostContentId);
             if (elementById is null)
             {
                 logger.LogWarning("Element with id 'post-content' not found");
@@ -494,3 +512,5 @@ public record RenderRequest(
     Guid PostId,
     bool IsPreview
     );
+    
+public record RenderResponse(string Html, List<Error?> Errors);

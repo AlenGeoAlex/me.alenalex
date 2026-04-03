@@ -1,10 +1,12 @@
 using System.Text.Json;
 using Bloggi.Backend.Api.Database.Posts;
 using Bloggi.Backend.Api.Web.Database;
+using Bloggi.Backend.Api.Web.Events;
 using Bloggi.Backend.EditorJS.Core;
 using Bloggi.Backend.EditorJS.Core.Models;
 using Bloggi.Backend.EditorJS.Core.Utils;
 using ErrorOr;
+using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bloggi.Backend.Api.Web.Features.Post.Services;
@@ -131,6 +133,13 @@ public class PostBlockService(
             .ExecuteUpdateAsync(x => x.SetProperty(x => x.EditorVersion, request.Version), cancellationToken: ct);
 
         await dbContext.SaveChangesAsync(cancellationToken: ct);
+
+        await new ClearCacheEventHandler.Event(
+            [
+                $"{PostCacheKeys.PostMasterKey}:{request.PostId}",
+            ],
+            [$"{PostCacheKeys.PostMasterKey}:{request.PostId}"]
+        ).PublishAsync(Mode.WaitForNone, ct);
         return new UpsertBlockDataResponse(ids);
     }
 

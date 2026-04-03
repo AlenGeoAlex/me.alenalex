@@ -12,6 +12,7 @@ using Bloggi.Backend.EditorJS.Renderer;
 using ErrorOr;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
 var configurationManager = builder.InitializeConfiguration();
@@ -35,6 +36,8 @@ builder.Services.AddUserModule(configurationManager);
 builder.Services.AddContext();
 builder.Services.AddPipelineServices();
 builder.ConfigureTokenSecrets();
+builder.Services.AddFusionCache()
+    .AsHybridCache();
 builder.Services.AddEditorJs();
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

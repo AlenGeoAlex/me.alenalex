@@ -9,19 +9,20 @@ import {
   PostBlockPreview
 } from '@components/admin/editor/post-block-editor-preview/lib/post-block-preview/post-block-preview';
 import {
-  BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponse, BloggiBackendEditorJSCoreBlockTypes,
+  BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponse,
+  BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse, BloggiBackendEditorJSCoreBlockTypes,
   PostService
 } from '@services/api/generated-sdk';
 import {OutputData} from '@editorjs/editorjs';
 import {HotToastService} from '@ngxpert/hot-toast';
+import {asProblemDetailsAsync} from '@utils/http-utils';
 @Component({
   selector: 'bloggi-post-block-editor-preview',
   imports: [
     CommonModule,
     SplitterModule,
     PostBlockEditor,
-    PostBlockPreview,
-    PrimeTemplate
+    PostBlockPreview
   ],
   templateUrl: './post-block-editor-preview.html',
   styleUrl: './post-block-editor-preview.scss',
@@ -32,6 +33,7 @@ export class PostBlockEditorPreview {
   protected readonly editorInitialized = signal(false);
   protected readonly editorLastMutatedOn = model<Date | undefined>();
   public readonly editorData = model<OutputData | undefined>();
+  public readonly editorPreview = model<BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse | undefined>();
   public readonly editorDirty = signal(false);
   private readonly toastService = inject(HotToastService);
 
@@ -66,6 +68,23 @@ export class PostBlockEditorPreview {
           .subscribe({
             next: () => {
               this.editorDirty.set(false);
+              var loading = this.toastService.loading('Rendering post preview...');
+              this.postService.preview(this.post()!.id!)
+                .pipe(
+                )
+                .subscribe({
+                  next: (res) => {
+                    this.editorPreview.set(res);
+                    loading.close()
+                  },
+                  error: (err) => {
+                    loading.close()
+                    asProblemDetailsAsync(err)
+                      .then(problemDetails => {
+                        this.toastService.error(problemDetails.detail);
+                      })
+                  }
+                })
             },
             error: (err) => {
               console.error('Error saving post block', err);

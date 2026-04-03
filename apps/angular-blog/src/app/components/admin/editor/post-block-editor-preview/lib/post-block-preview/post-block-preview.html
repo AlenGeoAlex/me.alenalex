@@ -1,1 +1,73 @@
-<p>post-block-preview works!</p>
+<div class="relative w-full h-full overflow-hidden">
+
+  @if (!response())
+  {
+    <div
+      class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-surface-400"
+    >
+      <i class="pi pi-eye text-3xl"></i>
+      <span class="text-sm">Preview will appear here</span>
+      <span class="text-xs text-surface-300">Start typing in the editor</span>
+    </div>
+  } @else {
+    <iframe
+      class="w-full h-full border-none block"
+      sandbox="allow-same-origin allow-scripts"
+      [srcdoc]="responseHtml()"
+    ></iframe>
+  }
+
+
+
+  @if (responseError()?.length){
+    @let response = responseError();
+    <ng-container >
+      <p-button
+        [label]="response!.length + (response!.length === 1 ? ' error' : ' errors')"
+        icon="pi pi-exclamation-circle"
+        severity="danger"
+        size="small"
+        [rounded]="true"
+        pTooltip="Click to see render errors"
+        tooltipPosition="left"
+        class="absolute bottom-4 right-4"
+        (onClick)="op.toggle($event)"
+      />
+
+      <p-popover #op styleClass="w-80 p-0 overflow-hidden">
+
+        <div class="flex items-center justify-between px-3 py-2 border-b border-surface-200">
+          <span class="text-sm font-medium text-surface-700">Render errors</span>
+          <p-tag
+            [value]="response!.length.toString()"
+            severity="danger"
+            class="text-xs"
+          />
+        </div>
+
+        <p-scrollPanel [style]="{ maxHeight: '260px' }">
+          <ul class="divide-y divide-surface-100 m-0 p-0 list-none">
+            @for (e of response!; track e) {
+            <li
+              class="px-3 py-2.5 flex flex-col gap-1"
+            >
+              <div class="flex items-center gap-2">
+                <code class="text-xs text-surface-400 font-mono">{{ e.code }}</code>
+                <p-tag
+                  [value]="e.type"
+                  [severity]="e.type === 'Failure' ? 'danger' : 'warn'"
+                  class="text-xs py-0"
+                />
+              </div>
+              <p class="text-sm text-surface-700 leading-snug m-0">{{ e.message }}</p>
+            </li>
+            }
+          </ul>
+        </p-scrollPanel>
+
+      </p-popover>
+    </ng-container>
+  }
+
+
+</div>

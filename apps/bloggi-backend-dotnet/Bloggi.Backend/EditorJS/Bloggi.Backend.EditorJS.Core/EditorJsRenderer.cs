@@ -27,7 +27,12 @@ public class EditorJsRenderer(
         {
             if (!blockProviderCache.TryGetValue(editorBlock.Type, out var renderer))
             {
-                renderer = serviceProvider.GetRequiredKeyedService<IBlockRenderer>(editorBlock.Type.ToString());
+                renderer = serviceProvider.GetKeyedService<IBlockRenderer>(editorBlock.Type.ToString());
+                if (renderer is null)
+                {
+                    logger.LogWarning($"No renderer found for block type {editorBlock.Type}");
+                    renderer = serviceProvider.GetRequiredKeyedService<IBlockRenderer>(BlockTypes.Unknown.ToString());
+                }
                 blockProviderCache[editorBlock.Type] = renderer;
             }
             

@@ -12,6 +12,8 @@ export * from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostRespo
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponseAuthor';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostTagDto';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponseError';
 export * from './bloggiBackendApiWebFeaturesUserEndpointsAuthGetLoginGetLoginResponse';
 export * from './bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginRequest';
 export * from './bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginResponse';

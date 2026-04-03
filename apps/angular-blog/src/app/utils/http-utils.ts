@@ -10,7 +10,8 @@ export type ProblemDetails = {
 
 export async function asProblemDetailsAsync(error: any) : Promise<ProblemDetails> {
   if (error instanceof HttpErrorResponse){
-    return await error.error as ProblemDetails;
+    if(error.error)
+      return await error.error as ProblemDetails;
   }
 
   return {
