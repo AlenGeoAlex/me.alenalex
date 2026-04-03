@@ -12,8 +12,6 @@ using ErrorOr;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 var configurationManager = builder.InitializeConfiguration();
 var loggerFactory = builder.InitializeLogger();
