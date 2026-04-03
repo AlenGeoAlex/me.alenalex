@@ -3,66 +3,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- ═══════════════════════════════════════════════════
-         SEO & OPEN GRAPH
-         All {{TOKEN}} values are replaced by LayoutTemplate.cs at publish time.
-         Tokens listed below — if a token is not applicable for a post,
-         LayoutTemplate.cs will leave the tag empty or omit it entirely.
-  
-         AVAILABLE TOKENS:
-           {{POST_TITLE}}        — posts.title
-           {{POST_EXCERPT}}      — posts.excerpt
-           {{SITE_NAME}}         — env var / settings
-           {{META_ROBOTS}}       — post_meta.meta_robots, default "index, follow"
-           {{CANONICAL_URL}}     — post_meta.canonical_url, fallback https://{domain}/blog/{slug}
-           {{OG_TITLE}}          — post_meta.og_title, fallback posts.title
-           {{OG_DESCRIPTION}}    — post_meta.og_description, fallback posts.excerpt
-           {{OG_IMAGE_URL}}      — post_meta.og_image_url
-           {{SCHEMA_ORG_JSON}}   — post_meta.schema_org_json (raw JSON-LD blob)
-           {{HEAD_INJECTIONS}}   — post_head_injections rows, injected verbatim in order
-           {{POST_TAGS}}         — rendered <span class="post-tag"> elements from post_tags → tags
-           {{POST_TITLE}}        — posts.title (also used in <h1>)
-           {{POST_EXCERPT}}      — posts.excerpt (also used as lede paragraph)
-           {{AUTHOR_NAME}}       — users.display_name
-           {{AUTHOR_INITIALS}}   — derived: first letter of first + last word of display_name
-           {{PUBLISHED_AT_ISO}}  — posts.published_at as ISO 8601, used in datetime attribute
-           {{PUBLISHED_AT_HUMAN}}— posts.published_at formatted e.g. "14 March 2025"
-           {{READ_TIME}}         — derived: sum(text_content word count) / 200, min 1
-           {{POST_COVER}}        — <img> if og_image_url set, placeholder <div> if not
-           {{POST_CONTENT}}      — full HTML fragment from BlockRendererRegistry.RenderAll()
-           {{POST_ID}}           — posts.id (UUID), used by script.js for series API call
-           {{POST_SLUG}}         — posts.slug, used by script.js for breadcrumb fallback
-    ═══════════════════════════════════════════════════ -->
-    <title>{{POST_TITLE}} — {{SITE_NAME}}</title>
-    <meta name="description"  content="{{POST_EXCERPT}}" />
-    <meta name="robots"       content="{{META_ROBOTS}}" />
-    <link rel="canonical"     href="{{CANONICAL_URL}}" />
-
-    <!-- Open Graph -->
-    <meta property="og:type"        content="article" />
-    <meta property="og:title"       content="{{OG_TITLE}}" />
-    <meta property="og:description" content="{{OG_DESCRIPTION}}" />
-    <meta property="og:url"         content="{{CANONICAL_URL}}" />
-    <!-- {{OG_IMAGE_URL}} — omit this tag entirely if og_image_url is null -->
-    <meta property="og:image"       content="{{OG_IMAGE_URL}}" />
-    <meta property="og:site_name"   content="{{SITE_NAME}}" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:title"       content="{{OG_TITLE}}" />
-    <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
-    <!-- {{OG_IMAGE_URL}} — omit this tag entirely if og_image_url is null -->
-    <meta name="twitter:image"       content="{{OG_IMAGE_URL}}" />
-
-    <!-- JSON-LD structured data — {{SCHEMA_ORG_JSON}} replaced by LayoutTemplate.cs -->
-    <!-- omit the script tag entirely if schema_org_json is null -->
-    <script type="application/ld+json">{{SCHEMA_ORG_JSON}}</script>
-
-    <!-- Per-post <head> injections — {{HEAD_INJECTIONS}} replaced by LayoutTemplate.cs -->
-    <!-- may be empty string if no post_head_injections rows exist for this post -->
-    {{HEAD_INJECTIONS}}
-
     <!-- ═══════════════════════════════════════════════════
          FONTS
     ═══════════════════════════════════════════════════ -->
@@ -133,7 +73,7 @@
 ═══════════════════════════════════════════════════ -->
 <header class="site-nav">
     <div class="site-nav-inner">
-        <a href="/" class="site-logo">{{SITE_NAME}}</a>
+        <a href="/" class="site-logo">Alen's Blog</a>
         <nav class="nav-links">
             <a href="/"      class="nav-link">Writing</a>
             <a href="/about" class="nav-link">About</a>
@@ -150,7 +90,7 @@
 <div class="page-layout">
 
     <!-- ── MAIN CONTENT COLUMN (2/3) ─────────────────── -->
-    <main class="content-column relative z-10">
+    <main class="content-column relative z-10" id="main">
 
         <!-- BREADCRUMB
              Default: Blog / Post Title
@@ -162,37 +102,33 @@
             <!-- series crumb — hidden until JS confirms post is in a series -->
             <span id="breadcrumb-series" class="breadcrumb-item breadcrumb-series" style="display:none"></span>
             <span id="breadcrumb-series-sep" class="breadcrumb-sep" style="display:none">·</span>
-            <span class="breadcrumb-item breadcrumb-current">{{POST_TITLE}}</span>
+            <span class="breadcrumb-item breadcrumb-current" id="breadcrumb-post-title"></span>
         </nav>
 
         <!-- POST HEADER -->
         <header class="post-header fade-1">
 
             <!-- Tags — {{POST_TAGS}} replaced by LayoutTemplate.cs as <span> elements -->
-            <div class="post-tags">{{POST_TAGS}}</div>
-
-            <h1 class="post-title">{{POST_TITLE}}</h1>
-
-            <p class="post-lede">{{POST_EXCERPT}}</p>
-
+            <div class="post-tags" id="post-tags-container"></div>
+            <h1 class="post-title" id="post-title"></h1>
+            <p class="post-lede" id="post-excerpt"></p>
             <div class="post-meta">
-                <div class="post-meta-avatar">{{AUTHOR_INITIALS}}</div>
-                <span>{{AUTHOR_NAME}}</span>
+                <div class="post-meta-avatar" id="author-initials"></div>
+                <span id="author-name"></span>
                 <span class="post-meta-dot">·</span>
-                <time datetime="{{PUBLISHED_AT_ISO}}">{{PUBLISHED_AT_HUMAN}}</time>
+                <time datetime="" id="published-at" ></time>
                 <span class="post-meta-dot">·</span>
-                <span>{{READ_TIME}} min read</span>
+                <span id="read-time"></span>
             </div>
 
-            <!-- Cover image — LayoutTemplate.cs emits <img> if og_image_url is set,
+            <!-- Cover image — emits <img> if og_image_url is set,
                  otherwise emits the decorative placeholder div -->
-            <div class="post-cover">{{POST_COVER}}</div>
+            <div class="post-cover" id="post-cover"></div>
 
         </header>
 
         <!-- POST BODY — {{POST_CONTENT}} replaced by BlockRendererRegistry.RenderAll() -->
         <article class="post-content fade-2" id="post-content">
-            {{POST_CONTENT}}
         </article>
 
         <!-- SERIES NAVIGATION — next / previous within series
@@ -205,7 +141,7 @@
         <!-- POST FOOTER -->
         <footer class="post-footer fade-3">
             <a href="/">← All posts</a>
-            <time datetime="{{PUBLISHED_AT_ISO}}">{{PUBLISHED_AT_HUMAN}}</time>
+            <time datetime="" id="published-at-fotter"></time>
         </footer>
 
     </main>
@@ -236,11 +172,6 @@
     </aside>
 
 </div>
-<script>
-    const postId   = '123';
-    const postSlug = '123';
-    const postTitle = '123';
-</script>
 
 <!-- ═══════════════════════════════════════════════════
      GLOSSARY SCRIPT
