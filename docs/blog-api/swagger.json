@@ -105,6 +105,55 @@
         }
       }
     },
+    "/v1/post/{postId}/preview": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "Preview",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{id}": {
       "get": {
         "tags": [
@@ -581,6 +630,37 @@
             "type": "string"
           }
         }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "html": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_ResponseError"
+            }
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_ResponseError": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_Request": {
+        "type": "object",
+        "additionalProperties": false
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Response": {
         "type": "object",
