@@ -636,7 +636,8 @@
         "additionalProperties": false,
         "properties": {
           "html": {
-            "type": "string"
+            "type": "string",
+            "format": "byte"
           },
           "errors": {
             "type": "array",
@@ -654,6 +655,9 @@
             "type": "string"
           },
           "message": {
+            "type": "string"
+          },
+          "type": {
             "type": "string"
           }
         }
