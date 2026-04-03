@@ -1,7 +1,10 @@
+using System.Text.Json;
 using Bloggi.Backend.Api.Database.Posts;
 using Bloggi.Backend.Api.Web.Database;
 using Bloggi.Backend.Api.Web.Extensions;
 using Bloggi.Backend.Api.Web.Options;
+using Bloggi.Backend.EditorJS.Core;
+using Bloggi.Backend.EditorJS.Core.Models;
 using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -257,7 +260,149 @@ public class PostService(
         return new CreatePostFileResponse(response.Id, response.PostId.Value, response.Id != id);
     }
 
+    public async Task<ErrorOr<GetPostByIdResponse>> GetPost(GetPostByIdRequest request, CancellationToken ct = default)
+    {
+        var posts = dbContext.Posts.AsNoTracking();
+        if (request.IncludeTags)
+        {
+            posts = posts.Include(x => x.PostTags)
+                .ThenInclude(x => x.Tag);
+        }
+        
+
+        if (request.IncludeAuthor)
+            posts = posts.Include(x => x.User);
+        
+        if(request.IncludeMeta)
+            posts = posts.Include(x => x.Metadata);
+        
+        if(request.IncludeHead)
+            posts = posts.Include(x => x.Heads);
+        
+        if(request.IncludeBlocks)
+            posts = posts.Include(x => x.Blocks);       
+        
+        var post = await posts.FirstOrDefaultAsync(x => x.Id == request.PostId, ct);
+        if (post is null)
+            return Errors.Post.PostNotFound;
+
+        var response = new GetPostByIdResponse
+        {
+            Id = post.Id,
+            UserId = post.UserId,
+            Slug = post.Slug,
+            Title = post.Title,
+            Excerpt = post.Excerpt,
+            Status = post.Status.ToString(),
+            RenderedKey = post.RenderedKey,
+            Template = post.Template,
+            PublishedAt = post.PublishedAt,
+            CreatedAt = post.CreatedAt,
+            UpdatedAt = post.UpdatedAt,
+            Author = request.IncludeAuthor ? new GetPostByIdResponse.GetPostAuthorDto
+            {
+                Id = post.User.Id,
+                DisplayName = post.User.DisplayName
+            } : null,
+            Meta = request.IncludeMeta ? new GetPostByIdResponse.GetPostMetaDto
+            {
+                OpenGraphTitle = post.Metadata.OpenGraphTitle,
+                OpenGraphDescription = post.Metadata.OpenGraphDescription,
+                OpenGraphImageUrl = post.Metadata.OpenGraphImageUrl,
+                CanonicalUrl = post.Metadata.CanonicalUrl,
+                Robot = post.Metadata.Robot,
+                EditorVersion = post.Metadata.EditorVersion,
+                JsonLd = post.Metadata.SchemaOrgJson?.RootElement ?? default
+            } : null,
+            Heads = request.IncludeHead
+                ? post.Heads.Select(x => new GetPostByIdResponse.GetPostHeadDto
+                {
+                    Kind = x.Kind.ToString(),
+                    Content = x.Content,
+                    Position = x.Position
+                }).ToList()
+                : null,
+            Tags = request.IncludeTags
+                ? post.PostTags.Select(x => new GetPostByIdResponse.GetPostTagDto
+                {
+                    Id = x.Tag.Id,
+                    Slug = x.Tag.Slug,
+                    DisplayName = x.Tag.DisplayName
+                }).ToList()
+                : null,
+            Blocks = request.IncludeBlocks
+                ? post.Blocks.Select(x => new EditorBlock(x.BlockId, Enum.TryParse<BlockTypes>(x.BlockType, out var tpe) ? tpe : BlockTypes.Unknown, x.BlockData.RootElement)).ToList()
+                : []
+        };
+
+        return response;
+    }
+
     #region Models
+
+    public class GetPostByIdResponse
+    {
+        public Guid Id { get; init; }
+        public Guid UserId { get; init; }
+        public string Slug { get; init; } = null!;
+        public string Title { get; init; } = null!;
+        public string Excerpt { get; init; } = "";
+        public string Status { get; init; } = null!;
+        public string? RenderedKey { get; init; }
+        public string Template { get; init; } = null!;
+        public DateTimeOffset? PublishedAt { get; init; }
+        public DateTimeOffset CreatedAt { get; init; }
+        public DateTimeOffset UpdatedAt { get; init; }
+
+        public GetPostAuthorDto? Author { get; init; }
+        public GetPostMetaDto? Meta { get; init; }
+        public List<GetPostHeadDto>? Heads { get; init; }
+        public List<GetPostTagDto>? Tags { get; init; }
+        
+        public List<EditorBlock> Blocks { get; init; } = new();
+        public string ReadTimeInMins { get; set; } = "1";
+
+        public sealed class GetPostAuthorDto
+        {
+            public Guid Id { get; init; }
+            public string? DisplayName { get; init; }
+        }
+
+        public sealed class GetPostMetaDto
+        {
+            public string? OpenGraphTitle { get; init; }
+            public string? OpenGraphDescription { get; init; }
+            public string? OpenGraphImageUrl { get; init; }
+            public string? CanonicalUrl { get; init; }
+            public string Robot { get; init; } = null!;
+            public string EditorVersion { get; init; } = null!;
+            
+            public JsonElement? JsonLd { get; init; }
+        }
+
+        public sealed class GetPostHeadDto
+        {
+            public string Kind { get; init; } = null!;
+            public string Content { get; init; } = null!;
+            public int Position { get; init; }
+        }
+
+        public sealed class GetPostTagDto
+        {
+            public Guid Id { get; init; }
+            public string Slug { get; init; } = null!;
+            public string DisplayName { get; init; } = null!;
+        }
+    }
+    
+    public record GetPostByIdRequest(
+        Guid PostId,
+        bool IncludeTags = true,
+        bool IncludeAuthor = true,
+        bool IncludeMeta = true,
+        bool IncludeHead = true,
+        bool IncludeBlocks = true
+        );
 
     public record CreatePostFileRequest(
         Guid PostId,

@@ -6,6 +6,9 @@ namespace Bloggi.Backend.Api.Database.Posts;
 
 public class Post : IEntity, IAuditable
 {
+    
+    public const string DefaultTemplate = "default";
+    
     public Guid Id { get; set; }
     
     public Guid UserId { get; set; }
@@ -21,6 +24,8 @@ public class Post : IEntity, IAuditable
     public PostStatus Status { get; set; }
     
     public string? RenderedKey { get; set; }
+    
+    public string Template { get; set; } = DefaultTemplate;
     
     public DateTimeOffset? PublishedAt { get; set; }
     
@@ -106,5 +111,10 @@ public class PostConfiguration : AuditableEntityConfiguration<Post>
             .WithOne(x => x.Post)
             .HasForeignKey(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Property(x => x.Template)
+            .IsRequired()
+            .HasMaxLength(50)
+            .HasDefaultValue(Post.DefaultTemplate);
     }
 }

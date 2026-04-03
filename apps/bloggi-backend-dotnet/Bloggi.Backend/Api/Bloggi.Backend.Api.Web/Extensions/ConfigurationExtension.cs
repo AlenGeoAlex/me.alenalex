@@ -46,8 +46,8 @@ public static class ConfigurationExtension
             .Configure<IConfiguration>((options, config) =>
             {
                 options.BaseUrl = config["APP_BASE_URL"] ?? string.Empty;
-                options.TemplatePath = config["APP_TEMPLATE_PATH"] ?? "/var/bloggi/templates";
-                bootstrapLogger.LogInformation("Template path: {TemplatePath}", options.TemplatePath);
+                options.TemplateJson = config["APP_TEMPLATE_JSON"] ??
+                                       "https://raw.githubusercontent.com/AlenGeoAlex/me.alenalex/refs/heads/main/packages/blog-template/template-repository.json";
             })
             .ValidateDataAnnotations()
             .ValidateOnStart();       

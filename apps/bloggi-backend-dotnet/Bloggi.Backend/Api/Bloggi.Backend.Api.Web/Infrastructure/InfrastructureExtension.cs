@@ -11,6 +11,7 @@ public static class InfrastructureExtension
         serviceCollection.AddHttpContextAccessor();
         serviceCollection.AddScoped<IContextFactory, ApiContextFactory>();
         serviceCollection.AddScoped<TokenService>();
+        serviceCollection.AddSingleton<TemplateService>();
         return serviceCollection;
     }
 

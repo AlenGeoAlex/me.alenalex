@@ -8,6 +8,7 @@ using Bloggi.Backend.Api.Web.Features.Glossary;
 using Bloggi.Backend.Api.Web.Features.Post;
 using Bloggi.Backend.Api.Web.Features.User;
 using Bloggi.Backend.Api.Web.Infrastructure;
+using Bloggi.Backend.EditorJS.Renderer;
 using ErrorOr;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -34,6 +35,7 @@ builder.Services.AddUserModule(configurationManager);
 builder.Services.AddContext();
 builder.Services.AddPipelineServices();
 builder.ConfigureTokenSecrets();
+builder.Services.AddEditorJs();
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

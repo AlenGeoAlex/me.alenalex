@@ -12,11 +12,18 @@ internal static partial class GetPost
     class Handler(
         ILogger<Handler> logger,
         PostService postService,
+        RenderService renderService,
         IUserModule userModule
         ) : Endpoint<Request, ErrorOr<Response>>
     {
         public override async Task<ErrorOr<Response>> ExecuteAsync(Request req, CancellationToken ct)
         {
+            // var res = await renderService.RenderAsync(new RenderRequest(req.Id, true), ct: ct);
+            // if (res.IsError)
+            //     return res.Errors;
+            //
+            // var html = res.Value;
+            
             logger.LogInformation("Getting post {Id}", req.Id);
             var include = HttpContext.Request.Query.ParseEnumArray<GetPostIncludeProperty>(nameof(req.Include));
             var postSummary = await postService.GetPostSummaryAsync(req.Id, includeTags: include.Contains(GetPostIncludeProperty.Tags), ct: ct);
