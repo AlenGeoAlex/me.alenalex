@@ -322,3 +322,16 @@ function setThemeIcon() {
   const isDark = document.documentElement.classList.contains('dark');
   icon.textContent = isDark ? '☽' : '☀';
 }
+
+function copyCode(btn) {
+    const code = btn.nextElementSibling?.querySelector('code');
+    if (!code) return;
+    navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
