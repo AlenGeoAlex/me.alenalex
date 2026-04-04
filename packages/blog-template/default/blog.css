@@ -402,13 +402,45 @@ a.breadcrumb-item:hover { color: var(--accent); }
     border-radius: 10px;
     padding: 1.25rem 1.5rem;
     overflow-x: auto;
-    margin: 1.5rem 0;
 }
+
+.dark .hljs { 
+   background: transparent;
+}
+
 .post-code {
     font-family: 'Geist Mono', monospace;
     font-size: 0.875rem;
     line-height: 1.7;
     color: var(--ink-2);
+}
+
+.post-code-wrap {
+    position: relative;
+    margin: 1.5rem 0;
+}
+.post-code-copy {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    font-size: 0.75rem;
+    font-family: 'Geist Mono', monospace;
+    padding: 0.2rem 0.6rem;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--bg-glass);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    backdrop-filter: var(--blur);
+}
+.post-code-copy:hover {
+    color: var(--ink);
+    border-color: var(--border-strong);
+}
+.post-code-copy.copied {
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 /* Image */
