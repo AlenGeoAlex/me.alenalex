@@ -9,14 +9,24 @@ const API = {
     glossary: () => `/api/glossary/terms`,
 };
 
+const THEME_KEY = 'blog.alenalex.me-darkModePersistence';
+
 
 function toggleDark() {
-    const html = document.documentElement;
-    html.classList.toggle('dark');
-    const isDark = html.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    const icon = document.getElementById('theme-icon');
-    if (icon) icon.textContent = isDark ? '☽' : '☀';
+  const html = document.documentElement;
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = isDark ? '☽' : '☀';
+  updateHljsTheme(isDark);
+}
+
+function updateHljsTheme(isDark) {
+  const link = document.getElementById('hljs-theme');
+  if (!link) return;
+  const base = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/';
+  link.href = base + (isDark ? 'github-dark.min.css' : 'github.min.css');
 }
 
 
@@ -293,4 +303,22 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+}
+
+
+function toggleDark() {
+  const html = document.documentElement;
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem(THEME_KEY, String(isDark));
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = isDark ? '☽' : '☀';
+  updateHljsTheme(isDark);
+}
+
+function setThemeIcon() {
+  const icon = document.getElementById('theme-icon');
+  if (!icon) return;
+  const isDark = document.documentElement.classList.contains('dark');
+  icon.textContent = isDark ? '☽' : '☀';
 }
