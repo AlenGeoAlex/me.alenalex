@@ -13,10 +13,8 @@
     <!-- ═══════════════════════════════════════════════════
          HIGHLIGHT.JS — code syntax highlighting
     ═══════════════════════════════════════════════════ -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-          media="(prefers-color-scheme: light)" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
-          media="(prefers-color-scheme: dark)" />
+    <link id="hljs-theme" rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
 
     <!-- ═══════════════════════════════════════════════════
@@ -50,14 +48,14 @@
     <!-- ═══════════════════════════════════════════════════
          DARK MODE — applied before first paint to prevent flash
     ═══════════════════════════════════════════════════ -->
+    
     <script>
-        (function () {
-            const stored = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (stored === 'dark' || (!stored && prefersDark)) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
+      (function () {
+        const stored = localStorage.getItem('blog.alenalex.me-darkModePersistence');
+        if (stored === 'true') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
     </script>
 
 </head>
