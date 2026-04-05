@@ -1,119 +1,20 @@
 /*
  * styles.css  (Angular global stylesheet)
  *
- * Three responsibilities:
- *   1. Design-system CSS variables (:root / .dark) — the single source of
- *      truth for ALL custom component styles. Angular components reference
- *      these vars only — never hardcode hex values in component CSS.
+ * Two responsibilities:
  *
- *   2. PrimeNG glass-surface overrides — applies the glass aesthetic to
+ *   1. PrimeNG glass-surface overrides — applies the glass aesthetic to
  *      PrimeNG overlay components (dropdowns, dialogs, tooltips, toasts).
  *      These use ::ng-deep-safe global selectors because PrimeNG overlays
  *      are appended to <body> outside Angular component trees.
  *
- *   3. Utility / helper classes referenced by the design system doc.
+ *   2. Utility / helper classes referenced by the design system doc.
  *
- * Font import — Instrument Serif + Geist + Geist Mono
- */
-
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap');
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   1. DESIGN SYSTEM TOKENS
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-:root {
-  /* Backgrounds */
-  --bg:              #F5F2ED;
-  --bg-2:            #EDE9E3;
-  --bg-3:            #E5E1DA;
-  --bg-glass:        rgba(245, 242, 237, 0.72);
-  --bg-glass-heavy:  rgba(245, 242, 237, 0.88);
-
-  /* Text */
-  --ink:             #1C1917;
-  --ink-2:           #44403C;
-  --ink-3:           #78716C;
-
-  /* Accent */
-  --accent:          #D97706;
-  --accent-hover:    #B45309;
-  --accent-dim:      rgba(217, 119, 6, 0.12);
-  --accent-dim-2:    rgba(217, 119, 6, 0.20);
-
-  /* Semantic */
-  --success:         #16A34A;
-  --success-bg:      rgba(22, 163, 74, 0.08);
-  --warning:         #D97706;
-  --warning-bg:      rgba(217, 119, 6, 0.08);
-  --danger:          #DC2626;
-  --danger-bg:       rgba(220, 38, 38, 0.08);
-  --info:            #2563EB;
-  --info-bg:         rgba(37, 99, 235, 0.08);
-
-  /* Borders */
-  --border:          rgba(28, 25, 23, 0.10);
-  --border-2:        rgba(28, 25, 23, 0.18);
-  --border-focus:    rgba(217, 119, 6, 0.50);
-
-  /* Effects */
-  --blur:            saturate(180%) blur(20px);
-  --blur-heavy:      saturate(200%) blur(32px);
-  --shadow-sm:       0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:       0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
-  --shadow-lg:       0 12px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
-
-  /* Border radii */
-  --r-sm:            6px;
-  --r-md:            10px;
-  --r-lg:            14px;
-  --r-xl:            20px;
-  --r-full:          999px;
-
-  /* Motion */
-  --ease:            cubic-bezier(0.16, 1, 0.3, 1);
-  --fast:            0.15s;
-  --mid:             0.25s;
-  --slow:            0.4s;
-}
-
-.dark {
-  --bg:              #0F0E0D;
-  --bg-2:            #1A1917;
-  --bg-3:            #242220;
-  --bg-glass:        rgba(15, 14, 13, 0.72);
-  --bg-glass-heavy:  rgba(15, 14, 13, 0.90);
-
-  --ink:             #F5F2ED;
-  --ink-2:           #D6D3D1;
-  --ink-3:           #78716C;
-
-  --accent:          #F59E0B;
-  --accent-hover:    #FBBF24;
-  --accent-dim:      rgba(245, 158, 11, 0.12);
-  --accent-dim-2:    rgba(245, 158, 11, 0.20);
-
-  --border:          rgba(245, 242, 237, 0.08);
-  --border-2:        rgba(245, 242, 237, 0.14);
-  --border-focus:    rgba(245, 158, 11, 0.45);
-
-  --shadow-sm:       0 1px 3px rgba(0,0,0,0.20);
-  --shadow-md:       0 4px 16px rgba(0,0,0,0.30);
-  --shadow-lg:       0 12px 40px rgba(0,0,0,0.40);
-
-  /* Semantic colours keep same hue in dark — only bg changes */
-  --success-bg:      rgba(22, 163, 74, 0.10);
-  --warning-bg:      rgba(245, 158, 11, 0.10);
-  --danger-bg:       rgba(220, 38, 38, 0.10);
-  --info-bg:         rgba(37,  99, 235, 0.10);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   2. BASE RESET
+ */  /* ═══════════════════════════════════════════════════════════════════════════
+   1. BASE RESET
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /**, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }*/
-
 html, body {
   height: 100%;
 }
@@ -135,7 +36,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   3. CUSTOM SCROLLBAR
+   2. CUSTOM SCROLLBAR
    ═══════════════════════════════════════════════════════════════════════════ */
 
 ::-webkit-scrollbar       { width: 5px; height: 5px; }
@@ -143,7 +44,7 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   4. DESIGN SYSTEM UTILITY CLASSES
+   3. DESIGN SYSTEM UTILITY CLASSES
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Glass surfaces */
@@ -226,7 +127,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   5. PRIMENG GLASS OVERRIDES
+   4. PRIMENG GLASS OVERRIDES
    PrimeNG appends overlays to <body> so component-scoped styles can't reach
    them. These global selectors apply the glass aesthetic to every PrimeNG
    overlay, matching the design system's glass-heavy spec.
@@ -670,7 +571,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   6. DARK MODE OVERRIDES
+   5. DARK MODE OVERRIDES
    When .dark is on <html>, adjust any PrimeNG components that need explicit
    dark treatment beyond what the theme preset handles.
    ═══════════════════════════════════════════════════════════════════════════ */

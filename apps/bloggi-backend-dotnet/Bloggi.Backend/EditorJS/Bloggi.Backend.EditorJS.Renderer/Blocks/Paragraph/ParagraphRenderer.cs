@@ -4,12 +4,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Bloggi.Backend.EditorJS.Renderer.Blocks.Paragraph;
 
-public class ParagraphRenderer(ILogger<AbstractBlockRenderer> logger, InlineProcessor inlineProcessor) : AbstractBlockRenderer<ParagraphData>(logger, inlineProcessor)
+public class ParagraphRenderer(ILogger<AbstractBlockRenderer> logger, InlineProcessor inlineProcessor, IHtmlDocumentWriter documentWriter) : AbstractBlockRenderer<ParagraphData>(logger, inlineProcessor, documentWriter)
 {
-    private readonly List<InlineRule> _inlineRules = new List<InlineRule>(){
-        new InlineRule("b", null, "strong", "post-bold", Array.Empty<string>()),
-        new InlineRule("i", null, "em", "post-italic", Array.Empty<string>()),
-    };
+    private readonly List<InlineRule> _inlineRules =
+    [
+        InlineRule.Bold,
+        InlineRule.Italic,
+        InlineRule.Underline,
+        InlineRule.Strikethrough,
+        InlineRule.Anchor,
+        InlineRule.Code,
+        InlineRule.Mark
+    ];
     
     public override BlockTypes BlockType => BlockTypes.Paragraph;
 
@@ -18,6 +24,10 @@ public class ParagraphRenderer(ILogger<AbstractBlockRenderer> logger, InlineProc
     protected override async Task<string> RenderCoreAsync(EditorBlock<ParagraphData> block, RenderOptions options, CancellationToken ct)
     {
         var text = await ProcessInlineAsync(block.TypedData.Text);
-        return $"<p class=\"post-p\">{text}</p>";
+        return HtmlDocumentWriter.Create("p", ele =>
+        {
+            ele.InnerHtml = text;
+            ele.SetAttribute("class", "post-p");
+        }); 
     }
 }

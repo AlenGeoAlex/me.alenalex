@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bloggi.Backend.EditorJS.Renderer.Blocks.Unknown;
 
-public class UnknownBlockRenderer(ILogger<AbstractBlockRenderer> logger, InlineProcessor inlineProcessor) : AbstractBlockRenderer<object>(logger, inlineProcessor)
+public class UnknownBlockRenderer(ILogger<AbstractBlockRenderer> logger, InlineProcessor inlineProcessor, IHtmlDocumentWriter documentWriter) : AbstractBlockRenderer<object>(logger, inlineProcessor, documentWriter)
 {
     public override BlockTypes BlockType => BlockTypes.Unknown;
     public override IReadOnlyList<InlineRule> InlineRules => [];

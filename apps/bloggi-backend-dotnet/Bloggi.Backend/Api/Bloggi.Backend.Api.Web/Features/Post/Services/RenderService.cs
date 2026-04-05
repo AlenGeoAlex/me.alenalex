@@ -83,6 +83,14 @@ public class RenderService(
             errors.AddIfNotNull(await RenderTagsAsync(document, post, renderOptions, ct));
             errors.AddRange((await RenderPostHeaderAsync(document, post, renderOptions, ct)));
             errors.AddRange((await RenderAuthorAsync(document, post, renderOptions, ct)));
+            await RenderGlobalJsConstants(document, post, renderOptions, ct);
+            await cache.SetAsync(cacheKey, document.ToHtml(), new FusionCacheEntryOptions()
+            {
+              Duration  = TimeSpan.FromMinutes(10),
+            }, [
+            $"{PostCacheKeys.RenderCacheKey}:{post.Id}"
+            ], ct);
+                
             errors.AddIfNotNull(await RenderBlockAsync(document, post.Blocks, renderOptions, ct));
             html = document.ToHtml();
         }
@@ -181,13 +189,11 @@ public class RenderService(
     )
     {
         var element = document.CreateElement("script");
-        var jsScript = @$"""
-                            const postId    = {JsonSerializer.Serialize(response.Id.ToString())};
-                            const postSlug  = {JsonSerializer.Serialize(response.Slug)};
-                            const postTitle = {JsonSerializer.Serialize(response.Title)};
-                       """;
+        var jsScript = $"  const postId    = {JsonSerializer.Serialize(response.Id.ToString())};\n" +
+                      $"  const postSlug  = {JsonSerializer.Serialize(response.Slug)};\n" +
+                      $"  const postTitle = {JsonSerializer.Serialize(response.Title)};\n";
         element.InnerHtml = jsScript;
-        document.Head?.AppendChild(element);
+        document.Head?.AppendElement(element);
         logger.LogInformation("Global JS constants set");
     }
 

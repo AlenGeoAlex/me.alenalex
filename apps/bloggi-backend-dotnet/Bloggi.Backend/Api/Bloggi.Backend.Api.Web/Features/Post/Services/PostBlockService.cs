@@ -165,7 +165,9 @@ public class PostBlockService(
             .Select(x => new EditorBlock(x.BlockId, Enum.Parse<BlockTypes>(x.BlockType), x.BlockData.RootElement))
             .ToArray();
 
-        var lastUpdateOn = post.Blocks.Max(x => x.UpdatedAt);
+        var lastUpdateOn = post.Blocks.Count > 0 ?
+            post.Blocks.Max(x => x.UpdatedAt) 
+            : DateTimeOffset.MinValue;
 
         return new GetBlocksForPostResponse(blocks, post.Metadata?.EditorVersion, lastUpdateOn);
     }

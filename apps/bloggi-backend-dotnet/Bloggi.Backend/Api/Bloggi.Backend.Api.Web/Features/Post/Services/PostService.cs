@@ -144,7 +144,7 @@ public class PostService(
                 [
                     $"{PostCacheKeys.PostMasterKey}:{request.PostId}",
                 ],
-                [PostCacheKeys.PostCacheTags.Template, $"{PostCacheKeys.PostMasterKey}:{request.PostId}"]
+                [$"{PostCacheKeys.RenderCacheKey}:{request.PostId}", $"{PostCacheKeys.PostMasterKey}:{request.PostId}"]
             ).PublishAsync(Mode.WaitForNone, cancellation: ct);
             await transaction.CommitAsync(ct);
             return true;
@@ -363,7 +363,7 @@ public class PostService(
                 }).ToList()
                 : null,
             Blocks = request.IncludeBlocks
-                ? post.Blocks.Select(x => new EditorBlock(x.BlockId, Enum.TryParse<BlockTypes>(x.BlockType, out var tpe) ? tpe : BlockTypes.Unknown, x.BlockData.RootElement)).ToList()
+                ? post.Blocks.OrderBy(x => x.Position).Select(x => new EditorBlock(x.BlockId, Enum.TryParse<BlockTypes>(x.BlockType, out var tpe) ? tpe : BlockTypes.Unknown, x.BlockData.RootElement)).ToList()
                 : []
         };
 

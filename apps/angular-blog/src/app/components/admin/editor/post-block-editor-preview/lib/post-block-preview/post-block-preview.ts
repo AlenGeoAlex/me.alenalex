@@ -29,10 +29,14 @@ export class PostBlockPreview {
   public readonly response = input.required<BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse | undefined>();
   public readonly responseHtml = linkedSignal(() => {
     const response = this.response();
-    if(!response) return '';
-    if(!response.html) return '';
-    return this.sanitizer.bypassSecurityTrustHtml(atob(response.html));
-  })
+    if (!response?.html) return '';
+
+    const binary = atob(response.html);
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    const html = new TextDecoder('utf-8').decode(bytes);
+
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  });
 
   public readonly responseError = linkedSignal(() => {
     const response = this.response();

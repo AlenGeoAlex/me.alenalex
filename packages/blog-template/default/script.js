@@ -11,15 +11,33 @@ const API = {
 
 const THEME_KEY = 'blog.alenalex.me-darkModePersistence';
 
-
 function toggleDark() {
-  const html = document.documentElement;
-  html.classList.toggle('dark');
-  const isDark = html.classList.contains('dark');
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  const icon = document.getElementById('theme-icon');
-  if (icon) icon.textContent = isDark ? '☽' : '☀';
-  updateHljsTheme(isDark);
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    const isDark = html.classList.contains('dark');
+    localStorage.setItem(THEME_KEY, String(isDark));
+    updateThemeIcon(isDark);
+    updateHljsTheme(isDark);
+}
+
+function setThemeIcon() {
+    const isDark = document.documentElement.classList.contains('dark');
+    updateThemeIcon(isDark);
+}
+
+function updateThemeIcon(isDark) {
+    const icon = document.getElementById('theme-icon');
+    if (!icon) return;
+    icon.className = isDark ? 'pi pi-moon' : 'pi pi-sun';
+}
+
+function toggleMobileMenu() {
+    const menu   = document.getElementById('mobile-menu');
+    const icon   = document.getElementById('mobile-icon');
+    if (!menu || !icon) return;
+    const isOpen = menu.style.display !== 'none';
+    menu.style.display = isOpen ? 'none' : 'block';
+    icon.className = isOpen ? 'pi pi-bars' : 'pi pi-times';
 }
 
 function updateHljsTheme(isDark) {

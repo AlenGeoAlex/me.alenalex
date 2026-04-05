@@ -3,24 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- ═══════════════════════════════════════════════════
-         FONTS
-    ═══════════════════════════════════════════════════ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-    <!-- ═══════════════════════════════════════════════════
-         HIGHLIGHT.JS — code syntax highlighting
-    ═══════════════════════════════════════════════════ -->
-    <link id="hljs-theme" rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AlenGeoAlex/me.alenalex@main/packages/blog-theme/theme-token.css" />
+    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
-
-    <!-- ═══════════════════════════════════════════════════
-         TAILWIND — utility classes for layout
-    ═══════════════════════════════════════════════════ -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AlenGeoAlex/me.alenalex@main/packages/blog-template/default/blog.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/primeicons@7.0.0/primeicons.css" />
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -34,21 +24,9 @@
                 }
             }
         }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     </script>
-
-    <!-- ═══════════════════════════════════════════════════
-         ALPINE JS — progressive enhancement for TOC, series, breadcrumb
-    ═══════════════════════════════════════════════════ -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- ═══════════════════════════════════════════════════
-         BLOG STYLES — all post and layout styles live in blog.css
-    ═══════════════════════════════════════════════════ -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AlenGeoAlex/me.alenalex@main/packages/blog-template/default/blog.css" />
-    <!-- ═══════════════════════════════════════════════════
-         DARK MODE — applied before first paint to prevent flash
-    ═══════════════════════════════════════════════════ -->
-    
     <script>
       (function () {
         const stored = localStorage.getItem('blog.alenalex.me-darkModePersistence');
@@ -65,47 +43,54 @@
 <div class="orb orb-1" aria-hidden="true"></div>
 <div class="orb orb-2" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════════════
-     NAV
-═══════════════════════════════════════════════════ -->
 <header class="site-nav">
     <div class="site-nav-inner">
+
         <a href="/" class="site-logo">Alen's Blog</a>
-        <nav class="nav-links">
-            <a href="/"      class="nav-link">Writing</a>
-            <a href="/about" class="nav-link">About</a>
+
+        <div class="nav-links">
+            <a href="https://alenalex.me" class="nav-link" title="About">
+                <i class="pi pi-info-circle"></i>
+                <span class="nav-link-label">About</span>
+            </a>
+            <a href="https://github.com/AlenGeoAlex" target="_blank" class="nav-link" title="GitHub">
+                <i class="pi pi-github"></i>
+                <span class="nav-link-label">GitHub</span>
+            </a>
             <button class="theme-toggle" onclick="toggleDark()" aria-label="Toggle dark mode">
-                <span id="theme-icon">☀</span>
+                <i id="theme-icon" class="pi pi-sun"></i>
             </button>
-        </nav>
+            <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+                <i id="mobile-icon" class="pi pi-bars"></i>
+            </button>
+        </div>
+
     </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════
-     PAGE LAYOUT — content + sidebar
-═══════════════════════════════════════════════════ -->
+<div id="mobile-menu" class="mobile-menu" style="display:none">
+    <div class="mobile-menu-inner">
+        <a href="https://alenalex.me" class="mobile-menu-link">
+            <i class="pi pi-info-circle"></i>
+            <span>About</span>
+        </a>
+        <a href="https://github.com/AlenGeoAlex" target="_blank" class="mobile-menu-link">
+            <i class="pi pi-github"></i>
+            <span>GitHub</span>
+        </a>
+    </div>
+</div>
+
 <div class="page-layout">
-
-    <!-- ── MAIN CONTENT COLUMN (2/3) ─────────────────── -->
     <main class="content-column relative z-10" id="main">
-
-        <!-- BREADCRUMB
-             Default: Blog / Post Title
-             script.js upgrades to: Blog / Series Name / Post Title if series found
-             The series-crumb span is hidden by default, shown by JS if series exists -->
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="/" class="breadcrumb-item">Blog</a>
             <span class="breadcrumb-sep">·</span>
-            <!-- series crumb — hidden until JS confirms post is in a series -->
             <span id="breadcrumb-series" class="breadcrumb-item breadcrumb-series" style="display:none"></span>
             <span id="breadcrumb-series-sep" class="breadcrumb-sep" style="display:none">/</span>
             <span class="breadcrumb-item breadcrumb-current" id="breadcrumb-post-title"></span>
         </nav>
-
-        <!-- POST HEADER -->
         <header class="post-header fade-1">
-
-            <!-- Tags — {{POST_TAGS}} replaced by LayoutTemplate.cs as <span> elements -->
             <div class="post-tags" id="post-tags-container"></div>
             <h1 class="post-title" id="post-title"></h1>
             <p class="post-lede" id="post-excerpt"></p>
@@ -118,24 +103,17 @@
                 <span id="read-time"></span>
             </div>
 
-            <!-- Cover image — emits <img> if og_image_url is set,
-                 otherwise emits the decorative placeholder div -->
             <div class="post-cover" id="post-cover"></div>
 
         </header>
 
-        <!-- POST BODY — {{POST_CONTENT}} replaced by BlockRendererRegistry.RenderAll() -->
         <article class="post-content fade-2" id="post-content">
         </article>
-
-        <!-- SERIES NAVIGATION — next / previous within series
-             Hidden by default. script.js renders this if post is part of a series. -->
         <nav class="series-nav" id="series-nav" style="display:none" aria-label="Series navigation">
             <div class="series-nav-prev" id="series-nav-prev"></div>
             <div class="series-nav-next" id="series-nav-next"></div>
         </nav>
 
-        <!-- POST FOOTER -->
         <footer class="post-footer fade-3">
             <a href="/">← All posts</a>
             <time datetime="" id="published-at-fotter"></time>
@@ -143,23 +121,12 @@
 
     </main>
 
-    <!-- ── SIDEBAR (1/4) ──────────────────────────────── -->
     <aside class="sidebar" id="sidebar" aria-label="Page sidebar">
-
-        <!-- TABLE OF CONTENTS
-             script.js extracts .post-heading-1, .post-heading-2, .post-heading-3
-             from #post-content and builds the TOC list.
-             IntersectionObserver highlights the active heading as user scrolls.
-             Hidden if fewer than 2 headings found. -->
         <div class="sidebar-section" id="toc-section" style="display:none">
             <p class="sidebar-label">On this page</p>
             <nav id="toc-list" aria-label="Table of contents"></nav>
         </div>
 
-        <!-- SERIES LIST
-             script.js calls GET /api/posts/{{POST_ID}}/series
-             If 404 or error → entire section stays hidden.
-             If found → renders series title, episode list, highlights current post. -->
         <div class="sidebar-section" id="series-section" style="display:none">
             <p class="sidebar-label">Series</p>
             <p class="series-title" id="series-title"></p>
@@ -170,17 +137,7 @@
 
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     GLOSSARY SCRIPT
-     Fetches all terms from /api/glossary/terms and injects
-     data-definition attributes into .post-glossary spans.
-     Zero SEO impact — content is already fully rendered.
-═══════════════════════════════════════════════════ -->
 <script src="/glossary.js" defer></script>
-
-<!-- ═══════════════════════════════════════════════════
-     BLOG SCRIPT — TOC, series, breadcrumb, dark mode
-═══════════════════════════════════════════════════ -->
 <script src="https://cdn.jsdelivr.net/gh/AlenGeoAlex/me.alenalex@main/packages/blog-template/default/script.js" defer></script>
 </body>
 </html>
