@@ -483,14 +483,37 @@ a.breadcrumb-item:hover { color: var(--accent); }
 .post-callout-warning { background: var(--warning-bg); border-color: var(--warning-bd); }
 .post-callout-danger  { background: var(--danger-bg);  border-color: var(--danger-bd); }
 .post-callout-success { background: var(--success-bg); border-color: var(--success-bd); }
-.post-callout-icon  { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
-.post-callout-icon svg { width: 1rem; height: 1rem; stroke: currentColor; }
-.post-callout-body  { font-size: 0.9375rem; line-height: 1.65; color: var(--ink-2); }
-.post-callout-title { font-weight: 500; color: var(--ink); margin-bottom: 0.2rem; font-size: 0.9rem; }
-.post-callout-info    .post-callout-icon { color: var(--info); }
-.post-callout-warning .post-callout-icon { color: var(--warning); }
-.post-callout-danger  .post-callout-icon { color: var(--danger); }
-.post-callout-success .post-callout-icon { color: var(--success); }
+.post-callout-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--r-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.post-callout-info    .post-callout-icon { background: var(--info-bg);    color: var(--info); }
+.post-callout-warning .post-callout-icon { background: var(--warning-bg); color: var(--warning); }
+.post-callout-danger  .post-callout-icon { background: var(--danger-bg);  color: var(--danger); }
+.post-callout-success .post-callout-icon { background: var(--success-bg); color: var(--success); }
+
+@keyframes callout-pulse {
+    0%   { transform: scale(1);    opacity: 1; }
+    50%  { transform: scale(1.15); opacity: 0.75; }
+    100% { transform: scale(1);    opacity: 1; }
+}
+.post-callout-icon .pi {
+    animation: callout-pulse 0.6s var(--ease) both;
+    font-size: 0.9rem;
+}
+.post-callout-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
+}
 
 .post-ul, .post-ol {
     padding-left: 1.5rem;
