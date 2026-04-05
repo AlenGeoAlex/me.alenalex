@@ -443,6 +443,30 @@ a.breadcrumb-item:hover { color: var(--accent); }
     border: 1px solid var(--border);
     display: block;
 }
+
+.post-figure--stretched {
+    margin-left: calc(-2rem);
+    margin-right: calc(-2rem);
+    width: calc(100% + 4rem);
+}
+.post-figure--stretched img {
+    border-radius: 0;
+}
+
+.post-figure--bordered img {
+    border: 2px solid var(--border-2);
+}
+
+.post-figure--bg {
+    background: var(--bg-2);
+    border-radius: var(--r-md);
+    padding: 1.5rem;
+}
+.post-figure--bg img {
+    border-radius: var(--r-sm);
+    border: none;
+}
+
 .post-figcaption {
     margin-top: 0.5rem;
     font-size: 0.8125rem;
