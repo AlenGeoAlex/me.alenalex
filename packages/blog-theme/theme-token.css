@@ -1,0 +1,106 @@
+/*
+ * tokens.css
+ * Design system CSS variables — single source of truth.
+ * Hosted at: jsDelivr 
+ *
+ * Consumed by:
+ *   - Angular app (styles.css) via @import
+ *   - Blog post template (blog.css) via <link> in template.html
+ *
+ * Never hardcode hex values in either codebase — always reference these vars.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap');
+
+:root {
+    /* Backgrounds */
+    --bg:              #F5F2ED;
+    --bg-2:            #EDE9E3;
+    --bg-3:            #E5E1DA;
+    --bg-glass:        rgba(245, 242, 237, 0.72);
+    --bg-glass-heavy:  rgba(245, 242, 237, 0.88);
+
+    /* Text */
+    --ink:             #1C1917;
+    --ink-2:           #44403C;
+    --ink-3:           #78716C;
+
+    /* Accent */
+    --accent:          #D97706;
+    --accent-hover:    #B45309;
+    --accent-dim:      rgba(217, 119, 6, 0.12);
+    --accent-dim-2:    rgba(217, 119, 6, 0.20);
+
+    /* Semantic */
+    --success:         #16A34A;
+    --success-bg:      rgba(22, 163, 74, 0.08);
+    --success-bd:      rgba(22, 163, 74, 0.25);
+    --warning:         #D97706;
+    --warning-bg:      rgba(217, 119, 6, 0.08);
+    --warning-bd:      rgba(217, 119, 6, 0.28);
+    --danger:          #DC2626;
+    --danger-bg:       rgba(220, 38, 38, 0.08);
+    --danger-bd:       rgba(220, 38, 38, 0.25);
+    --info:            #2563EB;
+    --info-bg:         rgba(37, 99, 235, 0.08);
+    --info-bd:         rgba(37, 99, 235, 0.25);
+
+    /* Borders */
+    --border:          rgba(28, 25, 23, 0.10);
+    --border-2:        rgba(28, 25, 23, 0.18);
+    --border-focus:    rgba(217, 119, 6, 0.50);
+
+    /* Effects */
+    --blur:            saturate(180%) blur(20px);
+    --blur-heavy:      saturate(200%) blur(32px);
+    --shadow-sm:       0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:       0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    --shadow-lg:       0 12px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
+
+    /* Border radii */
+    --r-sm:            6px;
+    --r-md:            10px;
+    --r-lg:            14px;
+    --r-xl:            20px;
+    --r-full:          999px;
+
+    /* Motion */
+    --ease:            cubic-bezier(0.16, 1, 0.3, 1);
+    --fast:            0.15s;
+    --mid:             0.25s;
+    --slow:            0.4s;
+}
+
+.dark {
+    --bg:              #0F0E0D;
+    --bg-2:            #1A1917;
+    --bg-3:            #242220;
+    --bg-glass:        rgba(15, 14, 13, 0.72);
+    --bg-glass-heavy:  rgba(15, 14, 13, 0.90);
+
+    --ink:             #F5F2ED;
+    --ink-2:           #D6D3D1;
+    --ink-3:           #78716C;
+
+    --accent:          #F59E0B;
+    --accent-hover:    #FBBF24;
+    --accent-dim:      rgba(245, 158, 11, 0.12);
+    --accent-dim-2:    rgba(245, 158, 11, 0.20);
+
+    --border:          rgba(245, 242, 237, 0.08);
+    --border-2:        rgba(245, 242, 237, 0.14);
+    --border-focus:    rgba(245, 158, 11, 0.45);
+
+    --shadow-sm:       0 1px 3px rgba(0,0,0,0.20);
+    --shadow-md:       0 4px 16px rgba(0,0,0,0.30);
+    --shadow-lg:       0 12px 40px rgba(0,0,0,0.40);
+
+    --success-bg:      rgba(22, 163, 74, 0.10);
+    --success-bd:      rgba(22, 163, 74, 0.30);
+    --warning-bg:      rgba(245, 158, 11, 0.10);
+    --warning-bd:      rgba(245, 158, 11, 0.32);
+    --danger-bg:       rgba(220, 38, 38, 0.10);
+    --danger-bd:       rgba(220, 38, 38, 0.28);
+    --info-bg:         rgba(37,  99, 235, 0.10);
+    --info-bd:         rgba(37,  99, 235, 0.28);
+}
