@@ -19,17 +19,17 @@ public class RenderService(
     IFusionCache cache
     )
 {
-    public const string ArticlePostContentId = "post-content";
-    public const string BreadCrumbPostTitle = "breadcrumb-post-title";
-    public const string TagsContainer = "post-tags-container";
-    public const string PostTitle = "post-title";
-    public const string PostExcerpt = "post-excerpt";
-    public const string AuthorInitials = "author-initials";
-    public const string AuthorName = "author-name";
-    public const string PublishedAt = "published-at";
-    public const string PublishedAtFooter = "published-at-fotter";
-    public const string ReadTime = "read-time";
-    public const string PostCover = "post-cover";
+    private const string ArticlePostContentId = "post-content";
+    private const string BreadCrumbPostTitle = "breadcrumb-post-title";
+    private const string TagsContainer = "post-tags-container";
+    private const string PostTitle = "post-title";
+    private const string PostExcerpt = "post-excerpt";
+    private const string AuthorInitials = "author-initials";
+    private const string AuthorName = "author-name";
+    private const string PublishedAt = "published-at";
+    private const string PublishedAtFooter = "published-at-fotter";
+    private const string ReadTime = "read-time";
+    private const string PostCover = "post-cover";
     
     /// <summary>
     /// Renders content based on the provided render request.
@@ -43,7 +43,12 @@ public class RenderService(
     )
     {
         var cacheKey = $"{PostCacheKeys.RenderCacheKey}:{request.PostId}";
-        var rawTemplate = await cache.GetOrDefaultAsync<string>(cacheKey, token: ct);
+        string? rawTemplate = null;
+        
+        // If its not a preview, don't even try to get the template from the cache
+        if(request.IsPreview)
+            rawTemplate = await cache.GetOrDefaultAsync<string>(cacheKey, token: ct);
+        
         string html = "";
         List<Error?> errors = [];
         var configuration = Configuration.Default;
@@ -81,8 +86,8 @@ public class RenderService(
             errors.AddIfNotNull(await RenderBreadCrumbsAsync(document, post, renderOptions, ct));
             errors.AddIfNotNull(await RenderFooterPublishedAtAsync(document, post, renderOptions, ct));
             errors.AddIfNotNull(await RenderTagsAsync(document, post, renderOptions, ct));
-            errors.AddRange((await RenderPostHeaderAsync(document, post, renderOptions, ct)));
-            errors.AddRange((await RenderAuthorAsync(document, post, renderOptions, ct)));
+            errors.AddRange(await RenderPostHeaderAsync(document, post, renderOptions, ct));
+            errors.AddRange(await RenderAuthorAsync(document, post, renderOptions, ct));
             await RenderGlobalJsConstants(document, post, renderOptions, ct);
             await cache.SetAsync(cacheKey, document.ToHtml(), new FusionCacheEntryOptions()
             {

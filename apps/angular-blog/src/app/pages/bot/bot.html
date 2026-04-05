@@ -1,0 +1,52 @@
+<div style="font-family:sans-serif;max-width:600px;margin:4rem auto;padding:0 1.5rem;color:#1C1917">
+  <h1 style="font-size:1.5rem;margin-bottom:0.5rem">BloggiBot</h1>
+  <p style="color:#78716C;margin-bottom:2rem">Link preview crawler for Alen's Blog (EditorJS)</p>
+
+  <h2 style="font-size:1rem;margin-bottom:0.5rem">What does it do?</h2>
+  <p style="margin-bottom:1.5rem;line-height:1.7">
+    BloggiBot fetches link metadata (title, description, image) when I creates a new post and want to cite/link your page, this happens only when I am writing up a post and
+    pastes a URL into the blog editor. It respects <code>robots.txt</code> and
+    only fetches pages on demand — it does not crawl or index your site. Its one time call and will be stored in along with the post content.
+  </p>
+
+  <h2 style="font-size:1rem;margin-bottom:0.5rem">User-Agent</h2>
+  <pre style="background:#EDE9E3;padding:0.75rem 1rem;border-radius:8px;margin-bottom:1.5rem">BloggiBot/1.0 (+https://alenalex.me/bot)</pre>
+
+  <h2 style="font-size:1rem;margin-bottom:0.5rem">Block BloggiBot</h2>
+  <p style="margin-bottom:1rem;line-height:1.7">
+    Add the following to your <code>robots.txt</code> to block BloggiBot from your domain:
+  </p>
+  <pre style="background:#EDE9E3;padding:0.75rem 1rem;border-radius:8px;margin-bottom:1.5rem">User-agent: BloggiBot
+  Disallow: /</pre>
+  <p style="line-height:1.7">
+    Alternatively, email
+    <a href="mailto:contact@alenalex.me" style="color:#D97706">{{'contact@alenalex.me'}}</a>
+    and I will manually add your domain to the blocklist.
+  </p>
+
+  <br>
+
+  <h2 style="font-size:1rem;margin-bottom:0.5rem">Frequency</h2>
+  <p style="line-height:1.7;color:#44403C">
+    BloggiBot only fetches a URL once when an author pastes it into the editor.
+    It does not periodically re-crawl or index your content.
+    It caches the metadata for a URL for 24 hours. It will be stored in along with the post content.
+  </p>
+
+  <br>
+
+
+  <h2 style="font-size:1rem;margin-bottom:0.5rem">Open Source</h2>
+  <p style="line-height:1.7;color:#44403C">
+    The entire code for this is open source and transparent. You can check it out at <a href="https://github.com/AlenGeoAlex/me.alenalex/tree/main/apps/bloggi-backend-dotnet/Bloggi.Backend/Api/Bloggi.Backend.Api.Web/Infrastructure/Services/LinkUnfurlService.cs" style="color:#D97706">Github</a>.
+  </p>
+
+  <br>
+  <p style="line-height:1.7;color:#44403C">
+    With love,
+  </p>
+  <p>
+    Alen
+  </p>
+
+</div>

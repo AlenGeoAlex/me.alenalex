@@ -31,9 +31,14 @@ public class WarningBlockRenderer(ILogger<AbstractBlockRenderer> logger, InlineP
             div.SetAttribute("class", "post-callout post-callout-warning");
         });
 
-        var iconSpan = HtmlDocumentWriter.CreateElement("i", span =>
+        var iconSpan = HtmlDocumentWriter.CreateElement("span", span =>
         {
-            span.SetAttribute("data-lucide", "triangle-alert");
+            span.SetAttribute("class", "post-callout-icon");
+            var icon = HtmlDocumentWriter.CreateElement("i", i =>
+            {
+                i.SetAttribute("class", "pi pi-exclamation-circle");
+            });
+            span.AppendChild(icon);
         });
         
         HtmlDocumentWriter.Append(outerDiv, iconSpan);

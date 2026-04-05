@@ -1,13 +1,12 @@
 using System.Net;
 using System.Security.Cryptography;
-using Bloggi.Backend.Api.Web.Features.Post.Endpoints.Post;
 using Bloggi.Backend.Api.Web.Features.Post.Events;
 using Bloggi.Backend.Api.Web.Features.Post.Services;
 using Bloggi.Backend.Api.Web.Infrastructure.Services.Contracts;
 using ErrorOr;
 using FastEndpoints;
 
-namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.File.SaveUrl;
+namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.Editor.SaveUrl;
 
 internal static partial class SaveUrl
 {
@@ -16,9 +15,9 @@ internal static partial class SaveUrl
         IHttpClientFactory httpClientFactory,
         PostService postService,
         IFileService fileService
-        ) : Endpoint<Request, ErrorOr<Response>>
+        ) : Endpoint<SaveUrl.Request, ErrorOr<SaveUrl.Response>>
     {
-        public override async Task<ErrorOr<Response>> ExecuteAsync(Request req, CancellationToken ct)
+        public override async Task<ErrorOr<SaveUrl.Response>> ExecuteAsync(SaveUrl.Request req, CancellationToken ct)
         {
             var httpClient = httpClientFactory.CreateClient();
             using var fetchResponse = await httpClient.GetAsync(req.Url, ct);
@@ -58,28 +57,28 @@ internal static partial class SaveUrl
                 if (existsResponse is not null)
                 {
                     logger.LogInformation("File {FileKey} already exists, returning public url", fileKey);
-                    return new Response(existsResponse.PublicUrl);
+                    return new SaveUrl.Response(existsResponse.PublicUrl);
                 }
                 
                 logger.LogInformation("File {FileKey} already exists, but seems like the file doesn't exists, Falling back to write", fileKey);
             }
 
             await PublishAsync(new UploadFileEventHandler.Event(bytes, fileKey, contentType), Mode.WaitForNone, ct);
-            return new Response(fileService.BuildPublicUrl(fileKey));
+            return new SaveUrl.Response(fileService.BuildPublicUrl(fileKey));
         }
 
         public override void Configure()
         {
-            Post("/{postId:guid}/file-url");
+            Post("/assets/url/");
             Description(x =>
             {
                 x.WithDescription("Save a file associated with a post");
                 x.WithName("SaveUrl");
                 x.WithSummary("Save a file for a post");
-                x.Produces<Response>(201);
+                x.Produces<SaveUrl.Response>(201);
             });
             Version(1);
-            Group<PostGroup>();
+            Group<EditorGroup>();
         }
     }
 }

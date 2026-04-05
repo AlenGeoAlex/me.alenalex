@@ -106,7 +106,7 @@
       }
     },
     "/v1/post/{postId}/preview": {
-      "post": {
+      "get": {
         "tags": [
           "Post"
         ],
@@ -274,140 +274,6 @@
         ]
       }
     },
-    "/v1/post/{postId}/file-url": {
-      "post": {
-        "tags": [
-          "Post"
-        ],
-        "operationId": "SaveUrl",
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            }
-          }
-        ],
-        "requestBody": {
-          "x-name": "Request",
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrl_Request"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrl_Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": []
-          }
-        ]
-      }
-    },
-    "/v1/post/{postId}/file": {
-      "post": {
-        "tags": [
-          "Post"
-        ],
-        "operationId": "SaveFile",
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            }
-          }
-        ],
-        "requestBody": {
-          "x-name": "Request",
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFile_Request"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFile_Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFile_Response"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": []
-          }
-        ]
-      }
-    },
     "/v1/post/{postId}/block": {
       "post": {
         "tags": [
@@ -492,6 +358,202 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlock_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/post/{postId}/editor/assets/url": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "SaveUrl",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrl_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrl_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/post/{postId}/editor/assets": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "SaveFile",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFile_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFile_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFile_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/post/{postId}/editor/crawl-meta": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "CrawlMeta",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOrErrorOrOfResponse"
                 }
               }
             }
@@ -806,85 +868,6 @@
           }
         }
       },
-      "BloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrl_Response": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "url": {
-            "type": "string"
-          }
-        }
-      },
-      "BloggiBackendApiWebFeaturesPostEndpointsFileSaveUrlSaveUrl_Request": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "url"
-        ],
-        "properties": {
-          "url": {
-            "type": "string",
-            "minLength": 1,
-            "nullable": false
-          }
-        }
-      },
-      "BloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFile_Response": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "url": {
-            "type": "string"
-          },
-          "signedUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "expiresAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "BloggiBackendApiWebFeaturesPostEndpointsFileSaveFileSaveFile_Request": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "name",
-          "hash",
-          "contentType",
-          "size"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 230,
-            "minLength": 0,
-            "nullable": false
-          },
-          "hash": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 0,
-            "nullable": false
-          },
-          "contentType": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 0,
-            "nullable": false
-          },
-          "size": {
-            "type": "integer",
-            "format": "int64",
-            "minimum": 0.0,
-            "minLength": 1,
-            "nullable": false,
-            "exclusiveMinimum": true
-          }
-        }
-      },
       "BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlock_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -997,6 +980,218 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlock_Request": {
         "type": "object",
         "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrl_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrl_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFile_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "signedUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFile_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "hash",
+          "contentType",
+          "size"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 230,
+            "minLength": 0,
+            "nullable": false
+          },
+          "hash": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": false
+          },
+          "contentType": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": false
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0.0,
+            "minLength": 1,
+            "nullable": false,
+            "exclusiveMinimum": true
+          }
+        }
+      },
+      "ErrorOrErrorOrOfResponse": {
+        "type": "object",
+        "description": "A discriminated union of errors or a value.",
+        "additionalProperties": false,
+        "properties": {
+          "isError": {
+            "type": "boolean",
+            "description": "Gets a value indicating whether the state is error."
+          },
+          "errors": {
+            "type": "array",
+            "description": "Gets the list of errors. If the state is not error, the list will contain a single error representing the state.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorOrError"
+            }
+          },
+          "errorsOrEmptyList": {
+            "type": "array",
+            "description": "Gets the list of errors. If the state is not error, the list will be empty.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorOrError"
+            }
+          },
+          "value": {
+            "description": "Gets the value.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Response"
+              }
+            ]
+          },
+          "firstError": {
+            "description": "Gets the first error.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorOrError"
+              }
+            ]
+          }
+        }
+      },
+      "ErrorOrError": {
+        "type": "object",
+        "description": "Represents an error.",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Gets the unique error code."
+          },
+          "description": {
+            "type": "string",
+            "description": "Gets the error description."
+          },
+          "type": {
+            "description": "Gets the error type.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorOrErrorType"
+              }
+            ]
+          },
+          "numericType": {
+            "type": "integer",
+            "description": "Gets the numeric value of the type.",
+            "format": "int32"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Gets the metadata.",
+            "nullable": true,
+            "additionalProperties": {}
+          }
+        }
+      },
+      "ErrorOrErrorType": {
+        "type": "string",
+        "description": "Error types.",
+        "x-enumNames": [
+          "Failure",
+          "Unexpected",
+          "Validation",
+          "Conflict",
+          "NotFound",
+          "Unauthorized",
+          "Forbidden"
+        ],
+        "enum": [
+          "Failure",
+          "Unexpected",
+          "Validation",
+          "Conflict",
+          "NotFound",
+          "Unauthorized",
+          "Forbidden"
+        ]
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "favicon": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": false
+          }
+        }
       }
     },
     "securitySchemes": {

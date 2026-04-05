@@ -3,6 +3,7 @@ using AngleSharp.Dom;
 using Bloggi.Backend.EditorJS.Core;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Code;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Header;
+using Bloggi.Backend.EditorJS.Renderer.Blocks.Image;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Paragraph;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Unknown;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Warning;
@@ -37,6 +38,10 @@ public static class EditorJsRendererBootstrapExtensions
         // Warning block
         services.AddKeyedSingleton<ITextExtractor, WarningTextExtractor>(nameof(BlockTypes.Warning));
         services.AddKeyedSingleton<IBlockRenderer, WarningBlockRenderer>(nameof(BlockTypes.Warning));
+        
+        // Image block
+        services.AddKeyedSingleton<ITextExtractor, ImageTextExtractor>(nameof(BlockTypes.Image));
+        services.AddKeyedSingleton<IBlockRenderer, ImageBlockRenderer>(nameof(BlockTypes.Image));
         return services;
     }
 }

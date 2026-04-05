@@ -7,6 +7,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
   },
   {
+    path: 'bot',
+    loadComponent: () => import('./pages/bot/bot').then((m) => m.Bot),
+  },
+  {
     path: 'admin',
     canActivate: [accessGuard],
     children: [

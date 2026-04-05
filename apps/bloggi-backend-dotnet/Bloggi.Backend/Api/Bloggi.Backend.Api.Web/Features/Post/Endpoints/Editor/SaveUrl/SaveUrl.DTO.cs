@@ -1,8 +1,9 @@
+using Bloggi.Backend.Api.Web.Extensions;
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.File.SaveUrl;
+namespace Bloggi.Backend.Api.Web.Features.Post.Endpoints.Editor.SaveUrl;
 
 internal static partial class SaveUrl
 {
@@ -19,6 +20,7 @@ internal static partial class SaveUrl
             RuleFor(x => x.Url)
                 .NotNull()
                 .NotEmpty()
+                .IsUrl()
                 .WithMessage("Url is required");
         }
     }

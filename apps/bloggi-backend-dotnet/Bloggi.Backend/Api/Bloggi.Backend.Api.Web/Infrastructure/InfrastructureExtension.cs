@@ -19,6 +19,12 @@ public static class InfrastructureExtension
     {
         serviceCollection.AddScoped<IFileService, S3FileService>();
         serviceCollection.AddHttpClient();
+        serviceCollection.AddHttpClient<LinkUnfurlService>(client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(30);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "BloggiBot-blog.alenalex.me/1.0 (+https://blog.alenalex.me/bot)");
+        });
         return serviceCollection;
     }
 }
