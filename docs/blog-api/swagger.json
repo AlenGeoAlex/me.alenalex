@@ -553,7 +553,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorOrErrorOrOfResponse"
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Response"
                 }
               }
             }
@@ -570,6 +570,36 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1059,104 +1089,6 @@
             "exclusiveMinimum": true
           }
         }
-      },
-      "ErrorOrErrorOrOfResponse": {
-        "type": "object",
-        "description": "A discriminated union of errors or a value.",
-        "additionalProperties": false,
-        "properties": {
-          "isError": {
-            "type": "boolean",
-            "description": "Gets a value indicating whether the state is error."
-          },
-          "errors": {
-            "type": "array",
-            "description": "Gets the list of errors. If the state is not error, the list will contain a single error representing the state.",
-            "items": {
-              "$ref": "#/components/schemas/ErrorOrError"
-            }
-          },
-          "errorsOrEmptyList": {
-            "type": "array",
-            "description": "Gets the list of errors. If the state is not error, the list will be empty.",
-            "items": {
-              "$ref": "#/components/schemas/ErrorOrError"
-            }
-          },
-          "value": {
-            "description": "Gets the value.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Response"
-              }
-            ]
-          },
-          "firstError": {
-            "description": "Gets the first error.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ErrorOrError"
-              }
-            ]
-          }
-        }
-      },
-      "ErrorOrError": {
-        "type": "object",
-        "description": "Represents an error.",
-        "additionalProperties": false,
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "Gets the unique error code."
-          },
-          "description": {
-            "type": "string",
-            "description": "Gets the error description."
-          },
-          "type": {
-            "description": "Gets the error type.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ErrorOrErrorType"
-              }
-            ]
-          },
-          "numericType": {
-            "type": "integer",
-            "description": "Gets the numeric value of the type.",
-            "format": "int32"
-          },
-          "metadata": {
-            "type": "object",
-            "description": "Gets the metadata.",
-            "nullable": true,
-            "additionalProperties": {}
-          }
-        }
-      },
-      "ErrorOrErrorType": {
-        "type": "string",
-        "description": "Error types.",
-        "x-enumNames": [
-          "Failure",
-          "Unexpected",
-          "Validation",
-          "Conflict",
-          "NotFound",
-          "Unauthorized",
-          "Forbidden"
-        ],
-        "enum": [
-          "Failure",
-          "Unexpected",
-          "Validation",
-          "Conflict",
-          "NotFound",
-          "Unauthorized",
-          "Forbidden"
-        ]
       },
       "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Response": {
         "type": "object",
