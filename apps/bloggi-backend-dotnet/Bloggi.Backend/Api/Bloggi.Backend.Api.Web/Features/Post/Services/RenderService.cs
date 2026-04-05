@@ -237,7 +237,7 @@ public class RenderService(
             }
             else
             {
-                publishedAt.InnerHtml = "Draft";
+                publishedAt.TextContent = "Draft";
                 logger.LogInformation("Published at (Footer) set to Draft"); 
             }
         }
@@ -274,7 +274,7 @@ public class RenderService(
         else
         {
             var c = response.Author?.DisplayName?[0] ?? 'A';
-            authorInitials.InnerHtml = c.ToString();
+            authorInitials.TextContent = c.ToString();
             logger.LogInformation("Author initials set to {Initials}", c);
         }
         
@@ -289,7 +289,7 @@ public class RenderService(
         }
         else
         {
-            authorName.InnerHtml = response.Author?.DisplayName ?? "Anonymous";
+            authorName.TextContent = response.Author?.DisplayName ?? "Anonymous";
             logger.LogInformation("Author name set to {Name}", response.Author?.DisplayName ?? "Anonymous");  
         }
         
@@ -307,13 +307,13 @@ public class RenderService(
         {
             if (response.PublishedAt.HasValue)
             {
-                publishedAt.InnerHtml = response.PublishedAt.Value.ToString("MMMM dd, yyyy");
+                publishedAt.TextContent = response.PublishedAt.Value.ToString("MMMM dd, yyyy");
                 publishedAt.SetAttribute("datetime", response.PublishedAt.Value.ToString());
                 logger.LogInformation("Published at set to {PublishedAt}", response.PublishedAt.Value.ToString("MMMM dd, yyyy"));  
             }
             else
             {
-                publishedAt.InnerHtml = "Draft";
+                publishedAt.TextContent = "Draft";
                 logger.LogInformation("Published at set to Draft"); 
             }
         }
@@ -321,7 +321,7 @@ public class RenderService(
         var readTime = document.GetElementById(ReadTime);
         if (readTime is not null)
         {
-            readTime.InnerHtml = $"{response.ReadTimeInMins} min read";
+            readTime.TextContent = $"{response.ReadTimeInMins} min read";
             logger.LogInformation("Read time set to {ReadTime}", response.ReadTimeInMins.ToString()); 
         }
         
@@ -356,7 +356,7 @@ public class RenderService(
         }
         else
         {
-            postTitle.InnerHtml = response.Title;
+            postTitle.TextContent = response.Title;
             logger.LogInformation("Post title set to {Title}", response.Title);   
         }
 
@@ -379,7 +379,7 @@ public class RenderService(
         }
         else
         {
-            postExcerpt.InnerHtml = response.Excerpt;
+            postExcerpt.TextContent = response.Excerpt;
             logger.LogInformation("Post excerpt set to {Excerpt}", response.Excerpt);   
         }
         
@@ -440,7 +440,7 @@ public class RenderService(
         foreach (var tag in response.Tags)
         {
             var span = document.CreateElement("span");
-            span.InnerHtml = tag.DisplayName;
+            span.TextContent = tag.DisplayName;
             span.SetAttribute("class", "post-tag");
             span.Id = $"tag-{tag.Id}";
             tagsDiv.AppendChild(span);
@@ -474,7 +474,7 @@ public class RenderService(
             return Error.Failure($"{nameof(RenderBreadCrumbsAsync)}", "Element with id 'breadcrumb-post-title' not found");
         }
 
-        breadcrumbPostTitle.InnerHtml = response.Title;
+        breadcrumbPostTitle.TextContent = response.Title;
         logger.LogInformation("Breadcrumb post title set to {Title}", response.Title);
         return null;
     }

@@ -4,7 +4,9 @@ using Bloggi.Backend.EditorJS.Core;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Code;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Header;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Image;
+using Bloggi.Backend.EditorJS.Renderer.Blocks.Link;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Paragraph;
+using Bloggi.Backend.EditorJS.Renderer.Blocks.Quote;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Unknown;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Warning;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +44,14 @@ public static class EditorJsRendererBootstrapExtensions
         // Image block
         services.AddKeyedSingleton<ITextExtractor, ImageTextExtractor>(nameof(BlockTypes.Image));
         services.AddKeyedSingleton<IBlockRenderer, ImageBlockRenderer>(nameof(BlockTypes.Image));
+        
+        // Link block
+        services.AddKeyedSingleton<ITextExtractor, LinkTextExtractor>(nameof(BlockTypes.Link));
+        services.AddKeyedSingleton<IBlockRenderer, LinkBlockRenderer>(nameof(BlockTypes.Link));
+        
+        // Quote block
+        services.AddKeyedSingleton<ITextExtractor, QuoteTextExtractor>(nameof(BlockTypes.Quote));
+        services.AddKeyedSingleton<IBlockRenderer, QuoteBlockRenderer>(nameof(BlockTypes.Quote));
         return services;
     }
 }

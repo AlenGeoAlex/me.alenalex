@@ -39,7 +39,7 @@ public class CodeBlockRenderer(ILogger<AbstractBlockRenderer> logger, InlineProc
             button.SetAttribute("class", "post-code-copy");
             button.SetAttribute("onclick", "copyCode(this)");
             button.SetAttribute("aria-label", "Copy code");
-            button.InnerHtml = "Copy";
+            button.TextContent = "Copy";
         });
         
         HtmlDocumentWriter.Append(divPostElement, button)

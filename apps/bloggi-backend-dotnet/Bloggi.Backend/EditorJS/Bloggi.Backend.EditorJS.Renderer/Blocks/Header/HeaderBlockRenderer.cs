@@ -16,7 +16,7 @@ public class HeaderBlockRenderer(ILogger<AbstractBlockRenderer> logger, InlinePr
     protected override async Task<string> RenderCoreAsync(EditorBlock<HeaderData> block, RenderOptions options, CancellationToken ct)
     {
         
-        var text = await InlineProcessor.ProcessAsync(block.TypedData.Text, InlineRules);
+        var text = await ProcessInlineAsync(block.TypedData.Text);
         switch (block.TypedData.Level)
         {
             case 1:

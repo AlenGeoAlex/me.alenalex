@@ -27,7 +27,8 @@ public class LinkUnfurlService(
     {
         try
         {
-            var previewCached = await cache.GetOrDefaultAsync<LinkPreview>(CacheKey, token: ct);
+            var cacheKey = $"{CacheKey}:{url}";
+            var previewCached = await cache.GetOrDefaultAsync<LinkPreview>(cacheKey, token: ct);
             if (previewCached is not null)
             {
                 logger.LogInformation("Link preview retrieved from cache for {Url}", url);
@@ -87,8 +88,8 @@ public class LinkUnfurlService(
                 image = new Uri(base64, image).ToString();
             }
 
-            var linkPreview = new LinkPreview(url, title, description, image, favicon);
-            await cache.SetAsync(CacheKey, linkPreview, TimeSpan.FromMinutes(60), token: ct);
+            var linkPreview = new LinkPreview(uri.ToString(), title, description, image, favicon);
+            await cache.SetAsync(cacheKey, linkPreview, TimeSpan.FromMinutes(60), token: ct);
             return linkPreview;
         }
         catch(Exception e)

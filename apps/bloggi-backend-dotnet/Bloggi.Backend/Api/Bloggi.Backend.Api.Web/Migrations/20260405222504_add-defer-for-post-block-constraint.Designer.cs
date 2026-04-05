@@ -4,6 +4,7 @@ using System.Text.Json;
 using Bloggi.Backend.Api.Web.Database.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace Bloggi.Backend.Api.Web.Migrations
 {
     [DbContext(typeof(BloggiDbContext))]
-    partial class BloggiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260405222504_add-defer-for-post-block-constraint")]
+    partial class adddeferforpostblockconstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

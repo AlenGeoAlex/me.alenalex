@@ -76,5 +76,5 @@ public record InlineRule(
     /// and converts it to an output tag "code" with an optional output class of "post-inline-code".
     /// No additional attributes are allowed for this rule.
     /// </remarks>
-    public static InlineRule Code => new("code", "cdx-inline-code", "code","post-inline-code", Array.Empty<string>());
+    public static InlineRule Code => new("code", "inline-code", "code","post-inline-code", Array.Empty<string>());
 }

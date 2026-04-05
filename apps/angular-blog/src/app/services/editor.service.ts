@@ -177,7 +177,12 @@ export class EditorService {
       onChange: options?.onChange,
       tools: {
         header: Header,
-        link: LinkTool,
+        link: {
+          class: LinkTool,
+          config: {
+            endpoint: `api/v1/post/${postId}/editor/crawl-meta`
+          }
+        },
         embed: Embed,
         quote: Quote,
         code: CodeTool,

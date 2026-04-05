@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Bloggi.Backend.EditorJS.Core.Attributes;
 
 namespace Bloggi.Backend.EditorJS.Core.Models;
 public class EditorBlock(string id, BlockTypes type, JsonElement data)
@@ -8,7 +9,7 @@ public class EditorBlock(string id, BlockTypes type, JsonElement data)
     public string Id { get; protected set; } = id;
 
     [JsonPropertyName("type")]
-    [JsonConverter(typeof(BlockTypeJsonConverter))]
+    [JsonConverter(typeof(CaseInsensitiveEnumJsonConverter<BlockTypes>))]
     public BlockTypes Type { get; protected set; } = type;
 
     [JsonPropertyName("data")]
