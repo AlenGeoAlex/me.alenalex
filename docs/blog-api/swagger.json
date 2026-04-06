@@ -154,6 +154,68 @@
         ]
       }
     },
+    "/v1/post/{postId}": {
+      "put": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "UpdatePost",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePost_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePost_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{id}": {
       "get": {
         "tags": [
@@ -518,7 +580,7 @@
       }
     },
     "/v1/post/{postId}/editor/crawl-meta": {
-      "post": {
+      "get": {
         "tags": [
           "Post"
         ],
@@ -534,19 +596,6 @@
             }
           }
         ],
-        "requestBody": {
-          "x-name": "Request",
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Request"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "Success",
@@ -758,6 +807,42 @@
         "type": "object",
         "additionalProperties": false
       },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePost_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePost_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 5,
+            "nullable": false
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -784,6 +869,10 @@
           },
           "status": {
             "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_StatusDto"
+          },
+          "renderedKey": {
+            "type": "string",
+            "nullable": true
           },
           "createdAt": {
             "type": "string",
@@ -981,7 +1070,9 @@
           "Warning",
           "InlineCode",
           "List",
-          "Image"
+          "Image",
+          "Math",
+          "Button"
         ],
         "enum": [
           "Unknown",
@@ -995,7 +1086,9 @@
           "Warning",
           "InlineCode",
           "List",
-          "Image"
+          "Image",
+          "Math",
+          "Button"
         ]
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlock_Response": {
@@ -1094,6 +1187,27 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "link": {
+            "type": "string"
+          },
+          "success": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMeta"
+              }
+            ]
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
           "title": {
             "type": "string",
             "nullable": true
@@ -1102,26 +1216,27 @@
             "type": "string",
             "nullable": true
           },
-          "imageUrl": {
+          "image": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMetaImage"
+              }
+            ]
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMetaImage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
             "type": "string",
             "nullable": true
           },
           "favicon": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_Request": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "url"
-        ],
-        "properties": {
-          "url": {
-            "type": "string",
-            "nullable": false
           }
         }
       }
