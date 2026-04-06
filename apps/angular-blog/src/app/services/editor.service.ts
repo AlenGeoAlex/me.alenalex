@@ -17,8 +17,10 @@ import EditorjsList from '@editorjs/list';
 import Quote from '@editorjs/quote';
 import CodeTool from '@editorjs/code';
 import InlineCode from '@editorjs/inline-code';
-import Paragraph from '@editorjs/paragraph';
+// @ts-ignore
 import Warning from '@editorjs/warning';
+// @ts-ignore
+import AnyButton from 'editorjs-button';
 
 type ImageUploadResult = {
   success: number
@@ -207,6 +209,9 @@ export class EditorService {
               uploadByUrl: (url: string) => this.uploadByUrl(postId, url),
             }
           }
+        },
+        button: {
+          class: AnyButton,
         }
       },
       data: options?.data,

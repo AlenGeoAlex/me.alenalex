@@ -1,10 +1,12 @@
 using AngleSharp;
 using AngleSharp.Dom;
 using Bloggi.Backend.EditorJS.Core;
+using Bloggi.Backend.EditorJS.Renderer.Blocks.Button;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Code;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Header;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Image;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Link;
+using Bloggi.Backend.EditorJS.Renderer.Blocks.Math;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Paragraph;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Quote;
 using Bloggi.Backend.EditorJS.Renderer.Blocks.Unknown;
@@ -52,6 +54,10 @@ public static class EditorJsRendererBootstrapExtensions
         // Quote block
         services.AddKeyedSingleton<ITextExtractor, QuoteTextExtractor>(nameof(BlockTypes.Quote));
         services.AddKeyedSingleton<IBlockRenderer, QuoteBlockRenderer>(nameof(BlockTypes.Quote));
+        
+        // Button block
+        services.AddKeyedSingleton<ITextExtractor, UnknownBlockTextExtractor>(nameof(BlockTypes.Button));
+        services.AddKeyedSingleton<IBlockRenderer, ButtonBlockRenderer>(nameof(BlockTypes.Button));
         return services;
     }
 }

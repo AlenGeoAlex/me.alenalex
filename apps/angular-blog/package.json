@@ -32,6 +32,7 @@
     "@ngneat/overview": "7.0.0",
     "@ngxpert/hot-toast": "^6.1.0",
     "@primeuix/themes": "^2.0.3",
+    "editorjs-button": "^3.0.3",
     "primeicons": "^7.0.0",
     "primeng": "^21.1.4",
     "rxjs": "~7.8.0",

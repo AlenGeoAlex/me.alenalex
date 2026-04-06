@@ -17,6 +17,8 @@ public enum BlockTypes
     InlineCode,
     List,
     Image,
+    Math,
+    Button
 }
 
 public static class BlockTypesExtensions

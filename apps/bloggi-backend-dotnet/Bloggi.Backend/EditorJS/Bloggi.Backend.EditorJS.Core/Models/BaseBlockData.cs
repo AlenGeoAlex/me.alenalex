@@ -9,7 +9,7 @@ public class EditorBlock(string id, BlockTypes type, JsonElement data)
     public string Id { get; protected set; } = id;
 
     [JsonPropertyName("type")]
-    [JsonConverter(typeof(CaseInsensitiveEnumJsonConverter<BlockTypes>))]
+    [JsonConverter(typeof(BlockTypeJsonConverter))]
     public BlockTypes Type { get; protected set; } = type;
 
     [JsonPropertyName("data")]
