@@ -655,7 +655,54 @@ a.breadcrumb-item:hover { color: var(--accent); }
     box-shadow: var(--shadow-sm);
 }
 
-/* Body — left side, always present */
+/* ─────────────────────────────────────────────────────────────
+   BUTTON BLOCK
+───────────────────────────────────────────────────────────────  */
+.post-button-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 1.75rem 0;
+}
+
+.post-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-family: 'Geist', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background var(--fast), color var(--fast),
+    border-color var(--fast), box-shadow var(--fast),
+    transform var(--fast);
+}
+
+.post-button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.post-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.post-button .pi {
+    font-size: 0.875rem;
+    transition: transform var(--fast);
+}
+
+.post-button:hover .pi {
+    transform: translateX(3px);
+}
+
 .post-link-card-body {
     flex: 1;
     display: flex;
