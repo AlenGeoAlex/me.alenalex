@@ -619,36 +619,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1198,13 +1168,13 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMeta"
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMetaData"
               }
             ]
           }
         }
       },
-      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMeta": {
+      "BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMeta_ResponseMetaData": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
