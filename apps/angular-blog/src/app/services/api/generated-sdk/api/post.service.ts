@@ -17,7 +17,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest } from '../model/bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest';
+import { BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse';
 // @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFileRequest } from '../model/bloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFileRequest';
 // @ts-ignore
@@ -39,9 +39,11 @@ import { BloggiBackendApiWebFeaturesPostEndpointsPostCreatePostCreatePostRespons
 // @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponse';
 // @ts-ignore
-import { BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse';
+import { BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest';
 // @ts-ignore
-import { ErrorOrErrorOrOfResponse } from '../model/errorOrErrorOrOfResponse';
+import { BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse';
+// @ts-ignore
+import { BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse';
 // @ts-ignore
 import { FastEndpointsProblemDetails } from '../model/fastEndpointsProblemDetails';
 
@@ -63,19 +65,15 @@ export class PostService extends BaseService {
 
     /**
      * @param postId 
-     * @param bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public crawlMeta(postId: string, bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest: BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<ErrorOrErrorOrOfResponse>;
-    public crawlMeta(postId: string, bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest: BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ErrorOrErrorOrOfResponse>>;
-    public crawlMeta(postId: string, bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest: BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ErrorOrErrorOrOfResponse>>;
-    public crawlMeta(postId: string, bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest: BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public crawlMeta(postId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse>;
+    public crawlMeta(postId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse>>;
+    public crawlMeta(postId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse>>;
+    public crawlMeta(postId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (postId === null || postId === undefined) {
             throw new Error('Required parameter postId was null or undefined when calling crawlMeta.');
-        }
-        if (bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest === null || bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest === undefined) {
-            throw new Error('Required parameter bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest was null or undefined when calling crawlMeta.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -96,15 +94,6 @@ export class PostService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -117,10 +106,9 @@ export class PostService extends BaseService {
         }
 
         let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/editor/crawl-meta`;
-        return this.httpClient.request<ErrorOrErrorOrOfResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -508,6 +496,76 @@ export class PostService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: bloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrlRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param postId 
+     * @param bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updatePost(postId: string, bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest: BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse>;
+    public updatePost(postId: string, bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest: BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse>>;
+    public updatePost(postId: string, bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest: BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse>>;
+    public updatePost(postId: string, bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest: BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (postId === null || postId === undefined) {
+            throw new Error('Required parameter postId was null or undefined when calling updatePost.');
+        }
+        if (bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest === null || bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest === undefined) {
+            throw new Error('Required parameter bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest was null or undefined when calling updatePost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (JWTBearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('JWTBearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            'application/problem+json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}`;
+        return this.httpClient.request<BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -7,18 +7,20 @@ import {HotToastService} from '@ngxpert/hot-toast';
 import {PostService} from '@services/api/generated-sdk';
 import {rxResource} from '@angular/core/rxjs-interop';
 import {catchError} from 'rxjs';
+import {PostBasicEditor} from '@components/admin/editor/post-basic-editor/post-basic-editor';
+import {PostMetadataEditor} from '@components/admin/editor/post-metadata-editor/post-metadata-editor';
+import {PostFileEditor} from '@components/admin/editor/post-file-editor/post-file-editor';
+import {PostBlockRevisionEditor} from '@components/admin/editor/post-block-revision-editor/post-block-revision-editor';
 
 @Component({
   selector: 'bloggi-post-editor',
-  imports: [PostEditorNavbar, CommonModule, PostBlockEditorPreview],
+  imports: [PostEditorNavbar, CommonModule, PostBlockEditorPreview, PostBasicEditor, PostMetadataEditor, PostFileEditor, PostBlockRevisionEditor],
   templateUrl: './post-editor.html',
   styleUrl: './post-editor.scss',
 })
 export class PostEditor {
-  protected activeTab = signal<PostEditorTab>('editor');
+  protected activeTab = signal<PostEditorTab>('basic');
   protected isEditorDirty = signal(false);
-  protected isPreviewDirty = signal(false);
-  protected isMetadataDirty = signal(false);
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);

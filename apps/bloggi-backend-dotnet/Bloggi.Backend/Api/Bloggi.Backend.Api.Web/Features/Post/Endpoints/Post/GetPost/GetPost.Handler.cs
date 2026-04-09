@@ -38,6 +38,7 @@ internal static partial class GetPost
                 post.Slug,
                 post.Tags.Select(t => new TagDto(t.TagId, t.Slug, t.DisplayName)).ToArray(),
                 Enum.Parse<StatusDto>(post.Status.ToString()),
+                post.RenderedKey,
                 post.CreatedAt,
                 post.UpdatedAt,
                 post.PublishedAt,

@@ -1,0 +1,84 @@
+<div class="w-10/12 mx-auto py-8 flex flex-col gap-6 px-8">
+  <div class="flex flex-col gap-1.5">
+    <label class="text-xs font-medium uppercase tracking-widest text-(--ink-3)">
+      Title
+    </label>
+    <input
+      [formField]="formModel.title"
+      pInputText
+      type="text"
+      placeholder="Post title..."
+      class="w-full"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label class="text-xs font-medium uppercase tracking-widest text-(--ink-3)">
+      Slug
+    </label>
+    <div class="flex items-center gap-0 rounded-(--r-md) border border-(--border) bg-(--bg-2) overflow-hidden focus-within:border-(--border-focus) focus-within:shadow-[0_0_0_3px_var(--accent-dim)] transition-all duration-150">
+      <span class="px-3 py-2 text-sm text-(--ink-3) border-r border-(--border) bg-(--bg-2) font-mono whitespace-nowrap select-none">
+        /blog/
+      </span>
+      <input
+        type="text"
+        [disabled]="true"
+        [value]="post()?.slug || ''"
+        placeholder="my-post-slug"
+        class="flex-1 px-3 py-2 text-sm bg-transparent text-(--ink) font-mono outline-none placeholder:text-(--ink-3)"
+      />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label class="text-xs font-medium uppercase tracking-widest text-(--ink-3)">
+      Excerpt
+    </label>
+    <textarea
+      [formField]="formModel.excerpt!"
+      pInputText
+      placeholder="A short summary shown on the home page and in search results..."
+      rows="3"
+      class="w-full resize-none"
+    ></textarea>
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label class="text-xs font-medium uppercase tracking-widest text-(--ink-3)">
+      Tags
+    </label>
+    <p-autoComplete [(ngModel)]="tags" inputId="chips-combined" multiple fluid [typeahead]="false" [addOnBlur]="true" [addOnTab]="true" separator="," placeholder="Use Tab, Blur, or Comma to add items..." />
+    {{tags().length}}
+<!--    <small class="text-(&#45;&#45;ink-3)">-->
+<!--      @for (tag of tags(); track tag) {-->
+<!--        <div class="flex flex-col gap-2">-->
+<!--          <span class="text-xs font-medium">{{ tag }}</span>-->
+<!--        </div>-->
+<!--      }-->
+<!--    </small>-->
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label class="text-xs font-medium uppercase tracking-widest text-(--ink-3)">
+      Status: <span class="text-(--ink-2) font-bold">{{ post()?.status }}</span>
+    </label>
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label class="text-xs font-medium uppercase tracking-widest text-(--ink-3)">
+      Rendered Key: <span class="text-(--ink-2) font-bold">{{ post()?.renderedKey ?? "Not published yet" }}</span>
+    </label>
+  </div>
+
+  <!-- Save -->
+  <div class="sticky bottom-0 flex justify-end px-4 py-3 border-t border-(--border) bg-(--bg-glass) backdrop-blur-md">
+    <p-button
+      (click)="save()"
+      [disabled]="formModel().invalid() || isSubmitting()"
+      [loading]="isSubmitting()"
+      label="Save"
+      icon="pi pi-check"
+    />
+  </div>
+
+</div>

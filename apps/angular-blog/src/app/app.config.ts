@@ -1,5 +1,4 @@
 import {
-  APP_INITIALIZER,
   ApplicationConfig,
   importProvidersFrom, provideAppInitializer,
   provideBrowserGlobalErrorListeners,
@@ -10,12 +9,17 @@ import { providePrimeNG } from 'primeng/config';
 import { BlogTheme } from './bloggi-theme';
 import { ApiModule, Configuration, ConfigurationParameters } from '@services/api/generated-sdk';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
-import {appAuthStateInitializer} from './angular/initializer';
+import {appAuthStateInitializer} from '@angular/initializer';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
+import {httpAccessInterceptorInterceptor} from '@angular/interceptor/http-access-interceptor-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideHttpClient(withInterceptors([
+      httpAccessInterceptorInterceptor
+    ])),
     importProvidersFrom([ApiModule.forRoot(apiConfigFactory)]),
     providePrimeNG({
       ripple: true,

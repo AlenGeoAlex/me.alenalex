@@ -30,6 +30,7 @@ internal static partial class GetPost
         string Slug,
         TagDto[] Tags,
         StatusDto Status,
+        string? RenderedKey,
         DateTimeOffset CreatedAt,
         DateTimeOffset UpdatedAt,
         DateTimeOffset? PublishedAt,

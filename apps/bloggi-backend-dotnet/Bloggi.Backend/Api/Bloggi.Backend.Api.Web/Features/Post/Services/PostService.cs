@@ -144,7 +144,7 @@ public class PostService(
                 [
                     $"{PostCacheKeys.PostMasterKey}:{request.PostId}",
                 ],
-                [$"{PostCacheKeys.RenderCacheKey}:{request.PostId}", $"{PostCacheKeys.PostMasterKey}:{request.PostId}"]
+                [request.PostId.ToString(), $"{PostCacheKeys.RenderCacheKey}:{request.PostId}", $"{PostCacheKeys.PostMasterKey}:{request.PostId}"]
             ).PublishAsync(Mode.WaitForNone, cancellation: ct);
             await transaction.CommitAsync(ct);
             return true;
@@ -156,7 +156,7 @@ public class PostService(
             return Error.Failure("PostTags.LinkFailed", "Failed to update post tags");
         }
     }
-
+    
     /// <summary>
     /// Asynchronously retrieves a summary of the specified post, including details such as title, slug, excerpt,
     /// and optionally associated tags.
@@ -219,6 +219,7 @@ public class PostService(
             post.Title,
             post.Slug,
             post.Excerpt,
+            post.RenderedKey,
             post.UserId,
             post.CreatedAt,
             post.UpdatedAt,
@@ -233,6 +234,74 @@ public class PostService(
         }, [postId.ToString(), "tags", "post", $"{PostCacheKeys.PostMasterKey}:{post.Id}"], ct);
         
         return postSummary;
+    }
+
+    /// <summary>
+    /// Asynchronously updates the details of an existing post based on the provided request data
+    /// and optionally saves the changes to the database.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing the updated details of the post, including post ID, title, and excerpt.
+    /// </param>
+    /// <param name="executeInstantly">
+    /// A boolean indicating whether the changes should be saved to the database immediately.
+    /// Defaults to true.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns a result containing either the ID of the updated post wrapped in an <see cref="UpdatePostResponse"/> object,
+    /// or an error if the operation fails (e.g., if the post is not found).
+    /// </returns>
+    public async Task<ErrorOr<UpdatePostResponse>> UpdatePostAsync(
+        UpdatePostRequest request,
+        bool executeInstantly = true,
+        CancellationToken ct = default
+    )
+    {
+        var post = await dbContext.Posts.Where(x => x.Id == request.PostId).FirstOrDefaultAsync(ct);
+        if (post is null)
+            return Errors.Post.PostNotFound;
+        
+        post.Title = request.Title;
+        post.Excerpt = request.Excerpt;
+        
+        if(executeInstantly)
+            await dbContext.SaveChangesAsync(ct);
+
+        await new ClearCacheEventHandler.Event(
+            [$"{PostCacheKeys.PostMasterKey}:{request.PostId}"],
+            [request.PostId.ToString()]
+        ).PublishAsync(cancellation: ct, waitMode: Mode.WaitForNone);
+        
+        return new UpdatePostResponse(request.PostId);
+    }
+
+    /// <summary>
+    /// Asynchronously retrieves all files associated with a specific post.
+    /// </summary>
+    /// <param name="postId">
+    /// The unique identifier of the post whose files are to be retrieved.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns a result containing a <see cref="GetPostFileResponse"/> object with details of the files associated with the
+    /// specified post, or an error if the operation fails.
+    /// </returns>
+    public async Task<ErrorOr<GetPostFileResponse>> GetFilesOfPostAsync(
+        Guid postId,
+        CancellationToken ct = default
+    )
+    {
+        var postListAsync = await dbContext.PostFiles
+            .Where(x => x.PostId == postId)
+            .ToListAsync(cancellationToken: ct);
+
+        return postListAsync.Count == 0 ?
+            new GetPostFileResponse(postId, []) : new GetPostFileResponse(postId, postListAsync.Select(x => new PostFile(x.Id, x.Name, x.Size, x.ContentType, x.Hash, x.CreatedAt, x.UpdatedAt)).ToArray());
     }
 
     /// <summary>
@@ -481,6 +550,7 @@ public class PostService(
         string Title,
         string Slug,
         string? Excerpt,
+        string? RenderedKey,
         Guid AuthorId,
         DateTimeOffset CreatedAt,
         DateTimeOffset UpdatedAt,
@@ -522,7 +592,38 @@ public class PostService(
         Guid PostId
     );
 
-    #endregion
-    
+    public record UpdatePostRequest(
+        Guid PostId,
+        string Title,
+        string Excerpt
+    );
 
+    public record UpdatePostResponse(
+        Guid PostId
+    );
+
+    /// <summary>
+    /// Represents the response model for retrieving files associated with a specific post.
+    /// </summary>
+    /// <param name="PostId">The unique identifier of the post.</param>
+    /// <param name="Files">A collection of files related to the specified post.</param>
+    public record GetPostFileResponse(
+        Guid PostId,
+        PostFile[] Files
+    );
+
+    /// <summary>
+    /// Represents a file associated with a specific post, including its metadata and creation details.
+    /// </summary>
+    public record PostFile(
+        Guid FileId,
+        string Name,
+        long Size,
+        string Type,
+        string Hash,
+        DateTimeOffset CreatedAt,
+        DateTimeOffset UpdatedAt
+    );
+
+    #endregion
 }

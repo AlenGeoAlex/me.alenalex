@@ -11,10 +11,10 @@ internal static partial class LinkMeta
     private record Response(
         string Link,
         int Success = 1,
-        ResponseMeta? Meta = null
+        [property: JsonPropertyName("meta")] ResponseMetaData? Meta = null
     );
 
-    private record ResponseMeta(
+    private record ResponseMetaData(
         [property: JsonPropertyName("title")] string? Title,
         [property: JsonPropertyName("description")] string? Description,
         [property: JsonPropertyName("image")]ResponseMetaImage? Image

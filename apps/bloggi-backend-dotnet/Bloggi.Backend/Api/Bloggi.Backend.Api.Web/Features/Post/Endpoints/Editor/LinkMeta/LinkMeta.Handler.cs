@@ -38,7 +38,7 @@ internal static partial class LinkMeta
             return new Response(
                 Link: unfurl.Url,
                 1,
-                new ResponseMeta(
+                new ResponseMetaData(
                     unfurl.Title,
                     unfurl.Description,
                     new ResponseMetaImage(
@@ -59,10 +59,6 @@ internal static partial class LinkMeta
                 x.WithSummary("Crawl meta data for a url");
                 x.WithName("CrawlMeta");
                 x.Produces<Response>(200);
-                x.Produces<ProblemDetails>(404);
-                x.Produces<ProblemDetails>(400);
-                x.Produces<ProblemDetails>(500);
-                x.Produces<ProblemDetails>(403);
             });
         }
     }

@@ -1,0 +1,126 @@
+<div class="max-w-2xl mx-auto py-8 px-4 flex flex-col gap-0 divide-y divide-(--border)">
+
+  <!-- OG Title -->
+  <div class="grid grid-cols-[180px_1fr] gap-6 py-5 items-start">
+    <div class="flex flex-col gap-1 pt-1">
+      <span class="text-sm font-medium text-(--ink)">OG Title</span>
+      <span class="text-xs text-(--ink-3) leading-relaxed">Overrides the post title for social sharing. Falls back to title if empty.</span>
+    </div>
+    <input
+      pInputText
+      type="text"
+      placeholder="Defaults to post title"
+      class="w-full"
+    />
+  </div>
+
+  <!-- OG Description -->
+  <div class="grid grid-cols-[180px_1fr] gap-6 py-5 items-start">
+    <div class="flex flex-col gap-1 pt-1">
+      <span class="text-sm font-medium text-(--ink)">OG Description</span>
+      <span class="text-xs text-(--ink-3) leading-relaxed">Shown as the preview blurb on social cards. Falls back to excerpt.</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <textarea
+        pInputText
+        placeholder="Defaults to excerpt"
+        rows="3"
+        class="w-full resize-none"
+      ></textarea>
+    </div>
+  </div>
+
+  <!-- OG Image -->
+  <div class="grid grid-cols-[180px_1fr] gap-6 py-5 items-start">
+    <div class="flex flex-col gap-1 pt-1">
+      <span class="text-sm font-medium text-(--ink)">OG Image</span>
+      <span class="text-xs text-(--ink-3) leading-relaxed">Thumbnail shown when shared on Twitter, LinkedIn, Slack etc. 1200×630 recommended.</span>
+    </div>
+    <div class="flex flex-col gap-3">
+      @if (true) {
+        <div class="relative rounded-(--r-lg) overflow-hidden border border-(--border) bg-(--bg-2)" style="aspect-ratio: 1200/630;">
+<!--          <img [src]="meta.ogImageUrl" alt="OG Image" class="w-full h-full object-cover" />-->
+<!--          <button-->
+<!--            type="button"-->
+<!--            (click)="meta.ogImageUrl = ''"-->
+<!--            class="absolute top-2 right-2 size-7 rounded-full bg-(&#45;&#45;bg-glass) border border-(&#45;&#45;border) backdrop-blur flex items-center justify-center text-[var(&#45;&#45;ink-2)] hover:text-[var(&#45;&#45;ink)] transition-colors"-->
+<!--          >-->
+<!--            <i class="pi pi-times text-xs"></i>-->
+<!--          </button>-->
+        </div>
+        <input
+          pInputText
+          type="text"
+          placeholder="https://..."
+          class="w-full"
+        />
+      } @else {
+        <div
+          class="flex flex-col items-center justify-center gap-2 rounded-(--r-lg) border border-dashed border-(--border-2) bg-(--bg-2) cursor-pointer hover:border-(--accent) hover:bg-(--accent-dim) transition-all duration-150 group"
+          style="aspect-ratio: 1200/630;"
+          (click)="ogImageInput.click()"
+        >
+          <i class="pi pi-image text-2xl text-(--ink-3) group-hover:text-(--accent) transition-colors"></i>
+          <span class="text-sm text-(--ink-3) group-hover:text-(--accent) transition-colors">Click to upload or paste URL below</span>
+        </div>
+<!--        <input #ogImageInput type="file" accept="image/*" class="hidden" (change)="onOgImageSelected($event)" />-->
+        <input #ogImageInput type="file" accept="image/*" class="hidden"  />
+        <input
+          pInputText
+          type="text"
+          placeholder="Or paste image URL — https://..."
+          class="w-full"
+        />
+      }
+    </div>
+  </div>
+
+  <!-- Canonical URL -->
+  <div class="grid grid-cols-[180px_1fr] gap-6 py-5 items-start">
+    <div class="flex flex-col gap-1 pt-1">
+      <span class="text-sm font-medium text-(--ink)">Canonical URL</span>
+      <span class="text-xs text-(--ink-3) leading-relaxed">Explicit canonical. Auto-derived from slug if left empty.</span>
+    </div>
+    <input
+      pInputText
+      type="text"
+      placeholder="Defaults to /blog/{slug}"
+      class="w-full"
+    />
+  </div>
+
+
+  <div class="grid grid-cols-[180px_1fr] gap-6 py-5 items-start">
+    <div class="flex flex-col gap-1 pt-1">
+      <span class="text-sm font-medium text-(--ink)">Meta Robots</span>
+      <span class="text-xs text-(--ink-3) leading-relaxed">Controls search engine crawler behaviour for this post.</span>
+    </div>
+    <p-select
+      optionLabel="label"
+      optionValue="value"
+      class="w-full"
+    />
+  </div>
+
+  <!-- Schema.org JSON -->
+  <div class="grid grid-cols-[180px_1fr] gap-6 py-5 items-start">
+    <div class="flex flex-col gap-1 pt-1">
+      <span class="text-sm font-medium text-(--ink)">Schema.org JSON</span>
+      <span class="text-xs text-(--ink-3) leading-relaxed">Raw JSON-LD injected as a <code class="font-mono text-(--accent)">&lt;script type="application/ld+json"&gt;</code> in the page head.</span>
+    </div>
+    <textarea
+      pInputText
+      placeholder='{ "@context": "https://schema.org", ... }'
+      rows="5"
+      class="w-full resize-none font-mono text-xs"
+    ></textarea>
+  </div>
+
+  <div class="flex justify-end pt-5">
+    <p-button
+      label="Save Metadata"
+      icon="pi pi-check"
+    />
+  </div>
+
+</div>

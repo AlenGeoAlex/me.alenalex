@@ -19,6 +19,7 @@ export interface BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostRespo
     slug?: string;
     tags?: Array<BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostTagDto>;
     status?: BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto;
+    renderedKey?: string | null;
     createdAt?: string;
     updatedAt?: string;
     publishedAt?: string | null;

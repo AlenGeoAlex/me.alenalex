@@ -12,7 +12,7 @@
 /**
  * 
  */
-export type BloggiBackendEditorJSCoreBlockTypes = 'Unknown' | 'Paragraph' | 'Header' | 'Link' | 'Embed' | 'Quote' | 'Code' | 'Table' | 'Warning' | 'InlineCode' | 'List' | 'Image';
+export type BloggiBackendEditorJSCoreBlockTypes = 'Unknown' | 'Paragraph' | 'Header' | 'Link' | 'Embed' | 'Quote' | 'Code' | 'Table' | 'Warning' | 'InlineCode' | 'List' | 'Image' | 'Math' | 'Button';
 
 export const BloggiBackendEditorJSCoreBlockTypes = {
 
@@ -38,6 +38,10 @@ export const BloggiBackendEditorJSCoreBlockTypes = {
 
     List: 'List' as BloggiBackendEditorJSCoreBlockTypes,
 
-    Image: 'Image' as BloggiBackendEditorJSCoreBlockTypes
+    Image: 'Image' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Math: 'Math' as BloggiBackendEditorJSCoreBlockTypes,
+
+    Button: 'Button' as BloggiBackendEditorJSCoreBlockTypes
 };
 

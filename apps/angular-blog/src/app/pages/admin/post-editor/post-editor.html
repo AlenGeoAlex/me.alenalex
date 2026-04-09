@@ -2,13 +2,19 @@
   <bloggi-post-editor-navbar
     [activeTab]="activeTab()"
     [editorDirty]="isEditorDirty()"
-    [previewDirty]="isPreviewDirty()"
-    [metadataDirty]="isMetadataDirty()"
     (tabChange)="onTabChange($event)"
   ></bloggi-post-editor-navbar>
 
   <div class="flex-1 flex flex-col overflow-hidden min-h-0 w-full">
     @switch (activeTab()) {
+      @case ('basic'){
+        <div class="flex flex-col flex-1 min-h-0 w-full">
+          <bloggi-post-basic-editor
+            [post]="postResource.hasValue() ? postResource.value() : undefined"
+            class="flex flex-col flex-1 min-h-0 mx-4 mb-2"
+          ></bloggi-post-basic-editor>
+        </div>
+      }
       @case ('editor') {
         <div class="flex flex-col flex-1 min-h-0 w-full">
           <bloggi-post-block-editor-preview
@@ -18,16 +24,19 @@
           ></bloggi-post-block-editor-preview>
         </div>
       }
-      @case ('preview') {
-        <div class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <h2 class="text-2xl font-serif mb-4">Post Preview</h2>
-          <p class="text-(--ink-2)">Preview content will go here...</p>
+      @case ('metadata') {
+        <div class="flex flex-col flex-1 min-h-0 w-full">
+          <bloggi-post-metadata-editor></bloggi-post-metadata-editor>
         </div>
       }
-      @case ('metadata') {
-        <div class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <h2 class="text-2xl font-serif mb-4">Post Metadata</h2>
-          <p class="text-(--ink-2)">Metadata configuration will go here...</p>
+      @case ('files') {
+        <div class="flex flex-col flex-1 min-h-0 w-full">
+          <bloggi-post-file-editor></bloggi-post-file-editor>
+        </div>
+      }
+      @case ('revisions'){
+        <div class="flex flex-col flex-1 min-h-0 w-full">
+          <bloggi-post-block-revision-editor></bloggi-post-block-revision-editor>
         </div>
       }
     }
