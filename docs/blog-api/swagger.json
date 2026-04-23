@@ -285,6 +285,104 @@
         ]
       }
     },
+    "/v1/post/{postId}/meta": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "GetPostMeta",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetMetaGetMeta_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/post/files": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "GetPostFiles",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetFilesGetFiles_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post": {
       "post": {
         "tags": [
@@ -917,6 +1015,92 @@
         }
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetMetaGetMeta_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "postId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "openGraphTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "openGraphImageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "canonicalUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "robot": {
+            "type": "string"
+          },
+          "schemaOrgJson": {
+            "nullable": true
+          },
+          "editorVersion": {
+            "type": "string"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetMetaGetMeta_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetFilesGetFiles_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "postId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetFilesGetFiles_File"
+            }
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetFilesGetFiles_File": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostGetFilesGetFiles_Request": {
         "type": "object",
         "additionalProperties": false
       },
