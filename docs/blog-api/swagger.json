@@ -154,6 +154,108 @@
         ]
       }
     },
+    "/v1/post/{postId}/meta": {
+      "put": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "UpdatePostMeta",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostMetaUpdatePostMeta_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "GetPostMeta",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetMetaGetMeta_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{postId}": {
       "put": {
         "tags": [
@@ -260,55 +362,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": []
-          }
-        ]
-      }
-    },
-    "/v1/post/{postId}/meta": {
-      "get": {
-        "tags": [
-          "Post"
-        ],
-        "operationId": "GetPostMeta",
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsPostGetMetaGetMeta_Response"
                 }
               }
             }
@@ -874,6 +927,39 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_Request": {
         "type": "object",
         "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostMetaUpdatePostMeta_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "robot"
+        ],
+        "properties": {
+          "openGraphTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "openGraphDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "openGraphImageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "canonicalUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "robot": {
+            "type": "string",
+            "nullable": false
+          },
+          "schemaOrgJson": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePost_Response": {
         "type": "object",
