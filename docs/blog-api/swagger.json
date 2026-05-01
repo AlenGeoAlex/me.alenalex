@@ -13,7 +13,9 @@
   "paths": {
     "/v1/auth/logout": {
       "delete": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "operationId": "Logout",
         "responses": {
           "204": {
@@ -34,7 +36,9 @@
     },
     "/v1/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "operationId": "Login",
         "requestBody": {
           "x-name": "Request",
@@ -73,7 +77,9 @@
         }
       },
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "operationId": "GetLogin",
         "responses": {
           "200": {
@@ -101,7 +107,9 @@
     },
     "/v1/post/{postId}/preview": {
       "get": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "Preview",
         "parameters": [
           {
@@ -148,7 +156,9 @@
     },
     "/v1/post/{postId}/meta": {
       "put": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "UpdatePostMeta",
         "parameters": [
           {
@@ -199,7 +209,9 @@
         ]
       },
       "get": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "GetPostMeta",
         "parameters": [
           {
@@ -246,7 +258,9 @@
     },
     "/v1/post/{postId}": {
       "put": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "UpdatePost",
         "parameters": [
           {
@@ -306,7 +320,9 @@
     },
     "/v1/post/{id}": {
       "get": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "GetPost",
         "parameters": [
           {
@@ -328,10 +344,15 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": ["Tags", "Author"]
+                "enum": [
+                  "Tags",
+                  "Author"
+                ]
               }
             },
-            "example": [""]
+            "example": [
+              ""
+            ]
           }
         ],
         "responses": {
@@ -368,7 +389,9 @@
     },
     "/v1/post/files": {
       "get": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "GetPostFiles",
         "parameters": [
           {
@@ -415,7 +438,9 @@
     },
     "/v1/post": {
       "post": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "CreatePost",
         "requestBody": {
           "x-name": "Request",
@@ -462,9 +487,69 @@
         ]
       }
     },
+    "/v1/post/files/{fileId}": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "GetFile",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOrErrorOrOfResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{postId}/block": {
       "post": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "UpsertPostBlock",
         "parameters": [
           {
@@ -522,7 +607,9 @@
         ]
       },
       "get": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "GetPostBlocksByPostId",
         "parameters": [
           {
@@ -569,7 +656,9 @@
     },
     "/v1/post/{postId}/editor/assets/url": {
       "post": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "SaveUrl",
         "parameters": [
           {
@@ -629,7 +718,9 @@
     },
     "/v1/post/{postId}/editor/assets": {
       "post": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "SaveFile",
         "parameters": [
           {
@@ -699,7 +790,9 @@
     },
     "/v1/post/{postId}/editor/crawl-meta": {
       "get": {
-        "tags": ["Post"],
+        "tags": [
+          "Post"
+        ],
         "operationId": "CrawlMeta",
         "parameters": [
           {
@@ -832,7 +925,10 @@
       "BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLogin_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["code", "state"],
+        "required": [
+          "code",
+          "state"
+        ],
         "properties": {
           "code": {
             "type": "string",
@@ -893,7 +989,9 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostMetaUpdatePostMeta_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["robot"],
+        "required": [
+          "robot"
+        ],
         "properties": {
           "openGraphTitle": {
             "type": "string",
@@ -934,7 +1032,9 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePost_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "properties": {
           "title": {
             "type": "string",
@@ -1028,8 +1128,14 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_StatusDto": {
         "type": "string",
         "description": "",
-        "x-enumNames": ["Published", "Draft"],
-        "enum": ["Published", "Draft"]
+        "x-enumNames": [
+          "Published",
+          "Draft"
+        ],
+        "enum": [
+          "Published",
+          "Draft"
+        ]
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPost_AuthorDto": {
         "type": "object",
@@ -1159,7 +1265,9 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPostCreatePostCreatePost_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "properties": {
           "title": {
             "type": "string",
@@ -1181,6 +1289,117 @@
           }
         }
       },
+      "ErrorOrErrorOrOfResponse": {
+        "type": "object",
+        "description": "A discriminated union of errors or a value.",
+        "additionalProperties": false,
+        "properties": {
+          "isError": {
+            "type": "boolean",
+            "description": "Gets a value indicating whether the state is error."
+          },
+          "errors": {
+            "type": "array",
+            "description": "Gets the list of errors. If the state is not error, the list will contain a single error representing the state.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorOrError"
+            }
+          },
+          "errorsOrEmptyList": {
+            "type": "array",
+            "description": "Gets the list of errors. If the state is not error, the list will be empty.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorOrError"
+            }
+          },
+          "value": {
+            "description": "Gets the value.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFile_Response"
+              }
+            ]
+          },
+          "firstError": {
+            "description": "Gets the first error.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorOrError"
+              }
+            ]
+          }
+        }
+      },
+      "ErrorOrError": {
+        "type": "object",
+        "description": "Represents an error.",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Gets the unique error code."
+          },
+          "description": {
+            "type": "string",
+            "description": "Gets the error description."
+          },
+          "type": {
+            "description": "Gets the error type.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorOrErrorType"
+              }
+            ]
+          },
+          "numericType": {
+            "type": "integer",
+            "description": "Gets the numeric value of the type.",
+            "format": "int32"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Gets the metadata.",
+            "nullable": true,
+            "additionalProperties": {}
+          }
+        }
+      },
+      "ErrorOrErrorType": {
+        "type": "string",
+        "description": "Error types.",
+        "x-enumNames": [
+          "Failure",
+          "Unexpected",
+          "Validation",
+          "Conflict",
+          "NotFound",
+          "Unauthorized",
+          "Forbidden"
+        ],
+        "enum": [
+          "Failure",
+          "Unexpected",
+          "Validation",
+          "Conflict",
+          "NotFound",
+          "Unauthorized",
+          "Forbidden"
+        ]
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFile_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFile_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlock_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -1197,7 +1416,9 @@
       "BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlock_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["editorJsData"],
+        "required": [
+          "editorJsData"
+        ],
         "properties": {
           "editorJsData": {
             "nullable": false,
@@ -1208,7 +1429,11 @@
       "BloggiBackendEditorJSCoreModelsOutputData": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["time", "version", "blocks"],
+        "required": [
+          "time",
+          "version",
+          "blocks"
+        ],
         "properties": {
           "time": {
             "type": "integer",
@@ -1304,7 +1529,9 @@
       "BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrl_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["url"],
+        "required": [
+          "url"
+        ],
         "properties": {
           "url": {
             "type": "string",
@@ -1334,7 +1561,12 @@
       "BloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFile_Request": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "hash", "contentType", "size"],
+        "required": [
+          "name",
+          "hash",
+          "contentType",
+          "size"
+        ],
         "properties": {
           "name": {
             "type": "string",
