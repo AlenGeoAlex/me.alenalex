@@ -91,6 +91,11 @@ namespace Bloggi.Backend.Api.Web.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("excerpt");
 
+                    b.Property<string>("Pouya")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("pouya");
+
                     b.Property<DateTimeOffset?>("PublishedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("published_at");

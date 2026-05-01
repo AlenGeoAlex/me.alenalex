@@ -70,7 +70,7 @@ public class RenderService(
         }
         else
         {
-            var postResult = await postService.GetPost(new PostService.GetPostByIdRequest(request.PostId), ct);
+            var postResult = await postService.GetPostAsync(new PostService.GetPostByIdRequest(request.PostId), ct);
             if(postResult.IsError)
                 return postResult.Errors;
 

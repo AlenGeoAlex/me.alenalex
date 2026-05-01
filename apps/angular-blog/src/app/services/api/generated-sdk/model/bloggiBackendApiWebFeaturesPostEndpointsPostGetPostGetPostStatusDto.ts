@@ -12,12 +12,9 @@
 /**
  * 
  */
-export type BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto = 'Published' | 'Draft';
-
 export const BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto = {
-
-    Published: 'Published' as BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto,
-
-    Draft: 'Draft' as BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto
-};
+    Published: 'Published',
+    Draft: 'Draft'
+} as const;
+export type BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto = typeof BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto[keyof typeof BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto];
 

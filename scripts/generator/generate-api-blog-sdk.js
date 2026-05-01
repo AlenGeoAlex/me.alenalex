@@ -18,7 +18,7 @@ const askQuestion = (question) => {
     });
 };
 
-const API_URL = "https://api.openapi-generator.tech/api/gen/clients/typescript-angular";
+const API_URL = "https://openapi-generator.thevv.me/api/gen/clients/typescript-angular";
 const API_OPTIONS = {
     openAPIUrl: '',
     ngVersion: '21',

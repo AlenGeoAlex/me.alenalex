@@ -42,6 +42,7 @@ export class AuthService extends BaseService {
     }
 
     /**
+     * @endpoint get /v1/auth/login
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -77,20 +78,22 @@ export class AuthService extends BaseService {
         }
 
         let localVarPath = `/v1/auth/login`;
-        return this.httpClient.request<BloggiBackendApiWebFeaturesUserEndpointsAuthGetLoginGetLoginResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BloggiBackendApiWebFeaturesUserEndpointsAuthGetLoginGetLoginResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
+                ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
     }
 
     /**
+     * @endpoint post /v1/auth/login
      * @param bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -139,21 +142,23 @@ export class AuthService extends BaseService {
         }
 
         let localVarPath = `/v1/auth/login`;
-        return this.httpClient.request<BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginRequest,
                 responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
+                ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
     }
 
     /**
+     * @endpoint delete /v1/auth/logout
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -188,14 +193,15 @@ export class AuthService extends BaseService {
         }
 
         let localVarPath = `/v1/auth/logout`;
-        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
+                ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );

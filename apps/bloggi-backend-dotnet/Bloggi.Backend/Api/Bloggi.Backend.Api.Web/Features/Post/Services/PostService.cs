@@ -353,7 +353,7 @@ public class PostService(
         return new CreatePostFileResponse(response.Id, response.PostId.Value, response.Id != id);
     }
 
-    public async Task<ErrorOr<GetPostByIdResponse>> GetPost(GetPostByIdRequest request, CancellationToken ct = default)
+    public async Task<ErrorOr<GetPostByIdResponse>> GetPostAsync(GetPostByIdRequest request, CancellationToken ct = default)
     {
         var cacheKey = $"{PostCacheKeys.PostMasterKey}:{request.PostId}:{PostCacheKeys.PostByIdCacheKey}:{request.IncludeTags}:{request.IncludeAuthor}:{request.IncludeMeta}:{request.IncludeHead}:{request.IncludeBlocks}";
         var cachedResponse = await cache.GetOrDefaultAsync<GetPostByIdResponse>(cacheKey, token: ct);
@@ -413,7 +413,7 @@ public class PostService(
                 CanonicalUrl = post.Metadata.CanonicalUrl,
                 Robot = post.Metadata.Robot,
                 EditorVersion = post.Metadata.EditorVersion,
-                JsonLd = post.Metadata.SchemaOrgJson?.RootElement ?? default
+                JsonLd = JsonElement.Parse(post.Metadata.SchemaOrgJson?.RootElement.GetRawText() ?? "{}")
             } : null,
             Heads = request.IncludeHead
                 ? post.Heads.Select(x => new GetPostByIdResponse.GetPostHeadDto
@@ -465,7 +465,71 @@ public class PostService(
         return response;
     }
 
+    /// <summary>
+    /// Asynchronously updates metadata for a specific post in the database based on the provided request,
+    /// and optionally saves the changes immediately.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing the metadata details to be updated, including OpenGraph information,
+    /// canonical URL, Schema.org data, and robot directives.
+    /// </param>
+    /// <param name="executeInstantly">
+    /// A boolean indicating whether the updates should be saved to the database immediately.
+    /// Defaults to true.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns a result containing either a boolean indicating the success of the operation or an error if the update fails.
+    /// </returns>
+    public async Task<ErrorOr<bool>> UpdatePostMetaAsync(UpdatePostMeta request,
+        bool executeInstantly = true,
+        CancellationToken ct = default)
+    {
+        var postId = request.PostId;
+
+        try
+        {
+            await dbContext.PostMetas
+                .Where(p => p.PostId == postId)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.Robot, request.Robot)
+                    .SetProperty(p => p.SchemaOrgJson, JsonDocument.Parse(
+                        request.SchemaOrgJson.HasValue
+                            ? request.SchemaOrgJson.Value.GetRawText()
+                            : "{}"))
+                    .SetProperty(p => p.OpenGraphDescription, request.OpenGraphDescription)
+                    .SetProperty(p => p.OpenGraphImageUrl, request.OpenGraphImageUrl)
+                    .SetProperty(p => p.OpenGraphTitle, request.OpenGraphTitle)
+                    .SetProperty(p => p.CanonicalUrl, request.CanonicalUrl), cancellationToken: ct);
+
+            if (executeInstantly)
+                await dbContext.SaveChangesAsync(ct);
+
+            await new ClearCacheEventHandler.Event([], [$"{PostCacheKeys.PostMasterKey}:{request.PostId}"])
+                .PublishAsync(cancellation: ct, waitMode: Mode.WaitForNone);
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Failed to update post meta for post {PostId}", postId);
+            return Errors.PostMeta.FailedToUpdatePostMeta;
+        }
+    }
+
     #region Models
+
+    public record UpdatePostMeta(
+        Guid PostId,
+        string? OpenGraphTitle,
+        string? OpenGraphDescription,
+        string? OpenGraphImageUrl,
+        string? CanonicalUrl,
+        string Robot,
+        JsonElement? SchemaOrgJson
+    );
 
     public class GetPostByIdResponse
     {

@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponseAuthor } from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponseAuthor';
+import { BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostAuthorDto } from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostAuthorDto';
 import { BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto } from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostStatusDto';
 import { BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostTagDto } from './bloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostTagDto';
 
@@ -23,7 +23,7 @@ export interface BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostRespo
     createdAt?: string;
     updatedAt?: string;
     publishedAt?: string | null;
-    author?: BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponseAuthor | null;
+    author?: BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostAuthorDto | null;
 }
 export namespace BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponse {
 }

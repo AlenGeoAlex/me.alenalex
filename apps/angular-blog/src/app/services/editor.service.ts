@@ -46,7 +46,7 @@ export class EditorService {
    * @param {File} file - The file to be uploaded, containing metadata such as name, type, and size.
    * @return {Promise<ImageUploadResult>} A promise that resolves to an object indicating the upload success status and file URL.
    */
-  private async uploadFile(postId: string, file: File): Promise<ImageUploadResult> {
+  public async uploadFile(postId: string, file: File): Promise<ImageUploadResult> {
     const fileHash = await this.hashService.hash(file);
 
     const response = await lastValueFrom(this.postService.saveFile(postId, {
@@ -58,7 +58,6 @@ export class EditorService {
         catchError(err => {
           asProblemDetailsAsync(err)
             .then(problemDetails => {
-              console.log(problemDetails)
               this.toastService.error(`An error occurred in the while uploading the image: ${problemDetails.detail}`)
             })
 

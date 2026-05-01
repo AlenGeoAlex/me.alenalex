@@ -12,36 +12,21 @@
 /**
  * 
  */
-export type BloggiBackendEditorJSCoreBlockTypes = 'Unknown' | 'Paragraph' | 'Header' | 'Link' | 'Embed' | 'Quote' | 'Code' | 'Table' | 'Warning' | 'InlineCode' | 'List' | 'Image' | 'Math' | 'Button';
-
 export const BloggiBackendEditorJSCoreBlockTypes = {
-
-    Unknown: 'Unknown' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Paragraph: 'Paragraph' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Header: 'Header' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Link: 'Link' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Embed: 'Embed' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Quote: 'Quote' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Code: 'Code' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Table: 'Table' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Warning: 'Warning' as BloggiBackendEditorJSCoreBlockTypes,
-
-    InlineCode: 'InlineCode' as BloggiBackendEditorJSCoreBlockTypes,
-
-    List: 'List' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Image: 'Image' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Math: 'Math' as BloggiBackendEditorJSCoreBlockTypes,
-
-    Button: 'Button' as BloggiBackendEditorJSCoreBlockTypes
-};
+    Unknown: 'Unknown',
+    Paragraph: 'Paragraph',
+    Header: 'Header',
+    Link: 'Link',
+    Embed: 'Embed',
+    Quote: 'Quote',
+    Code: 'Code',
+    Table: 'Table',
+    Warning: 'Warning',
+    InlineCode: 'InlineCode',
+    List: 'List',
+    Image: 'Image',
+    Math: 'Math',
+    Button: 'Button'
+} as const;
+export type BloggiBackendEditorJSCoreBlockTypes = typeof BloggiBackendEditorJSCoreBlockTypes[keyof typeof BloggiBackendEditorJSCoreBlockTypes];
 

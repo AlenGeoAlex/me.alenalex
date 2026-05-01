@@ -8,6 +8,11 @@ internal class Errors
     {
         public static readonly Error PostNotFound = Error.NotFound($"{nameof(Post)}.{nameof(PostNotFound)}", "Post not found.");
     }
+
+    public static class PostMeta
+    {
+        public static readonly Error FailedToUpdatePostMeta = Error.NotFound($"{nameof(PostMeta)}.{nameof(FailedToUpdatePostMeta)}", "Failed to update post meta.");
+    }
     
     public static class PostFile
     {

@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponseMeta } from './bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponseMeta';
+import { BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponseMetaData } from './bloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponseMetaData';
 
 
 export interface BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponse { 
     link?: string;
     success?: number;
-    meta?: BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponseMeta | null;
+    meta?: BloggiBackendApiWebFeaturesPostEndpointsEditorLinkMetaLinkMetaResponseMetaData | null;
 }
 

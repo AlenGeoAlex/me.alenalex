@@ -29,6 +29,7 @@ public class AuthService(
     /// </returns>
     public ErrorOr<GoogleOAuthUrlState> GetGoogleOAuthLink(CancellationToken cancellationToken = default)
     {
+        
         var googleClientId = googleOAuthOptions.Value.ClientId;
         var redirectUri = googleOAuthOptions.Value.RedirectUri;
         if (string.IsNullOrWhiteSpace(googleClientId) || string.IsNullOrWhiteSpace(redirectUri))
