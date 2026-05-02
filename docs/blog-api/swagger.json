@@ -543,6 +543,55 @@
             "JWTBearerAuth": []
           }
         ]
+      },
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "DeleteFile",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
       }
     },
     "/v1/post/{postId}/block": {
@@ -1299,6 +1348,10 @@
         }
       },
       "BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFile_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsFileDeleteFileDeleteFile_Request": {
         "type": "object",
         "additionalProperties": false
       },
