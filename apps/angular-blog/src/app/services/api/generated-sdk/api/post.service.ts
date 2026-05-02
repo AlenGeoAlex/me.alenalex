@@ -27,6 +27,8 @@ import { BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrlRequest } f
 // @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrlResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrlResponse';
 // @ts-ignore
+import { BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse';
+// @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse';
 // @ts-ignore
 import { BloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockRequest } from '../model/bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockRequest';
@@ -196,6 +198,129 @@ export class PostService extends BaseService {
     }
 
     /**
+     * @endpoint delete /v1/post/{postId}/files/{fileId}
+     * @param postId 
+     * @param fileId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteFile(postId: string, fileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteFile(postId: string, fileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteFile(postId: string, fileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteFile(postId: string, fileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (postId === null || postId === undefined) {
+            throw new Error('Required parameter postId was null or undefined when calling deleteFile.');
+        }
+        if (fileId === null || fileId === undefined) {
+            throw new Error('Required parameter fileId was null or undefined when calling deleteFile.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (JWTBearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('JWTBearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/problem+json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/files/${this.configuration.encodeParam({name: "fileId", value: fileId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint get /v1/post/{postId}/files/{fileId}
+     * @param postId 
+     * @param fileId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFile(postId: string, fileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse>;
+    public getFile(postId: string, fileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse>>;
+    public getFile(postId: string, fileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse>>;
+    public getFile(postId: string, fileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (postId === null || postId === undefined) {
+            throw new Error('Required parameter postId was null or undefined when calling getFile.');
+        }
+        if (fileId === null || fileId === undefined) {
+            throw new Error('Required parameter fileId was null or undefined when calling getFile.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (JWTBearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('JWTBearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            'application/problem+json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/files/${this.configuration.encodeParam({name: "fileId", value: fileId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @endpoint get /v1/post/{id}
      * @param id 
      * @param include 
@@ -325,7 +450,7 @@ export class PostService extends BaseService {
     }
 
     /**
-     * @endpoint get /v1/post/files
+     * @endpoint get /v1/post/{postId}/files
      * @param postId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -337,10 +462,6 @@ export class PostService extends BaseService {
         if (postId === null || postId === undefined) {
             throw new Error('Required parameter postId was null or undefined when calling getPostFiles.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>postId, 'postId');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -371,12 +492,11 @@ export class PostService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/post/files`;
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/files`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BloggiBackendApiWebFeaturesPostEndpointsPostGetFilesGetFilesResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -305,6 +305,52 @@ public class PostService(
     }
 
     /// <summary>
+    /// Asynchronously deletes a file associated with a specific post based on the provided request.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing the identifiers of the post and the file to be deleted.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests during the operation.
+    /// </param>
+    /// <returns>
+    /// Returns a result indicating whether the file was successfully deleted as a wrapped <see cref="bool"/>,
+    /// or an error if the operation fails.
+    /// </returns>
+    public async Task<ErrorOr<bool>> DeletePostFileAsync(DeleteFileOfPostRequest request,
+        CancellationToken ct = default)
+    {
+        // TODO RESTRICT DELETION OF OG IMAGE
+        var requestFileId = request.FileId;
+        if (requestFileId.Count == 0)
+            return false;
+        if (!request.IsHardDelete)
+        {
+            var deletedCount = await dbContext.PostFiles
+                .Where(x => x.PostId == request.PostId)
+                .Where(x => request.FileId.Contains(x.Id))
+                .ExecuteUpdateAsync((s) =>
+                {
+                    s.SetProperty(x => x.PostId, (Guid?)null);
+                }, cancellationToken: ct);
+
+            if (deletedCount != request.FileId.Count)
+            {
+                logger.LogWarning("Some files were not deleted for post {PostId}", request.PostId);
+            }
+        
+            foreach (var fileId in request.FileId)
+            {
+                var @event = new DeletePostFileEventHandler.Event(request.PostId, fileId);
+                await @event.PublishAsync(Mode.WaitForNone, ct);
+            }
+        
+            return true;
+        }
+        
+        return true;
+    }
+    /// <summary>
     /// Asynchronously creates a new file for an existing post based on the provided request data.
     /// </summary>
     /// <param name="request">
@@ -353,7 +399,22 @@ public class PostService(
         return new CreatePostFileResponse(response.Id, response.PostId.Value, response.Id != id);
     }
 
-    public async Task<ErrorOr<GetPostByIdResponse>> GetPostAsync(GetPostByIdRequest request, CancellationToken ct = default)
+
+    /// <summary>
+    /// Asynchronously retrieves a post by its identifier based on the provided request data.
+    /// </summary>
+    /// <param name="request">
+    /// The request containing the identifier of the post to be retrieved.
+    /// </param>
+    /// <param name="ct">
+    /// A cancellation token that can be used to observe and propagate cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns a result containing either the details of the requested post wrapped in a <see cref="GetPostByIdResponse"/>
+    /// object, or an error if the operation fails.
+    /// </returns>
+    public async Task<ErrorOr<GetPostByIdResponse>> GetPostAsync(GetPostByIdRequest request,
+        CancellationToken ct = default)
     {
         var cacheKey = $"{PostCacheKeys.PostMasterKey}:{request.PostId}:{PostCacheKeys.PostByIdCacheKey}:{request.IncludeTags}:{request.IncludeAuthor}:{request.IncludeMeta}:{request.IncludeHead}:{request.IncludeBlocks}";
         var cachedResponse = await cache.GetOrDefaultAsync<GetPostByIdResponse>(cacheKey, token: ct);
@@ -585,7 +646,10 @@ public class PostService(
             public string DisplayName { get; init; } = null!;
         }
     }
-    
+
+    /// <summary>
+    /// Represents the request model for retrieving a specific post by its unique identifier.
+    /// </summary>
     public record GetPostByIdRequest(
         Guid PostId,
         bool IncludeTags = true,
@@ -593,7 +657,7 @@ public class PostService(
         bool IncludeMeta = true,
         bool IncludeHead = true,
         bool IncludeBlocks = true
-        );
+    );
 
     public record CreatePostFileRequest(
         Guid PostId,
@@ -688,6 +752,8 @@ public class PostService(
         DateTimeOffset CreatedAt,
         DateTimeOffset UpdatedAt
     );
+    
+    public record DeleteFileOfPostRequest(Guid PostId, List<Guid> FileId, bool IsHardDelete = false);
 
     #endregion
 }

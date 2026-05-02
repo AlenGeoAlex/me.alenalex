@@ -42,7 +42,6 @@
     <ItemGroup>
       <Folder Include="Database\Migrations\" />
       <Folder Include="Features\Glossary\Endpoints\" />
-      <Folder Include="Features\Post\Endpoints\File\" />
       <Folder Include="Features\User\Endpoints\User\" />
     </ItemGroup>
 

@@ -5,6 +5,7 @@ export * from './bloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFileR
 export * from './bloggiBackendApiWebFeaturesPostEndpointsEditorSaveFileSaveFileResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrlRequest';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsEditorSaveUrlSaveUrlResponse';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsFileGetFileGetFileResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostBlockGetPostBlockGetPostBlockResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockRequest';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostBlockUpsertPostBlockUpsertPostBlockResponse';

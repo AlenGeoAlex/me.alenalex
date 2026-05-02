@@ -22,7 +22,7 @@ internal static partial class GetFiles
 
         public override void Configure()
         {
-            Get("/files");
+            Get("{postId:guid}/files");
             Group<PostGroup>();
             Description(x =>
             {
