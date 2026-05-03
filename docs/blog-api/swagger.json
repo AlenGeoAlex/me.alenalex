@@ -152,6 +152,53 @@
             "JWTBearerAuth": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "CreateRevision",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsRevisionsCreateRevisionCreateRevision_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
       }
     },
     "/v1/post/{postId}/preview": {
@@ -1099,6 +1146,20 @@
         }
       },
       "BloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisions_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsCreateRevisionCreateRevision_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsCreateRevisionCreateRevision_Request": {
         "type": "object",
         "additionalProperties": false
       },
