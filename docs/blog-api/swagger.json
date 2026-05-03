@@ -201,6 +201,65 @@
         ]
       }
     },
+    "/v1/post/{postId}/revisions/{revisionId}/from-existing": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "FromExistingRevision",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "revisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "confirmation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{postId}/preview": {
       "get": {
         "tags": [
@@ -1149,6 +1208,10 @@
         "type": "object",
         "additionalProperties": false
       },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsFromExistingRevisionFromExistingRevision_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "BloggiBackendApiWebFeaturesPostEndpointsRevisionsCreateRevisionCreateRevision_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -1158,10 +1221,6 @@
             "format": "guid"
           }
         }
-      },
-      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsCreateRevisionCreateRevision_Request": {
-        "type": "object",
-        "additionalProperties": false
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_Response": {
         "type": "object",
