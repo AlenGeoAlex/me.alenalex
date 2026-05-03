@@ -105,6 +105,55 @@
         }
       }
     },
+    "/v1/post/{postId}/revisions": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "ListRevisions",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisions_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{postId}/preview": {
       "get": {
         "tags": [
@@ -999,6 +1048,59 @@
             "type": "string"
           }
         }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisions_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "postId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "revisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisions_Revision"
+            }
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisions_Revision": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revisionNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "isPublished": {
+            "type": "boolean"
+          },
+          "isCurrent": {
+            "type": "boolean"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisions_Request": {
+        "type": "object",
+        "additionalProperties": false
       },
       "BloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRender_Response": {
         "type": "object",
