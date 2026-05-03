@@ -582,6 +582,11 @@ public class PostService(
 
     #region Models
 
+    public record UpdateBlockStateFromRevisionRequest(
+        Guid PostId,
+        Guid RevisionId
+    );
+    
     public record UpdatePostMeta(
         Guid PostId,
         string? OpenGraphTitle,

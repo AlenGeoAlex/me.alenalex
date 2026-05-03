@@ -1,11 +1,15 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {PostBlockEditorPreview} from '@components/admin/editor/post-block-editor-preview/post-block-editor-preview';
-import {PostEditorNavbar, PostEditorTab} from '@components/admin/editor/post-editor-navbar/post-editor-navbar';
+import {
+  POST_EDITOR_TABS,
+  PostEditorNavbar,
+  PostEditorTab
+} from '@components/admin/editor/post-editor-navbar/post-editor-navbar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HotToastService} from '@ngxpert/hot-toast';
 import {PostService} from '@services/api/generated-sdk';
-import {rxResource} from '@angular/core/rxjs-interop';
+import {rxResource, takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {catchError} from 'rxjs';
 import {PostBasicEditor} from '@components/admin/editor/post-basic-editor/post-basic-editor';
 import {PostMetadataEditor} from '@components/admin/editor/post-metadata-editor/post-metadata-editor';
@@ -14,7 +18,7 @@ import {PostBlockRevisionEditor} from '@components/admin/editor/post-block-revis
 
 @Component({
   selector: 'bloggi-post-editor',
-  imports: [PostEditorNavbar, CommonModule, PostBlockEditorPreview, PostBasicEditor, PostMetadataEditor, PostFileEditor, PostBlockRevisionEditor],
+  imports: [PostEditorNavbar, CommonModule, PostBasicEditor, PostMetadataEditor, PostFileEditor, PostBlockRevisionEditor, PostBlockEditorPreview],
   templateUrl: './post-editor.html',
   styleUrl: './post-editor.scss',
 })
@@ -63,10 +67,25 @@ export class PostEditor {
     }
 
     this.postId.set(postId);
+
+    this.route.fragment
+      .pipe(
+        takeUntilDestroyed()
+      )
+      .subscribe(fragment => {
+      if(fragment && POST_EDITOR_TABS.includes(fragment as PostEditorTab)){
+        this.activeTab.set(fragment as PostEditorTab);
+      }
+    })
   }
 
   protected onTabChange(tab: PostEditorTab) {
     this.activeTab.set(tab);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      fragment: tab,
+      replaceUrl: true
+    }).catch(console.error);
   }
 
   protected onEditorDirty($event: boolean) {

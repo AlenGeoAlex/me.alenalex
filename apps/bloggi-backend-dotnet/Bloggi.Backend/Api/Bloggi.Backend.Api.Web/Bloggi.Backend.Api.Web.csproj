@@ -9,6 +9,8 @@
     <ItemGroup>
         <PackageReference Include="AWSSDK.S3" Version="4.0.20.1" />
         <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
+        <PackageReference Include="EntityFrameworkCore.Locking" Version="0.4.0" />
+        <PackageReference Include="EntityFrameworkCore.Locking.PostgreSQL" Version="0.4.0" />
         <PackageReference Include="ErrorOr" Version="2.0.1" />
         <PackageReference Include="FastEndpoints" Version="8.1.0" />
         <PackageReference Include="FastEndpoints.Swagger" Version="8.1.0" />

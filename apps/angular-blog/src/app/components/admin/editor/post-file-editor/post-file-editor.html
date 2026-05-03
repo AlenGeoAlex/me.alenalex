@@ -1,5 +1,5 @@
 <div class="w-full py-8 px-10 flex flex-col gap-0 divide-y divide-(--border)">
-  <p-table [value]="postFileResource?.value() ?? []" styleClass="w-full table-fixed">
+  <p-table [value]="postFileResource.hasValue() ? postFileResource.value() ?? [] : []" styleClass="w-full table-fixed" [loading]="postFileResource.isLoading()">
     <ng-template #header>
       <tr>
         <th class="px-4 py-2 w-[40%] text-left">File Name</th>
@@ -16,7 +16,7 @@
             <div class="min-w-fit">
               @if (file.isOg)
               {
-                <p-badge severity="info" value="Meta" [pTooltip]="'This is an Open Graph Image, Deleting this or mutating this is not possible without deleting the link'" />
+                <p-badge severity="secondary" value="Open Graph" [pTooltip]="'This is an Open Graph Image, Deleting this or mutating this is not possible without deleting the link'" />
               }
             </div>
             <div class="min-w-0 truncate" title="{{ file.name }}">

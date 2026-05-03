@@ -143,6 +143,39 @@ public class PostBlockService(
         return new UpsertBlockDataResponse(ids);
     }
 
+    public async Task SetBlockDataAsync(SetBlockDataRequest request,
+        bool executeInstantly = true,
+        CancellationToken ct = default)
+    {
+        if(request.Blocks.Count == 0)
+            return;
+        
+        await dbContext.PostBlocks.Where(x => x.PostId == request.PostId)
+            .ExecuteDeleteAsync(cancellationToken: ct);
+        
+        for (var i = 0; i < request.Blocks.Count; i++)
+        {
+            var block = request.Blocks[i];
+            var hash = BlockHash.Compute(block.Data);
+            var newBlockId = Guid.CreateVersion7();
+            dbContext.PostBlocks.Add(new PostBlock
+            {
+                PostId = request.PostId,
+                Id = newBlockId,
+                BlockId = block.Id,
+                BlockType = block.Type.ToString(),
+                Position = i,
+                BlockData = JsonDocument.Parse(block.Data.GetRawText()),
+            });
+        }
+        
+        if(executeInstantly)
+            await dbContext.SaveChangesAsync(ct);
+        
+        logger.LogInformation("Set block data for post {PostId}", request.PostId);
+        return;
+    }
+
     
     public async Task<ErrorOr<GetBlocksForPostResponse>> GetBlocksForPostAsync(GetBlocksForPostRequest request, CancellationToken ct = default)
     {
@@ -189,6 +222,11 @@ public class PostBlockService(
     public record UpsertBlockDataRequest(
         Guid PostId,
         string Version,
+        IReadOnlyList<EditorBlock> Blocks
+    );
+
+    public record SetBlockDataRequest(
+        Guid PostId,
         IReadOnlyList<EditorBlock> Blocks
     );
     

@@ -1,4 +1,5 @@
 using Bloggi.Backend.Api.Web.Database.DbContext;
+using EntityFrameworkCore.Locking.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -30,7 +31,8 @@ public static class BloggiDatabaseExtension
                     o.MigrationsHistoryTable("bloggi_migrations", "bloggi");
                     o.UseVector();
                 })
-                .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention()
+                .UseLocking();
             
             if(loggerFactory != null)
                 conf.UseLoggerFactory(loggerFactory);

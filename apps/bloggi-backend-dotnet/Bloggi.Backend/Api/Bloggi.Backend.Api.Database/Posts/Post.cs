@@ -49,6 +49,7 @@ public class Post : IEntity, IAuditable
     {
         Published,
         Draft,
+        Hidden
     }
 }
 

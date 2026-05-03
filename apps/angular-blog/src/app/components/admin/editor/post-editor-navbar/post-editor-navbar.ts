@@ -3,7 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 
-export type PostEditorTab = 'basic' | 'editor' | 'metadata' | 'files' | 'series' | 'revisions' | 'preview';
+export const POST_EDITOR_TABS = [
+  'basic',
+  'editor',
+  'metadata',
+  'files',
+  'series',
+  'revisions',
+  'preview'
+] as const;
+
+export type PostEditorTab = typeof POST_EDITOR_TABS[number];
 @Component({
   selector: 'bloggi-post-editor-navbar',
   standalone: true,

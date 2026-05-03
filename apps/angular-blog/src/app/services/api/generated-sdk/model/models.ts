@@ -23,6 +23,9 @@ export * from './bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePos
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPostUpdatePostUpdatePostResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponse';
 export * from './bloggiBackendApiWebFeaturesPostEndpointsPreviewRenderRenderResponseError';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsRevisionsCreateRevisionCreateRevisionResponse';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisionsResponse';
+export * from './bloggiBackendApiWebFeaturesPostEndpointsRevisionsListRevisionsListRevisionsRevision';
 export * from './bloggiBackendApiWebFeaturesUserEndpointsAuthGetLoginGetLoginResponse';
 export * from './bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginRequest';
 export * from './bloggiBackendApiWebFeaturesUserEndpointsAuthLoginLoginResponse';

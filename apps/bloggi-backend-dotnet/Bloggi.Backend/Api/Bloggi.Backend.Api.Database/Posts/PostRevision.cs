@@ -14,11 +14,11 @@ public class PostRevision : IEntity, IAuditable, IDisposable
     
     public int Revision { get; set; }
     
-    public string Key { get; set; } = null!;
+    public string? Key { get; set; } = null!;
 
     public JsonDocument Blocks { get; set; } = null!;
     
-    public DateTimeOffset PublishedAt { get; set; }
+    public DateTimeOffset? PublishedAt { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
@@ -38,10 +38,13 @@ public class PostRevisionConfiguration : AuditableEntityConfiguration<PostRevisi
         
         builder.HasIndex(x =>  new {x.PostId, x.Revision})
             .IsUnique();
-        
+
         builder.Property(x => x.Key)
-            .HasMaxLength(200)
-            .IsRequired();
+            .IsRequired(false)
+            .HasMaxLength(200);
+        
+        builder.Property(x => x.PublishedAt)
+            .IsRequired(false);       
         
         builder.Property(x => x.Blocks)
             .IsRequired();
