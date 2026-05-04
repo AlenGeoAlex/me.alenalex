@@ -3,9 +3,10 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
-import {environment} from '../environments/environment';
+import {environment} from '@env/environment';
 import {ApiModule, Configuration, ConfigurationParameters} from '@api/generated-sdk';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import {provideDialogConfig, provideDialogDocRef} from '@ngneat/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,10 +19,11 @@ export const appConfig: ApplicationConfig = {
         const params: ConfigurationParameters = {
           basePath: environment.apiBasePath
         }
-
         return new Configuration(params)
       }),
-
-    ]), provideHotToastConfig()
+    ]),
+    provideHotToastConfig(),
+    provideDialogConfig({}),
+    provideDialogDocRef(document)
   ]
 };
