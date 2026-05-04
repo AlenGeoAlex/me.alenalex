@@ -260,6 +260,57 @@
         ]
       }
     },
+    "/v1/post/{postId}/revisions/{revisionId}": {
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "DeleteRevision",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "revisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/v1/post/{postId}/preview": {
       "get": {
         "tags": [
@@ -1209,6 +1260,10 @@
         "additionalProperties": false
       },
       "BloggiBackendApiWebFeaturesPostEndpointsRevisionsFromExistingRevisionFromExistingRevision_Request": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BloggiBackendApiWebFeaturesPostEndpointsRevisionsDeleteRevisionDeleteRevision_Request": {
         "type": "object",
         "additionalProperties": false
       },
