@@ -321,6 +321,67 @@ export class PostService extends BaseService {
     }
 
     /**
+     * @endpoint delete /v1/post/{postId}/revisions/{revisionId}
+     * @param postId 
+     * @param revisionId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteRevision(postId: string, revisionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteRevision(postId: string, revisionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteRevision(postId: string, revisionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteRevision(postId: string, revisionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (postId === null || postId === undefined) {
+            throw new Error('Required parameter postId was null or undefined when calling deleteRevision.');
+        }
+        if (revisionId === null || revisionId === undefined) {
+            throw new Error('Required parameter revisionId was null or undefined when calling deleteRevision.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (JWTBearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('JWTBearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/problem+json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/post/${this.configuration.encodeParam({name: "postId", value: postId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}/revisions/${this.configuration.encodeParam({name: "revisionId", value: revisionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "guid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @endpoint post /v1/post/{postId}/revisions/{revisionId}/from-existing
      * @param postId 
      * @param revisionId 

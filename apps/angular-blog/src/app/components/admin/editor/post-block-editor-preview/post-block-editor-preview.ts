@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, effect, inject, input, model, output, signal} from '@angular/core';
+import {Component, effect, inject, input, model, OnDestroy, OnInit, output, signal} from '@angular/core';
 import {SplitterModule} from 'primeng/splitter';
 import {PrimeTemplate} from 'primeng/api';
 import {
@@ -16,6 +16,7 @@ import {
 import {OutputData} from '@editorjs/editorjs';
 import {HotToastService} from '@ngxpert/hot-toast';
 import {asProblemDetailsAsync} from '@utils/http-utils';
+
 @Component({
   selector: 'bloggi-post-block-editor-preview',
   imports: [
@@ -27,7 +28,7 @@ import {asProblemDetailsAsync} from '@utils/http-utils';
   templateUrl: './post-block-editor-preview.html',
   styleUrl: './post-block-editor-preview.scss',
 })
-export class PostBlockEditorPreview {
+export class PostBlockEditorPreview implements OnDestroy {
 
   public readonly post = input.required<BloggiBackendApiWebFeaturesPostEndpointsPostGetPostGetPostResponse | undefined>();
   protected readonly editorInitialized = signal(false);
@@ -123,5 +124,9 @@ export class PostBlockEditorPreview {
 
   protected onEditorLastMutatedOn($event: Date | undefined) {
     this.editorLastMutatedOn.set($event);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.debounceTimer);
   }
 }

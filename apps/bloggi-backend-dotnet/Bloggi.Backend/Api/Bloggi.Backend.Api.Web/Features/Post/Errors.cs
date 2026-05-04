@@ -26,5 +26,7 @@ internal class Errors
         public static readonly Error ExistingRevisionCreationPending = Error.Conflict($"{nameof(Revision)}.{nameof(ExistingRevisionCreationPending)}", "A revision creation is already pending for this post.");
         public static readonly Error FailedToCreateRevision = Error.Failure($"{nameof(Revision)}.{nameof(FailedToCreateRevision)}", "Failed to create revision.");
         public static readonly Error NoRevisionFoundYet = Error.NotFound($"{nameof(Revision)}.{nameof(NoRevisionFoundYet)}", "No revision found for the given post and revision ID.");
+        
+        public static readonly Error CannotDeletePublishedRevision = Error.Failure($"{nameof(Revision)}.{nameof(CannotDeletePublishedRevision)}", "Cannot delete revision which is already published.");
     }
 }

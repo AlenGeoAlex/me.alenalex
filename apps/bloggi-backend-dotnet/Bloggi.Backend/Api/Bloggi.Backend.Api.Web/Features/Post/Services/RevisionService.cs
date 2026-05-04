@@ -177,6 +177,16 @@ public class RevisionService(
         }
     }
 
+    public async Task<ErrorOr<RevisionSummary>> GetRevisionAsync(GetRevisionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var revision = await dbContext.PostRevisions.FirstOrDefaultAsync(x => x.Id == request.RevisionId && x.PostId == request.PostId, cancellationToken: cancellationToken);
+        if(revision is null)
+            return Errors.Revision.NoRevisionFoundYet;
+        
+        return new RevisionSummary(revision.Id, revision.Revision, revision.CreatedAt, revision.UpdatedAt, revision.Key, revision.PublishedAt);   
+    }
+
     private async Task<bool> IsLastRevisionPendingAsync(Guid postId, CancellationToken cancellationToken = default)
     {
         var lastRevision = await dbContext.PostRevisions
@@ -188,6 +198,24 @@ public class RevisionService(
             return false;
         
         return lastRevision.PublishedAt is null || lastRevision.Key is null;
+    }
+
+    public async Task<ErrorOr<DeleteRevisionResponse>> DeleteRevisionAsync(DeleteRevisionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var revisionResult = await GetRevisionAsync(new GetRevisionRequest(request.RevisionId, request.PostId), cancellationToken);
+        if(revisionResult.IsError)
+            return revisionResult.Errors;
+        
+        var revision = revisionResult.Value;
+        if(revision.IsPublished)
+            return Errors.Revision.CannotDeletePublishedRevision;
+
+        var postRevision = await dbContext.PostRevisions.FindAsync([request.RevisionId], cancellationToken: cancellationToken)!;
+        dbContext.PostRevisions.Remove(postRevision!);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new DeleteRevisionResponse();
     }
     
     #region Models
@@ -203,13 +231,22 @@ public class RevisionService(
         string? CurrentPublishedKey = null
         );
     
+    public record GetRevisionRequest(Guid RevisionId, Guid PostId);
+
+    public record DeleteRevisionRequest(Guid PostId, Guid RevisionId);
+    
+    public record DeleteRevisionResponse();
+
     public record RevisionSummary(
         Guid Id,
         int Revision,
         DateTimeOffset CreatedAt,
         DateTimeOffset UpdatedAt,
         string? Key,
-        DateTimeOffset? PublishedAt = null);
+        DateTimeOffset? PublishedAt = null)
+    {
+        public bool IsPublished = PublishedAt is not null && Key is not null;
+    }
 
     public record GetBlocksOfRevisionRequest(Guid PostId, Guid RevisionId);
     #endregion

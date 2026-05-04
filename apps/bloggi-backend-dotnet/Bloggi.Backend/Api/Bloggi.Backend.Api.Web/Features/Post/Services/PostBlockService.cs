@@ -150,30 +150,42 @@ public class PostBlockService(
         if(request.Blocks.Count == 0)
             return;
         
-        await dbContext.PostBlocks.Where(x => x.PostId == request.PostId)
-            .ExecuteDeleteAsync(cancellationToken: ct);
+        var transaction = dbContext.Database.CurrentTransaction ?? await dbContext.Database.BeginTransactionAsync(ct);
         
-        for (var i = 0; i < request.Blocks.Count; i++)
+        try
         {
-            var block = request.Blocks[i];
-            var hash = BlockHash.Compute(block.Data);
-            var newBlockId = Guid.CreateVersion7();
-            dbContext.PostBlocks.Add(new PostBlock
+            await dbContext.PostBlocks.Where(x => x.PostId == request.PostId)
+                .ExecuteDeleteAsync(cancellationToken: ct);
+
+            for (var i = 0; i < request.Blocks.Count; i++)
             {
-                PostId = request.PostId,
-                Id = newBlockId,
-                BlockId = block.Id,
-                BlockType = block.Type.ToString(),
-                Position = i,
-                BlockData = JsonDocument.Parse(block.Data.GetRawText()),
-            });
+                var block = request.Blocks[i];
+                var hash = BlockHash.Compute(block.Data);
+                var newBlockId = Guid.CreateVersion7();
+                dbContext.PostBlocks.Add(new PostBlock
+                {
+                    PostId = request.PostId,
+                    Id = newBlockId,
+                    BlockId = block.Id,
+                    BlockType = block.Type.ToString(),
+                    Position = i,
+                    BlockData = JsonDocument.Parse(block.Data.GetRawText()),
+                });
+            }
+
+            if (executeInstantly)
+                await dbContext.SaveChangesAsync(ct);
+
+            logger.LogInformation("Set block data for post {PostId}", request.PostId);
+            await transaction.CommitAsync(ct);
+            return;
         }
-        
-        if(executeInstantly)
-            await dbContext.SaveChangesAsync(ct);
-        
-        logger.LogInformation("Set block data for post {PostId}", request.PostId);
-        return;
+        catch (Exception e)
+        {
+            logger.LogError(e, "Failed to set block data for post {PostId}", request.PostId);
+            await transaction.RollbackAsync(ct);
+            throw;
+        }
     }
 
     

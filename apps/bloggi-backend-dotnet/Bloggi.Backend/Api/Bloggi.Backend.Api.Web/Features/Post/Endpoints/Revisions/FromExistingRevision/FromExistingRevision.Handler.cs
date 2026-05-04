@@ -8,14 +8,16 @@ internal static partial class FromExistingRevision
 {
     class Handler(
         ILogger<Handler> logger
-        ) : Endpoint<Request>
+        ) : EndpointWithoutRequest
     {
-        public override async Task HandleAsync(Request req, CancellationToken ct)
+        public override async Task HandleAsync(CancellationToken ct)
         {
-            await new UpdateBlockFromRevisionEventHandler.Event(req.PostId, req.RevisionId)
+            var postId = Route<Guid>("postId");
+            var revisionId = Route<Guid>("revisionId");
+            await new UpdateBlockFromRevisionEventHandler.Event(postId, revisionId)
                 .PublishAsync(Mode.WaitForNone, cancellation: ct);
             
-            logger.LogInformation("Revision {RevisionId} of post {PostId} created from existing revision", req.RevisionId, req.PostId);
+            logger.LogInformation("Revision {RevisionId} of post {PostId} created from existing revision", revisionId, postId);
         }
 
         public override void Configure()

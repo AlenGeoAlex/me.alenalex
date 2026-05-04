@@ -64,7 +64,8 @@
             severity="danger"
             icon="pi pi-trash"
             rounded
-            (onClick)="deleteRevision(revision)"
+            [disabled]="!!revision.key"
+            (onClick)="deleteRevision($event, revision)"
             pTooltip="Delete the selected revision"
           >
           </p-button>

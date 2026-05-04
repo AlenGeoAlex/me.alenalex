@@ -12,6 +12,8 @@ import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import {appAuthStateInitializer} from '@angular/initializer';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {httpAccessInterceptorInterceptor} from '@angular/interceptor/http-access-interceptor-interceptor';
+import {DialogService} from 'primeng/dynamicdialog';
+import {ConfirmationService} from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,7 +37,9 @@ export const appConfig: ApplicationConfig = {
     provideHotToastConfig({
       position: 'bottom-right',
     }),
-    provideAppInitializer(appAuthStateInitializer)
+    provideAppInitializer(appAuthStateInitializer),
+    DialogService,
+    ConfirmationService
   ],
 };
 

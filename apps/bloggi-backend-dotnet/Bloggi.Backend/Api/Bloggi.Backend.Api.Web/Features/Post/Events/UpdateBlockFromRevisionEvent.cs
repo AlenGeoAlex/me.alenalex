@@ -6,15 +6,16 @@ namespace Bloggi.Backend.Api.Web.Features.Post.Events;
 
 public class UpdateBlockFromRevisionEventHandler(
     ILogger<UpdateBlockFromRevisionEventHandler> logger,
-    PostService postService,
-    PostBlockService blockService,
-    RevisionService revisionService
+    IServiceScopeFactory serviceProvider
     ) : IEventHandler<UpdateBlockFromRevisionEventHandler.Event>
 {
     public record Event(Guid PostId, Guid RevisionId) : IEvent;
 
     public async Task HandleAsync(Event eventModel, CancellationToken ct)
     {
+        using var scope = serviceProvider.CreateScope();
+        var revisionService = scope.ServiceProvider.GetRequiredService<RevisionService>();
+        var blockService = scope.ServiceProvider.GetRequiredService<PostBlockService>();
         var revisionResult = await revisionService.GetBlocksForRevisionAsync(new RevisionService.GetBlocksOfRevisionRequest(eventModel.PostId, eventModel.RevisionId), ct);
         if (revisionResult.IsError)
         {

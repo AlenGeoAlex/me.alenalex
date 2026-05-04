@@ -22,7 +22,6 @@ import {ConfirmationService} from 'primeng/api';
   ],
   templateUrl: './post-block-revision-editor.html',
   styleUrl: './post-block-revision-editor.scss',
-  providers: [ConfirmationService],
 })
 export class PostBlockRevisionEditor {
 
@@ -67,8 +66,38 @@ export class PostBlockRevisionEditor {
 
   }
 
-  protected deleteRevision(revision: any) {
-
+  protected deleteRevision(event: Event ,revision: any) {
+    this.confirmationService.confirm({
+      header: 'Danger Zone (Deletion)',
+      target: event.target as HTMLElement,
+      message: 'Are you sure you want to delete this revision? This action cannot be undone.',
+      icon: 'pi pi-warning-triangle',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Delete',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger'
+      },
+      accept: () => {
+        this.postService.deleteRevision(this.post()!.id!, revision.id!)
+          .subscribe({
+            next: () => {
+              this.revisionResource.reload();
+            },
+            error: (error) => {
+              asProblemDetailsAsync(error)
+                .then((pd) => {
+                  this.toastService.error(pd.detail);
+                })
+            }
+          });
+      },
+    })
   }
 
   protected newRevisionFrom(event: Event ,revision: any) {
@@ -84,7 +113,7 @@ export class PostBlockRevisionEditor {
         outlined: true
       },
       acceptButtonProps: {
-        label: 'Delete',
+        label: 'Proceed',
         severity: 'danger'
       },
       accept: () => {
