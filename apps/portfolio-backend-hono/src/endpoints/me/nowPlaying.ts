@@ -135,7 +135,7 @@ export class NowPlaying extends OpenAPIRoute {
         expiresIn: number,
     } | Error> {
         let refreshToken = await c.env.NowPlayingStore.get('SPOTIFY_REFRESH_TOKEN', "text")
-        if(!refreshToken){
+        if(!refreshToken || refreshToken === "" || refreshToken === "undefined" || refreshToken === "null"){
             console.log('No refresh token found, Trying to populate from env');
             refreshToken = c.env.SPOTIFY_REFRESH_TOKEN;
         }
@@ -165,10 +165,10 @@ export class NowPlaying extends OpenAPIRoute {
         }
 
         const refreshData : any = await refreshResponse.json();
-
+        console.log(refreshData)
         return {
             accessToken: refreshData.access_token,
-            refreshToken: refreshData.refresh_token,
+            refreshToken: refreshData.refresh_token || refreshToken,
             expiresIn: refreshData.expires_in,
         }
     }
