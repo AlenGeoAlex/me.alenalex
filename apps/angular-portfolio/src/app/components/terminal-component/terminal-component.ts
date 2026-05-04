@@ -161,6 +161,7 @@ export class TerminalComponent {
         })
         this.pushNewCommand();
         break;
+      case 'cat':
       case 'open':
         this.onOpenCommand(userCommand.slice(1));
         break;
@@ -250,6 +251,16 @@ export class TerminalComponent {
   }
 
   private constructPath(newPath: string) : string {
+    const path = this.path();
+    // If we are at ~, then send with out /
+    if(path.length === 0){
+      if(newPath.startsWith("/"))
+        return newPath.slice(1);
+
+      return newPath;
+    }
+
+
     if(newPath.startsWith('/')){
       return newPath;
     }
@@ -441,8 +452,6 @@ export class TerminalComponent {
       this.pushError('No file specified');
       return;
     }
-
-
 
     const fileName = this.path().join('/') + '/' + strings[0];
 
